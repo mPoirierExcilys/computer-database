@@ -68,7 +68,7 @@ public class Computer {
 	
 	@Override
 	public String toString() {
-		return name + " from Company id :" + companyId + " introduced " + introduced + " and discontinued " + discontinued + "\n" +
+		return name + " with id : "+ idComputer +" from Company id :" + companyId + " introduced " + introduced + " and discontinued " + discontinued + "\n" +
 				"-------------------------------------------------- \n";
 	}
 
