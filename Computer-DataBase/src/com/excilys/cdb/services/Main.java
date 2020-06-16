@@ -1,5 +1,6 @@
 package com.excilys.cdb.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,23 @@ public class Main {
 			System.out.println(computer);
 		}
 		
-		Computer computer = computerDao.find(574);
+		Computer computer = computerDao.find(8);
 		System.out.println(computer);
+		//computer.setIntroduced(LocalDate.of(1980, 3, 12));
+		//computer.setCompanyId(1);
+		//computer = computerDao.update(computer);
+		//System.out.println(computer);
+		
+		
+		Computer computer1 = new Computer();
+		computer1.setName("Asus Zenbook");
+		computer1.setIntroduced(LocalDate.of(2015, 9, 20));
+		computer1.setCompanyId(37);
+		Computer computerCreated = computerDao.create(computer1);
+		System.out.println(computerCreated);
+		
+		computerDao.delete(computerCreated);
+		
 	}
 
 }

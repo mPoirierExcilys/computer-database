@@ -13,8 +13,7 @@ public class CompanyDao extends AbstractDao<Company> {
 	public Company find(Integer id) {
 		Company company = new Company();
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, 
-										ResultSet.CONCUR_UPDATABLE).executeQuery(
+			ResultSet result = this.connect.createStatement().executeQuery(
 										"SELECT * FROM company WHERE id = " + id);
 			if(result.first()) {
 				company = new Company(result.getInt("id"), result.getString("name"));
@@ -30,8 +29,7 @@ public class CompanyDao extends AbstractDao<Company> {
 	public List<Company> findAll() {
 		List<Company> allCompany = new ArrayList<>();
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, 
-                    										ResultSet.CONCUR_UPDATABLE).executeQuery(
+			ResultSet result = this.connect.createStatement().executeQuery(
                     		"SELECT * FROM company");
 			while(result.next()) {
 				Company company = new Company(result.getInt("id"), result.getString("name"));

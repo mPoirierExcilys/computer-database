@@ -1,4 +1,4 @@
-package com.excilys.cdb.jdbc;
+package com.excilys.cdb.persistence;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
