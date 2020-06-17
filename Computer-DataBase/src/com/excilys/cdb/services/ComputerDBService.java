@@ -22,5 +22,13 @@ public interface ComputerDBService {
 	void deleteComputer(Computer computer);
 	
 	Company getCompanyFromComputer(Computer computer);
+	
+	List<Company> getCompaniesByPage(Integer page);
+	
+	List<Computer> getComputersByPage(Integer page);
+	
+	Integer getComputersNbPages();
+	
+	Integer getCompaniesNbPages();
 
 }

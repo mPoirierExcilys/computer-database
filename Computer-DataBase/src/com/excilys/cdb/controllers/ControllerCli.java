@@ -27,10 +27,40 @@ public class ControllerCli {
 			String input = sc.next();
 			switch(input) {
 			case "1":
-				cliUi.listAllCompanies(service.getAllCompanies());
+				Integer currentPage = 1;
+				Integer totalPage = service.getCompaniesNbPages();
+				boolean test = true;
+				do {
+					cliUi.listAllCompanies(service.getCompaniesByPage(currentPage),currentPage,totalPage);
+					String input1 = sc.next();
+					try {
+						Integer page = Integer.parseInt(input1);
+						currentPage = page;
+					}catch(NumberFormatException e) {
+						if(input1.equals("q")) {
+							test = false;
+						}
+						currentPage++;
+					}
+				}while(test && currentPage<=totalPage);
 				break;
 			case "2":
-				cliUi.listAllComputers(service.getAllComputers());
+				Integer currentPage1 = 1;
+				Integer totalPage1 = service.getComputersNbPages();
+				boolean test1 = true;
+				do {
+					cliUi.listAllComputers(service.getComputersByPage(currentPage1),currentPage1,totalPage1);
+					String input1 = sc.next();
+					try {
+						Integer page = Integer.parseInt(input1);
+						currentPage1 = page;
+					}catch(NumberFormatException e) {
+						if(input1.equals("q")) {
+							test1 = false;
+						}
+						currentPage1++;
+					}
+				}while(test1 && currentPage1<=totalPage1);
 				break;
 			case "3":
 				cliUi.enterComputerId();
@@ -69,6 +99,7 @@ public class ControllerCli {
 	public static void main(String[] args) {
 		ControllerCli controller = new ControllerCli();
 		controller.CdbLogical();
+		
 	}
 
 }

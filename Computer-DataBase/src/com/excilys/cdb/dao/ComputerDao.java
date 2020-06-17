@@ -104,4 +104,34 @@ public class ComputerDao extends AbstractDao<Computer>{
 		}
 	}
 
+
+	@Override
+	public List<Computer> findBetween(Integer offset, Integer nb) {
+		List<Computer> allComputer = null;
+		try {
+			ResultSet result = this.connect.createStatement().executeQuery("SELECT * FROM computer LIMIT "+offset+", "+nb);
+			allComputer = computerMapper.resultToList(result);
+		}catch(SQLException eSQL) {
+			System.out.println("Error Getting Computers between");
+			eSQL.printStackTrace();
+		}
+		return allComputer;
+	}
+
+
+	@Override
+	public Integer count() {
+		Integer nb = 0;
+		try {
+			ResultSet result = this.connect.createStatement().executeQuery("SELECT COUNT(*) FROM computer");
+			if(result.first()) {
+				nb =result.getInt(1);
+			}
+		}catch(SQLException eSQL) {
+			System.out.println("Error counting Computers");
+			eSQL.printStackTrace();
+		}
+		return nb;
+	}
+
 }

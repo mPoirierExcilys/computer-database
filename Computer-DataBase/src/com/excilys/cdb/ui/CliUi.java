@@ -83,14 +83,20 @@ public class CliUi {
 		return computer;
 	}
 	
-	public void listAllCompanies(List<Company> allCompanies) {
-		CompanyPage companyPage = new CompanyPage(allCompanies);
-		companyPage.print();
+	public void listAllCompanies(List<Company> allCompanies, Integer currentPage, Integer totalPage) {
+		for(Company company: allCompanies) {
+			System.out.println(company);
+		}
+		System.out.println("Page "+ currentPage+" of "+ totalPage);
+		System.out.println("Press q for exit, anything to go to the next page or a page you want to go ");
 	}
 	
-	public void listAllComputers(List<Computer> allComputers) {
-		ComputerPage computerPage = new ComputerPage(allComputers);
-		computerPage.print();
+	public void listAllComputers(List<Computer> allComputers, Integer currentPage, Integer totalPage) {
+		for(Computer computer: allComputers) {
+			System.out.println(computer);
+		}
+		System.out.println("Page "+ currentPage+" of "+ totalPage);
+		System.out.println("Press q for exit, anything to go to the next page or a page you want to go ");
 	}
 	
 	public void computerDetails(Computer computer) {
