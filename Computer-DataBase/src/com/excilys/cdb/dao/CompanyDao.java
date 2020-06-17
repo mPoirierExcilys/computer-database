@@ -2,22 +2,26 @@ package com.excilys.cdb.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.model.Company;
 
 public class CompanyDao extends AbstractDao<Company> {
+	
+	private CompanyMapper companyMapper;
+	
+	public CompanyDao() {
+		this.companyMapper = new CompanyMapper();
+	}
 
 	@Override
 	public Company find(Integer id) {
-		Company company = new Company();
+		Company company = null;
 		try {
 			ResultSet result = this.connect.createStatement().executeQuery(
 										"SELECT * FROM company WHERE id = " + id);
-			if(result.first()) {
-				company = new Company(result.getInt("id"), result.getString("name"));
-			}
+			company = companyMapper.resultToObject(result);
 		}catch(SQLException eSQL) {
 			System.out.println("Error Getting campany");
 			eSQL.printStackTrace();
@@ -27,14 +31,11 @@ public class CompanyDao extends AbstractDao<Company> {
 
 	@Override
 	public List<Company> findAll() {
-		List<Company> allCompany = new ArrayList<>();
+		List<Company> allCompany = null;
 		try {
 			ResultSet result = this.connect.createStatement().executeQuery(
                     		"SELECT * FROM company");
-			while(result.next()) {
-				Company company = new Company(result.getInt("id"), result.getString("name"));
-				allCompany.add(company);
-			}
+			allCompany = companyMapper.resultToList(result);
 		}catch(SQLException eSQL) {
 			System.out.println("Error Getting campanies");
 			eSQL.printStackTrace();

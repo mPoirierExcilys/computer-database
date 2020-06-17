@@ -1,15 +1,15 @@
 package com.excilys.cdb.services;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 public interface ComputerDBService {
 	
-	Collection<Computer> getAllComputers();
+	List<Computer> getAllComputers();
 	
-	Collection<Company> getAllCompanies();
+	List<Company> getAllCompanies();
 	
 	Computer getComputer(Integer id);
 	

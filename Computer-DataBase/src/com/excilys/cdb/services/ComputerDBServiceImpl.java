@@ -1,6 +1,6 @@
 package com.excilys.cdb.services;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.dao.ComputerDao;
@@ -18,12 +18,12 @@ public class ComputerDBServiceImpl implements ComputerDBService{
 	}
 
 	@Override
-	public Collection<Computer> getAllComputers() {
+	public List<Computer> getAllComputers() {
 		return computerDao.findAll();
 	}
 
 	@Override
-	public Collection<Company> getAllCompanies() {
+	public List<Company> getAllCompanies() {
 		return companyDao.findAll();
 	}
 

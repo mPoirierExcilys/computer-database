@@ -1,7 +1,7 @@
 package com.excilys.cdb.ui;
 
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 import com.excilys.cdb.model.Company;
@@ -83,16 +83,14 @@ public class CliUi {
 		return computer;
 	}
 	
-	public void listAllCompanies(Collection<Company> allCompanies) {
-		for(Company company: allCompanies) {
-			System.out.println(company);
-		}
+	public void listAllCompanies(List<Company> allCompanies) {
+		CompanyPage companyPage = new CompanyPage(allCompanies);
+		companyPage.print();
 	}
 	
-	public void listAllComputers(Collection<Computer> allComputers) {
-		for(Computer computer: allComputers) {
-			System.out.println(computer);
-		}
+	public void listAllComputers(List<Computer> allComputers) {
+		ComputerPage computerPage = new ComputerPage(allComputers);
+		computerPage.print();
 	}
 	
 	public void computerDetails(Computer computer) {

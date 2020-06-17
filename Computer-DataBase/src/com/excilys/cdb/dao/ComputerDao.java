@@ -5,12 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 
 public class ComputerDao extends AbstractDao<Computer>{
+	
+	private ComputerMapper computerMapper;
+	
+	public ComputerDao() {
+		computerMapper = new ComputerMapper();
+	}
+	
 
 	@Override
 	public Computer create(Computer obj) {
@@ -37,24 +44,11 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 	@Override
 	public Computer find(Integer id) {
-		Computer computer = new Computer();
+		Computer computer = null;
 		try {
 			ResultSet result = this.connect.createStatement().executeQuery(
 										"SELECT * FROM computer WHERE id = " + id);
-			if(result.first()) {
-				computer = new Computer(result.getInt("id"), result.getString("name"));
-				if(result.getDate("introduced") != null) {
-					computer.setIntroduced(result.getDate("introduced").toLocalDate());
-				}
-				
-				if(result.getDate("discontinued") != null) {
-					computer.setDiscontinued(result.getDate("discontinued").toLocalDate());
-				}
-				
-				if(result.getInt("company_id") != 0) {
-					computer.setCompanyId(result.getInt("company_id"));
-				}
-			}
+			computer = computerMapper.resultToObject(result);
 		}catch(SQLException eSQL) {
 			System.out.println("Error Getting computer");
 			eSQL.printStackTrace();
@@ -64,25 +58,11 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 	@Override
 	public List<Computer> findAll() {
-		List<Computer> allComputer = new ArrayList<>();
+		List<Computer> allComputer = null;
 		try {
 			ResultSet result = this.connect.createStatement().executeQuery(
                     		"SELECT * FROM computer");
-			while(result.next()) {
-				Computer computer = new Computer(result.getInt("id"), result.getString("name"));
-				if(result.getDate("introduced") != null) {
-					computer.setIntroduced(result.getDate("introduced").toLocalDate());
-				}
-				
-				if(result.getDate("discontinued") != null) {
-					computer.setDiscontinued(result.getDate("discontinued").toLocalDate());
-				}
-				
-				if(result.getInt("company_id") != 0) {
-					computer.setCompanyId(result.getInt("company_id"));
-				}
-				allComputer.add(computer);
-			}
+			allComputer = computerMapper.resultToList(result);
 		}catch(SQLException eSQL) {
 			System.out.println("Error Getting computers");
 			eSQL.printStackTrace();
@@ -105,8 +85,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			}		
 			sqlRequest += " WHERE id = "+ obj.getIdComputer();
 			
-			this.connect.createStatement().
-				executeUpdate(sqlRequest);
+			this.connect.createStatement().executeUpdate(sqlRequest);
 			obj = this.find(obj.getIdComputer());
 		}catch(SQLException eSQL) {
 			System.out.println("Error Update Computer");
