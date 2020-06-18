@@ -1,16 +1,23 @@
 package com.excilys.cdb.persistence;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class ConnectionMysql {
 	
-	private static String url = "jdbc:mysql://localhost:3306/computer-database-db";
+	private static String url;
 	
-	private static String user ="admincdb";
+	private static String user;
 	
-	private static String passwd = "qwerty1234";
+	private static String passwd;
+	
+	private static String driver;
 	
 	private static Connection connect;
 	
@@ -18,7 +25,8 @@ public class ConnectionMysql {
 	public static Connection getInstance() {
 		if(connect == null) {
 			try {
-				Class.forName("com.mysql.jdbc.Driver");
+				getProperties();
+				Class.forName(driver);
 				connect = DriverManager.getConnection(url, user, passwd);
 			} catch(SQLException eSQL) {
 				System.out.println("Error connection to DB");
@@ -37,6 +45,23 @@ public class ConnectionMysql {
 			connect.close();
 		} catch (SQLException e) {
 			System.out.println("Error to close connection");
+			e.printStackTrace();
+		}
+	}
+	
+	private static void getProperties() {
+		Properties prop = new Properties();
+		try(InputStream input = new FileInputStream("ressources/jdbc.properties")){
+			prop.load(input);
+			url = prop.getProperty("db.url");
+			user = prop.getProperty("db.username");
+			passwd = prop.getProperty("db.password");
+			driver = prop.getProperty("db.driver");
+		} catch (FileNotFoundException e) {
+			System.out.println("File not Found");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("IO Exceptions");
 			e.printStackTrace();
 		}
 	}

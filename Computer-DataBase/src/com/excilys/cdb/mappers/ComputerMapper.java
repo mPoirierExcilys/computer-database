@@ -7,10 +7,9 @@ import java.util.List;
 
 import com.excilys.cdb.model.Computer;
 
-public class ComputerMapper extends AbstractMapper<Computer>{
+public class ComputerMapper{
 
-	@Override
-	public Computer resultToObject(ResultSet result) throws SQLException {
+	public static Computer resultToObject(ResultSet result) throws SQLException {
 		Computer computer = null;
 		if(result.first()) {
 			computer = new Computer(result.getInt("id"), result.getString("name"));
@@ -29,8 +28,7 @@ public class ComputerMapper extends AbstractMapper<Computer>{
 		return computer;
 	}
 
-	@Override
-	public List<Computer> resultToList(ResultSet result) throws SQLException {
+	public static List<Computer> resultToList(ResultSet result) throws SQLException {
 		List<Computer> allComputer = new ArrayList<>();
 		while(result.next()) {
 			Computer computer = new Computer(result.getInt("id"), result.getString("name"));

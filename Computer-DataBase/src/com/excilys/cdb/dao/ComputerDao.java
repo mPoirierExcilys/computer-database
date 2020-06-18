@@ -12,19 +12,22 @@ import com.excilys.cdb.model.Computer;
 
 public class ComputerDao extends AbstractDao<Computer>{
 	
-	private ComputerMapper computerMapper;
+	private static String insertSql = "INSERT INTO computer (name) VALUES(?)";
 	
-	public ComputerDao() {
-		computerMapper = new ComputerMapper();
-	}
+	private static String findAllSql = "SELECT id,name,introduced,discontinued,company_id FROM computer";
 	
-
+	private static String findSql = "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE id = ?";
+	
+	private static String deleteSql = "DELETE FROM computer WHERE id = ?";
+	
+	private static String limitSql = "SELECT id,name,introduced,discontinued,company_id FROM computer LIMIT ?, ?";
+	
+	private static String countSql = "SELECT COUNT(id) FROM computer";
+	
 	@Override
 	public Computer create(Computer obj) {
 		Computer comp = new Computer();
-		try {
-			PreparedStatement prepare = this.connect.prepareStatement("INSERT INTO computer (name) VALUES(?)"
-					, Statement.RETURN_GENERATED_KEYS);
+		try(PreparedStatement prepare = this.connect.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
 			prepare.setString(1, obj.getName());
 			prepare.executeUpdate();
 			ResultSet resultKeys = prepare.getGeneratedKeys();
@@ -33,7 +36,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 				obj.setIdComputer(computerId);
 				this.update(obj);
 				comp = this.find(computerId);
-			}		
+			}	
 		}catch(SQLException eSQL) {
 			System.out.println("Error Created Computer");
 			System.out.println(eSQL.getMessage());
@@ -45,10 +48,10 @@ public class ComputerDao extends AbstractDao<Computer>{
 	@Override
 	public Computer find(Integer id) {
 		Computer computer = null;
-		try {
-			ResultSet result = this.connect.createStatement().executeQuery(
-										"SELECT * FROM computer WHERE id = " + id);
-			computer = computerMapper.resultToObject(result);
+		try(PreparedStatement prepare = this.connect.prepareStatement(findSql)) {
+			prepare.setInt(1, id);
+			ResultSet result = prepare.executeQuery();
+			computer = ComputerMapper.resultToObject(result);
 		}catch(SQLException eSQL) {
 			System.out.println("Error Getting computer");
 			eSQL.printStackTrace();
@@ -59,10 +62,8 @@ public class ComputerDao extends AbstractDao<Computer>{
 	@Override
 	public List<Computer> findAll() {
 		List<Computer> allComputer = null;
-		try {
-			ResultSet result = this.connect.createStatement().executeQuery(
-                    		"SELECT * FROM computer");
-			allComputer = computerMapper.resultToList(result);
+		try(ResultSet result = this.connect.createStatement().executeQuery(findAllSql)) {
+			allComputer = ComputerMapper.resultToList(result);
 		}catch(SQLException eSQL) {
 			System.out.println("Error Getting computers");
 			eSQL.printStackTrace();
@@ -96,8 +97,9 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 	@Override
 	public void delete(Computer obj) {
-		try {
-			this.connect.createStatement().executeUpdate("DELETE FROM computer WHERE id = "+obj.getIdComputer());
+		try (PreparedStatement prepare = this.connect.prepareStatement(deleteSql)){
+			prepare.setInt(1, obj.getIdComputer());
+			prepare.executeUpdate();
 		}catch(SQLException eSQL) {
 			System.out.println("Error Delete Computer");
 			eSQL.printStackTrace();
@@ -108,9 +110,11 @@ public class ComputerDao extends AbstractDao<Computer>{
 	@Override
 	public List<Computer> findBetween(Integer offset, Integer nb) {
 		List<Computer> allComputer = null;
-		try {
-			ResultSet result = this.connect.createStatement().executeQuery("SELECT * FROM computer LIMIT "+offset+", "+nb);
-			allComputer = computerMapper.resultToList(result);
+		try(PreparedStatement prepare = this.connect.prepareStatement(limitSql)) {
+			prepare.setInt(1, offset);
+			prepare.setInt(2, nb);
+			ResultSet result = prepare.executeQuery();
+			allComputer = ComputerMapper.resultToList(result);
 		}catch(SQLException eSQL) {
 			System.out.println("Error Getting Computers between");
 			eSQL.printStackTrace();
@@ -122,8 +126,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 	@Override
 	public Integer count() {
 		Integer nb = 0;
-		try {
-			ResultSet result = this.connect.createStatement().executeQuery("SELECT COUNT(*) FROM computer");
+		try(ResultSet result = this.connect.createStatement().executeQuery(countSql)) {
 			if(result.first()) {
 				nb =result.getInt(1);
 			}

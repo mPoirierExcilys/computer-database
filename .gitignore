@@ -13,3 +13,6 @@ Computer-DataBase/.classpath
 
 #ignore WebContent
 Computer-DataBase/WebContent/
+
+#ignore jdbc properties
+Computer-DataBase/ressources/jdbc.properties

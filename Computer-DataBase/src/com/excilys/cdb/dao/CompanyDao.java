@@ -1,5 +1,6 @@
 package com.excilys.cdb.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -9,19 +10,22 @@ import com.excilys.cdb.model.Company;
 
 public class CompanyDao extends AbstractDao<Company> {
 	
-	private CompanyMapper companyMapper;
+	private static String findAllSql = "SELECT id,name FROM company";
 	
-	public CompanyDao() {
-		this.companyMapper = new CompanyMapper();
-	}
+	private static String findSql = "SELECT id,name FROM company WHERE id = ?";
+	
+	private static String limitSql = "SELECT id,name FROM company LIMIT ?, ?";
+	
+	private static String countSql = "SELECT COUNT(id) FROM company";
 
 	@Override
 	public Company find(Integer id) {
 		Company company = null;
-		try {
-			ResultSet result = this.connect.createStatement().executeQuery(
-										"SELECT * FROM company WHERE id = " + id);
-			company = companyMapper.resultToObject(result);
+		try (PreparedStatement prepare = this.connect.prepareStatement(findSql)){	
+			prepare.setInt(1, id);
+			ResultSet result = prepare.executeQuery();
+			//ResultSet result = this.connect.createStatement().executeQuery("SELECT * FROM company WHERE id = " + id);
+			company = CompanyMapper.resultToObject(result);
 		}catch(SQLException eSQL) {
 			System.out.println("Error Getting campany");
 			eSQL.printStackTrace();
@@ -32,10 +36,8 @@ public class CompanyDao extends AbstractDao<Company> {
 	@Override
 	public List<Company> findAll() {
 		List<Company> allCompany = null;
-		try {
-			ResultSet result = this.connect.createStatement().executeQuery(
-                    		"SELECT * FROM company");
-			allCompany = companyMapper.resultToList(result);
+		try(ResultSet result = this.connect.createStatement().executeQuery(findAllSql)) {
+			allCompany = CompanyMapper.resultToList(result);
 		}catch(SQLException eSQL) {
 			System.out.println("Error Getting campanies");
 			eSQL.printStackTrace();
@@ -64,9 +66,12 @@ public class CompanyDao extends AbstractDao<Company> {
 	@Override
 	public List<Company> findBetween(Integer offset, Integer nb) {
 		List<Company> allCompanies = null;
-		try {
-			ResultSet result = this.connect.createStatement().executeQuery("SELECT * FROM company LIMIT "+offset+", "+nb);
-			allCompanies = companyMapper.resultToList(result);
+		try (PreparedStatement prepare = this.connect.prepareStatement(limitSql)){
+			prepare.setInt(1, offset);
+			prepare.setInt(2, nb);
+			ResultSet result = prepare.executeQuery();
+			//ResultSet result = this.connect.createStatement().executeQuery("SELECT * FROM company LIMIT "+offset+", "+nb);
+			allCompanies = CompanyMapper.resultToList(result);
 		}catch(SQLException eSQL) {
 			System.out.println("Error getting companies between");
 			eSQL.printStackTrace();
@@ -77,8 +82,7 @@ public class CompanyDao extends AbstractDao<Company> {
 	@Override
 	public Integer count() {
 		Integer nb = 0;
-		try {
-			ResultSet result = this.connect.createStatement().executeQuery("SELECT COUNT(*) FROM company");
+		try(ResultSet result = this.connect.createStatement().executeQuery(countSql)) {
 			if(result.first()) {
 				nb =result.getInt(1);
 			}

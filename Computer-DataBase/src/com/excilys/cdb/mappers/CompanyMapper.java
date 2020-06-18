@@ -7,10 +7,9 @@ import java.util.List;
 
 import com.excilys.cdb.model.Company;
 
-public class CompanyMapper extends AbstractMapper<Company>{
+public class CompanyMapper{
 
-	@Override
-	public Company resultToObject(ResultSet result) throws SQLException {
+	public static Company resultToObject(ResultSet result) throws SQLException {
 		Company company = null;
 		if(result.first()) {
 			company = new Company(result.getInt("id"), result.getString("name"));
@@ -18,8 +17,7 @@ public class CompanyMapper extends AbstractMapper<Company>{
 		return company;
 	}
 
-	@Override
-	public List<Company> resultToList(ResultSet result) throws SQLException {
+	public static List<Company> resultToList(ResultSet result) throws SQLException {
 		List<Company> allCompany = new ArrayList<>();
 		while(result.next()) {
 			Company company = new Company(result.getInt("id"), result.getString("name"));
