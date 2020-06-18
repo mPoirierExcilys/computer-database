@@ -1,2 +1,15 @@
 # ignore build
 Computer-DataBase/build/
+
+# ignore .project
+.project
+Computer-DataBase/.project
+
+# ignore settings
+Computer-DataBase/.settings/
+
+#ignore classpath
+Computer-DataBase/.classpath
+
+#ignore WebContent
+Computer-DataBase/WebContent
