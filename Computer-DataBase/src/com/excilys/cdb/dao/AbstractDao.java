@@ -1,12 +1,9 @@
 package com.excilys.cdb.dao;
 
-import java.sql.Connection;
 import java.util.List;
 
-import com.excilys.cdb.persistence.ConnectionMysql;
-
 public abstract class AbstractDao<T> {
-	public  Connection connect = ConnectionMysql.getInstance();
+	//private  Connection connect = ConnectionMysql.getInstance();
 	
 	public abstract T create(T obj);
 	
