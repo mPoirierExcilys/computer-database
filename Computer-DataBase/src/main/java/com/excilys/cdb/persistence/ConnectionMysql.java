@@ -51,7 +51,7 @@ public class ConnectionMysql {
 	
 	private static void getProperties() {
 		Properties prop = new Properties();
-		try(InputStream input = new FileInputStream("ressources/jdbc.properties")){
+		try(InputStream input = new FileInputStream("src/main/resources/jdbc.properties")){
 			prop.load(input);
 			url = prop.getProperty("db.url");
 			user = prop.getProperty("db.username");
