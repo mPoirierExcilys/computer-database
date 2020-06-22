@@ -1,19 +1,13 @@
 package com.excilys.cdb.services;
 
 import java.util.List;
-
-import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 public interface ComputerDBService {
 	
 	List<Computer> getAllComputers();
 	
-	List<Company> getAllCompanies();
-	
 	Computer getComputer(Integer id);
-	
-	Company getCompany(Integer id);
 	
 	Computer updateComputer(Computer computer);
 	
@@ -21,14 +15,8 @@ public interface ComputerDBService {
 	
 	void deleteComputer(Computer computer);
 	
-	Company getCompanyFromComputer(Computer computer);
-	
-	List<Company> getCompaniesByPage(Integer page);
-	
 	List<Computer> getComputersByPage(Integer page);
 	
 	Integer getComputersNbPages();
-	
-	Integer getCompaniesNbPages();
 
 }
