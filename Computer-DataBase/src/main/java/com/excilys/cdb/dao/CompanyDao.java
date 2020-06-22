@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.ConnectionMysql;
@@ -19,6 +22,8 @@ public class CompanyDao extends AbstractDao<Company> {
 	private static String limitSql = "SELECT id,name FROM company LIMIT ?, ?";
 	
 	private static String countSql = "SELECT COUNT(id) FROM company";
+	
+	private static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
 
 	@Override
 	public Company find(Integer id) {
@@ -29,7 +34,7 @@ public class CompanyDao extends AbstractDao<Company> {
 			ResultSet result = prepare.executeQuery();
 			company = CompanyMapper.resultToObject(result);
 		}catch(SQLException eSQL) {
-			System.out.println("Error Getting campany");
+			logger.error("Error Getting campany");
 			eSQL.printStackTrace();
 		}
 		return company;
@@ -42,7 +47,7 @@ public class CompanyDao extends AbstractDao<Company> {
 			ResultSet result = connect.createStatement().executeQuery(findAllSql)) {
 			allCompany = CompanyMapper.resultToList(result);
 		}catch(SQLException eSQL) {
-			System.out.println("Error Getting campanies");
+			logger.error("Error Getting campanies");
 			eSQL.printStackTrace();
 		}
 		return allCompany;
@@ -76,7 +81,7 @@ public class CompanyDao extends AbstractDao<Company> {
 			ResultSet result = prepare.executeQuery();
 			allCompanies = CompanyMapper.resultToList(result);
 		}catch(SQLException eSQL) {
-			System.out.println("Error getting companies between");
+			logger.error("Error getting companies between");
 			eSQL.printStackTrace();
 		}
 		return allCompanies;
@@ -91,7 +96,7 @@ public class CompanyDao extends AbstractDao<Company> {
 				nb =result.getInt(1);
 			}
 		}catch(SQLException eSQL) {
-			System.out.println("Error counting Computers");
+			logger.error("Error counting Computers");
 			eSQL.printStackTrace();
 		}
 		return nb;

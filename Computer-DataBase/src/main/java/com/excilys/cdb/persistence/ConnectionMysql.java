@@ -9,6 +9,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ConnectionMysql {
 	
 	private static String url;
@@ -21,6 +24,8 @@ public class ConnectionMysql {
 	
 	private static Connection connect;
 	
+	private static Logger logger = LoggerFactory.getLogger(ConnectionMysql.class);
+	
 	
 	public static Connection getInstance() throws SQLException {
 		if(connect == null || connect.isClosed()) {
@@ -29,11 +34,11 @@ public class ConnectionMysql {
 				Class.forName(driver);
 				connect = DriverManager.getConnection(url, user, passwd);
 			} catch(SQLException eSQL) {
-				System.out.println("Error connection to DB");
+				logger.error("Error connection to DB");
 				eSQL.printStackTrace();
 				
 			} catch (ClassNotFoundException e) {
-				System.out.println("Driver not found");
+				logger.error("Driver not found");
 				e.printStackTrace();
 			}
 		}
@@ -44,7 +49,7 @@ public class ConnectionMysql {
 		try {
 			connect.close();
 		} catch (SQLException e) {
-			System.out.println("Error to close connection");
+			logger.error("Error to close connection");
 			e.printStackTrace();
 		}
 	}
@@ -58,10 +63,10 @@ public class ConnectionMysql {
 			passwd = prop.getProperty("db.password");
 			driver = prop.getProperty("db.driver");
 		} catch (FileNotFoundException e) {
-			System.out.println("File not Found");
+			logger.error("File not Found");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("IO Exceptions");
+			logger.error("IO Exceptions");
 			e.printStackTrace();
 		}
 	}

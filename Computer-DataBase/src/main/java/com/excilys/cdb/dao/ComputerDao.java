@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 
 import com.excilys.cdb.mappers.ComputerMapper;
@@ -26,6 +30,8 @@ public class ComputerDao extends AbstractDao<Computer>{
 	
 	private static String countSql = "SELECT COUNT(id) FROM computer";
 	
+	private static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
+	
 	@Override
 	public Computer create(Computer obj) {
 		Computer comp = new Computer();
@@ -41,8 +47,8 @@ public class ComputerDao extends AbstractDao<Computer>{
 				comp = this.find(computerId);
 			}	
 		}catch(SQLException eSQL) {
-			System.out.println("Error Created Computer");
-			System.out.println(eSQL.getMessage());
+			logger.error("Error Created Computer");
+			logger.error(eSQL.getMessage());
 			eSQL.printStackTrace();
 		}
 		return comp;
@@ -57,7 +63,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			ResultSet result = prepare.executeQuery();
 			computer = ComputerMapper.resultToObject(result);
 		}catch(SQLException eSQL) {
-			System.out.println("Error Getting computer");
+			logger.error("Error Getting computer");
 			eSQL.printStackTrace();
 		}
 		return computer;
@@ -70,7 +76,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			ResultSet result = connect.createStatement().executeQuery(findAllSql)) {
 			allComputer = ComputerMapper.resultToList(result);
 		}catch(SQLException eSQL) {
-			System.out.println("Error Getting computers");
+			logger.error("Error Getting computers");
 			eSQL.printStackTrace();
 		}
 		return allComputer;
@@ -94,7 +100,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			connect.createStatement().executeUpdate(sqlRequest);
 			obj = this.find(obj.getIdComputer());
 		}catch(SQLException eSQL) {
-			System.out.println("Error Update Computer");
+			logger.error("Error Update Computer");
 			eSQL.printStackTrace();
 		}
 		return obj;
@@ -107,7 +113,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			prepare.setInt(1, obj.getIdComputer());
 			prepare.executeUpdate();
 		}catch(SQLException eSQL) {
-			System.out.println("Error Delete Computer");
+			logger.error("Error Delete Computer");
 			eSQL.printStackTrace();
 		}
 	}
@@ -123,7 +129,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			ResultSet result = prepare.executeQuery();
 			allComputer = ComputerMapper.resultToList(result);
 		}catch(SQLException eSQL) {
-			System.out.println("Error Getting Computers between");
+			logger.error("Error Getting Computers between");
 			eSQL.printStackTrace();
 		}
 		return allComputer;
@@ -139,7 +145,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 				nb =result.getInt(1);
 			}
 		}catch(SQLException eSQL) {
-			System.out.println("Error counting Computers");
+			logger.error("Error counting Computers");
 			eSQL.printStackTrace();
 		}
 		return nb;
