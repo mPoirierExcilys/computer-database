@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -32,7 +33,9 @@ public class CompanyDao extends AbstractDao<Company> {
 			PreparedStatement prepare = connect.prepareStatement(findSql)){	
 			prepare.setInt(1, id);
 			ResultSet result = prepare.executeQuery();
-			company = CompanyMapper.resultToObject(result);
+			if(result.first()) {
+				company = CompanyMapper.resultToObject(result);
+			}	
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting campany");
 			eSQL.printStackTrace();
@@ -42,10 +45,13 @@ public class CompanyDao extends AbstractDao<Company> {
 
 	@Override
 	public List<Company> findAll() {
-		List<Company> allCompany = null;
+		List<Company> allCompany = new ArrayList<>();
 		try(Connection connect = ConnectionMysql.getInstance();
 			ResultSet result = connect.createStatement().executeQuery(findAllSql)) {
-			allCompany = CompanyMapper.resultToList(result);
+			while(result.next()) {
+				Company company = CompanyMapper.resultToObject(result);
+				allCompany.add(company);
+			}
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting campanies");
 			eSQL.printStackTrace();
@@ -73,13 +79,16 @@ public class CompanyDao extends AbstractDao<Company> {
 
 	@Override
 	public List<Company> findBetween(Integer offset, Integer nb) {
-		List<Company> allCompanies = null;
+		List<Company> allCompanies = new ArrayList<>();
 		try (Connection connect = ConnectionMysql.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(limitSql)){
 			prepare.setInt(1, offset);
 			prepare.setInt(2, nb);
 			ResultSet result = prepare.executeQuery();
-			allCompanies = CompanyMapper.resultToList(result);
+			while(result.next()) {
+				Company company = CompanyMapper.resultToObject(result);
+				allCompanies.add(company);
+			}
 		}catch(SQLException eSQL) {
 			logger.error("Error getting companies between");
 			eSQL.printStackTrace();

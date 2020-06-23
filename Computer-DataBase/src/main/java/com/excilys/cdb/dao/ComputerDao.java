@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -61,7 +62,9 @@ public class ComputerDao extends AbstractDao<Computer>{
 			PreparedStatement prepare = connect.prepareStatement(findSql)) {
 			prepare.setInt(1, id);
 			ResultSet result = prepare.executeQuery();
-			computer = ComputerMapper.resultToObject(result);
+			if(result.first()) {
+				computer = ComputerMapper.resultToObject(result);
+			}
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting computer");
 			eSQL.printStackTrace();
@@ -71,10 +74,13 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 	@Override
 	public List<Computer> findAll() {
-		List<Computer> allComputer = null;
+		List<Computer> allComputer = new ArrayList<>();
 		try(Connection connect = ConnectionMysql.getInstance();
 			ResultSet result = connect.createStatement().executeQuery(findAllSql)) {
-			allComputer = ComputerMapper.resultToList(result);
+			while(result.next()) {
+				Computer computer = ComputerMapper.resultToObject(result);
+				allComputer.add(computer);
+			}
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting computers");
 			eSQL.printStackTrace();
@@ -121,13 +127,16 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 	@Override
 	public List<Computer> findBetween(Integer offset, Integer nb) {
-		List<Computer> allComputer = null;
+		List<Computer> allComputer = new ArrayList<>();
 		try(Connection connect = ConnectionMysql.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(limitSql)) {
 			prepare.setInt(1, offset);
 			prepare.setInt(2, nb);
 			ResultSet result = prepare.executeQuery();
-			allComputer = ComputerMapper.resultToList(result);
+			while(result.next()) {
+				Computer computer = ComputerMapper.resultToObject(result);
+				allComputer.add(computer);
+			}
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting Computers between");
 			eSQL.printStackTrace();
