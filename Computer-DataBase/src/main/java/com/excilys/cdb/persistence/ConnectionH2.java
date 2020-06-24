@@ -9,15 +9,19 @@ import org.slf4j.LoggerFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class ConnectionMysql implements Connector {
+public class ConnectionH2 implements Connector{
 	
 	private static Connection connect;
 	
-	private static Logger logger = LoggerFactory.getLogger(ConnectionMysql.class);
+	private static Logger logger = LoggerFactory.getLogger(ConnectionH2.class);
 	
-	private static HikariDataSource ds = new HikariDataSource(new HikariConfig("/datasource.properties"));
+	private static HikariDataSource ds;
 	
-	
+	public ConnectionH2() {
+		ds = new HikariDataSource(new HikariConfig("/datasource.properties"));
+	}
+
+	@Override
 	public Connection getInstance() throws SQLException {
 		if(connect == null || connect.isClosed()) {
 			try {

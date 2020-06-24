@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.ConnectionH2;
 import com.excilys.cdb.persistence.ConnectionMysql;
+import com.excilys.cdb.persistence.Connector;
 
 public class CompanyDao extends AbstractDao<Company> {
 	
@@ -25,11 +27,21 @@ public class CompanyDao extends AbstractDao<Company> {
 	private static String countSql = "SELECT COUNT(id) FROM company";
 	
 	private static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
+	
+	private Connector connector;
+	
+	public CompanyDao() {
+		this.connector = new ConnectionMysql();
+	}
+	
+	public CompanyDao(int h2) {
+		this.connector = new ConnectionH2();
+	}
 
 	@Override
 	public Company find(Integer id) {
 		Company company = null;
-		try(Connection connect = ConnectionMysql.getInstance();
+		try(Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(findSql)){	
 			prepare.setInt(1, id);
 			ResultSet result = prepare.executeQuery();
@@ -46,7 +58,7 @@ public class CompanyDao extends AbstractDao<Company> {
 	@Override
 	public List<Company> findAll() {
 		List<Company> allCompany = new ArrayList<>();
-		try(Connection connect = ConnectionMysql.getInstance();
+		try(Connection connect = connector.getInstance();
 			ResultSet result = connect.createStatement().executeQuery(findAllSql)) {
 			while(result.next()) {
 				Company company = CompanyMapper.resultToObject(result);
@@ -80,7 +92,7 @@ public class CompanyDao extends AbstractDao<Company> {
 	@Override
 	public List<Company> findBetween(Integer offset, Integer nb) {
 		List<Company> allCompanies = new ArrayList<>();
-		try (Connection connect = ConnectionMysql.getInstance();
+		try (Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(limitSql)){
 			prepare.setInt(1, offset);
 			prepare.setInt(2, nb);
@@ -99,7 +111,7 @@ public class CompanyDao extends AbstractDao<Company> {
 	@Override
 	public Integer count() {
 		Integer nb = 0;
-		try(Connection connect = ConnectionMysql.getInstance();
+		try(Connection connect = connector.getInstance();
 			ResultSet result = connect.createStatement().executeQuery(countSql)) {
 			if(result.first()) {
 				nb =result.getInt(1);
