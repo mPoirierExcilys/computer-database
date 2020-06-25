@@ -53,4 +53,9 @@ public class ComputerDBServiceImpl implements ComputerDBService{
 		return nbEntries%NB_ELEMENTS_BY_PAGE == 0?nbPages:nbPages+1;
 	}
 
+	@Override
+	public Integer getNbComputers() {
+		return computerDao.count();
+	}
+
 }

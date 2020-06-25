@@ -18,5 +18,7 @@ public interface ComputerDBService {
 	List<Computer> getComputersByPage(Integer page);
 	
 	Integer getComputersNbPages();
+	
+	Integer getNbComputers();
 
 }
