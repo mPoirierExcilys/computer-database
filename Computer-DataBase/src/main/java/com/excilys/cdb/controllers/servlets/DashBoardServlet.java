@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.cdb.dto.ComputerDto;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.CompanyDBService;
 import com.excilys.cdb.services.CompanyDBServiceImpl;
 import com.excilys.cdb.services.ComputerDBService;
@@ -27,7 +28,7 @@ public class DashBoardServlet extends HttpServlet {
 	
 	private ComputerDBService computerService;
 	private CompanyDBService companyService;
-	private Integer currentPage;
+	private Page page;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -36,7 +37,7 @@ public class DashBoardServlet extends HttpServlet {
         super();
         computerService = new ComputerDBServiceImpl();
         companyService = new CompanyDBServiceImpl();
-        currentPage=1;
+        page = new Page(1,10);
     }
 
 	/**
@@ -46,10 +47,11 @@ public class DashBoardServlet extends HttpServlet {
 		List<ComputerDto> computersDto = new ArrayList<>();
 		List<Computer> computers = new ArrayList<>();
 		if(request.getParameter("page") != null) {
-			String page = request.getParameter("page");
-			currentPage = Integer.parseInt(page);
+			String pageWish = request.getParameter("page");
+			Integer currentPage = Integer.parseInt(pageWish);
+			page.setCurrentPage(currentPage);
 		}
-		computers = computerService.getComputersByPage(currentPage);
+		computers = computerService.getComputersByPage(page);
 		for(Computer computer: computers) {
 			ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, companyService.getCompanyFromComputer(computer));
 			computersDto.add(computerDto);

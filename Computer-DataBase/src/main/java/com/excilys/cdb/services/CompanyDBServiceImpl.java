@@ -5,12 +5,11 @@ import java.util.List;
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 
 public class CompanyDBServiceImpl implements CompanyDBService {
 	
 	private final CompanyDao companyDao;
-	
-	private static final int NB_ELEMENTS_BY_PAGE = 10;
 	
 	public CompanyDBServiceImpl() {
 		this.companyDao = new CompanyDao();
@@ -35,16 +34,16 @@ public class CompanyDBServiceImpl implements CompanyDBService {
 	}
 
 	@Override
-	public List<Company> getCompaniesByPage(Integer page) {
-		Integer offset = (page-1)*NB_ELEMENTS_BY_PAGE;
-		return companyDao.findBetween(offset, NB_ELEMENTS_BY_PAGE);
+	public List<Company> getCompaniesByPage(Page page) {
+		Integer offset = (page.getCurrentPage()-1)*page.getItemsByPage();
+		return companyDao.findBetween(offset, page.getItemsByPage());
 	}
 
 	@Override
-	public Integer getCompaniesNbPages() {
+	public Integer getCompaniesNbPages(Page page) {
 		Integer nbEntries = companyDao.count();
-		Integer nbPages = nbEntries/NB_ELEMENTS_BY_PAGE;
-		return nbEntries%NB_ELEMENTS_BY_PAGE == 0?nbPages:nbPages+1;
+		Integer nbPages = nbEntries/page.getItemsByPage();
+		return nbEntries%page.getItemsByPage() == 0?nbPages:nbPages+1;
 	}
 
 }

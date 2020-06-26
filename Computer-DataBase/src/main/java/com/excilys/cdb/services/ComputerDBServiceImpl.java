@@ -3,12 +3,11 @@ package com.excilys.cdb.services;
 import java.util.List;
 import com.excilys.cdb.dao.ComputerDao;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 
 public class ComputerDBServiceImpl implements ComputerDBService{
 	
 	private final ComputerDao computerDao;
-	
-	private static final int NB_ELEMENTS_BY_PAGE = 10;
 	
 	public ComputerDBServiceImpl() {
 		this.computerDao = new ComputerDao();
@@ -41,16 +40,16 @@ public class ComputerDBServiceImpl implements ComputerDBService{
 	}
 	
 	@Override
-	public List<Computer> getComputersByPage(Integer page) {
-		Integer offset = (page-1)*NB_ELEMENTS_BY_PAGE;
-		return computerDao.findBetween(offset, NB_ELEMENTS_BY_PAGE);
+	public List<Computer> getComputersByPage(Page page) {
+		Integer offset = (page.getCurrentPage()-1)*page.getItemsByPage();
+		return computerDao.findBetween(offset, page.getItemsByPage());
 	}
 
 	@Override
-	public Integer getComputersNbPages() {
+	public Integer getComputersNbPages(Page page) {
 		Integer nbEntries = computerDao.count();
-		Integer nbPages = nbEntries/NB_ELEMENTS_BY_PAGE;
-		return nbEntries%NB_ELEMENTS_BY_PAGE == 0?nbPages:nbPages+1;
+		Integer nbPages = nbEntries/page.getItemsByPage();
+		return nbEntries%page.getItemsByPage() == 0?nbPages:nbPages+1;
 	}
 
 	@Override

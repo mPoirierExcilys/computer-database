@@ -3,6 +3,7 @@ package com.excilys.cdb.controllers;
 import java.util.Scanner;
 
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.CompanyDBService;
 import com.excilys.cdb.services.CompanyDBServiceImpl;
 import com.excilys.cdb.services.ComputerDBService;
@@ -15,12 +16,14 @@ public class ControllerCli {
 	private final CompanyDBService companyService;
 	private final CliUi cliUi;
 	private Scanner sc;
+	private Page page;
 	
 	public ControllerCli() {
 		this.computerService = new ComputerDBServiceImpl();
 		this.companyService = new CompanyDBServiceImpl();
 		this.cliUi = new CliUi();
 		this.sc = new Scanner(System.in);
+		this.page = new Page(1,10);
 	}
 	
 	public void CdbLogical() {
@@ -31,40 +34,40 @@ public class ControllerCli {
 			String input = sc.next();
 			switch(input) {
 			case "1":
-				Integer currentPage = 1;
-				Integer totalPage = companyService.getCompaniesNbPages();
+				page.setCurrentPage(1);
+				page.setNbPage(companyService.getCompaniesNbPages(page));
 				boolean test = true;
 				do {
-					cliUi.listAllCompanies(companyService.getCompaniesByPage(currentPage),currentPage,totalPage);
+					cliUi.listAllCompanies(companyService.getCompaniesByPage(page),page.getCurrentPage(),page.getNbPage());
 					String input1 = sc.next();
 					try {
-						Integer page = Integer.parseInt(input1);
-						currentPage = page;
+						Integer pageWish = Integer.parseInt(input1);
+						page.setCurrentPage(pageWish);
 					}catch(NumberFormatException e) {
 						if(input1.equals("q")) {
 							test = false;
 						}
-						currentPage++;
+						page.incrementCurrentPage();
 					}
-				}while(test && currentPage<=totalPage);
+				}while(test && page.getCurrentPage()<=page.getNbPage());
 				break;
 			case "2":
-				Integer currentPage1 = 1;
-				Integer totalPage1 = computerService.getComputersNbPages();
 				boolean test1 = true;
+				page.setCurrentPage(1);
+				page.setNbPage(computerService.getComputersNbPages(page));
 				do {
-					cliUi.listAllComputers(computerService.getComputersByPage(currentPage1),currentPage1,totalPage1);
+					cliUi.listAllComputers(computerService.getComputersByPage(page),page.getCurrentPage(),page.getNbPage());
 					String input1 = sc.next();
 					try {
-						Integer page = Integer.parseInt(input1);
-						currentPage1 = page;
+						Integer pageWish = Integer.parseInt(input1);
+						page.setCurrentPage(pageWish);
 					}catch(NumberFormatException e) {
 						if(input1.equals("q")) {
 							test1 = false;
 						}
-						currentPage1++;
+						page.incrementCurrentPage();;
 					}
-				}while(test1 && currentPage1<=totalPage1);
+				}while(test1 && page.getCurrentPage()<=page.getNbPage());
 				break;
 			case "3":
 				cliUi.enterComputerId();

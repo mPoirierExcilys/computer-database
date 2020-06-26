@@ -2,6 +2,7 @@ package com.excilys.cdb.services;
 
 import java.util.List;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 
 public interface ComputerDBService {
 	
@@ -15,9 +16,9 @@ public interface ComputerDBService {
 	
 	void deleteComputer(Computer computer);
 	
-	List<Computer> getComputersByPage(Integer page);
+	List<Computer> getComputersByPage(Page page);
 	
-	Integer getComputersNbPages();
+	Integer getComputersNbPages(Page page);
 	
 	Integer getNbComputers();
 

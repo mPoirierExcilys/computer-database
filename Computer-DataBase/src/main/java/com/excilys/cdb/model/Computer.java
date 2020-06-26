@@ -40,7 +40,7 @@ public class Computer {
 
 	public void setIntroduced(LocalDate introduced){
 		if(this.discontinued != null) {
-			if(introduced.compareTo(this.discontinued) < 0) {
+			if(introduced.compareTo(this.discontinued) <= 0) {
 				this.introduced = introduced;
 			}
 			else {
@@ -58,7 +58,7 @@ public class Computer {
 
 	public void setDiscontinued(LocalDate discontinued){
 		if(this.introduced != null) {
-			if(this.introduced.compareTo(discontinued) < 0) {
+			if(this.introduced.compareTo(discontinued) <= 0) {
 				this.discontinued = discontinued;
 			}
 			else {
