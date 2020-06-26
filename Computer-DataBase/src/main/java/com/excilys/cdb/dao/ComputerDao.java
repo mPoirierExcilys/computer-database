@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,7 +15,9 @@ import java.sql.Connection;
 
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.ConnectionH2;
 import com.excilys.cdb.persistence.ConnectionMysql;
+import com.excilys.cdb.persistence.Connector;
 
 public class ComputerDao extends AbstractDao<Computer>{
 	
@@ -32,10 +35,20 @@ public class ComputerDao extends AbstractDao<Computer>{
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 	
+	private Connector connector;
+	
+	public ComputerDao() {
+		this.connector = new ConnectionMysql();
+	}
+	
+	public ComputerDao(int h2) {
+		this.connector = new ConnectionH2();
+	}
+	
 	@Override
 	public Computer create(Computer obj) {
 		Computer comp = new Computer();
-		try(Connection connect = ConnectionMysql.getInstance();
+		try(Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
 			prepare.setString(1, obj.getName());
 			prepare.executeUpdate();
@@ -57,11 +70,13 @@ public class ComputerDao extends AbstractDao<Computer>{
 	@Override
 	public Computer find(Integer id) {
 		Computer computer = null;
-		try(Connection connect = ConnectionMysql.getInstance();
+		try(Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(findSql)) {
 			prepare.setInt(1, id);
 			ResultSet result = prepare.executeQuery();
-			computer = ComputerMapper.resultToObject(result);
+			if(result.first()) {
+				computer = ComputerMapper.resultToObject(result);
+			}
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting computer");
 			eSQL.printStackTrace();
@@ -71,10 +86,13 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 	@Override
 	public List<Computer> findAll() {
-		List<Computer> allComputer = null;
-		try(Connection connect = ConnectionMysql.getInstance();
+		List<Computer> allComputer = new ArrayList<>();
+		try(Connection connect = connector.getInstance();
 			ResultSet result = connect.createStatement().executeQuery(findAllSql)) {
-			allComputer = ComputerMapper.resultToList(result);
+			while(result.next()) {
+				Computer computer = ComputerMapper.resultToObject(result);
+				allComputer.add(computer);
+			}
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting computers");
 			eSQL.printStackTrace();
@@ -84,7 +102,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 	@Override
 	public Computer update(Computer obj) {
-		try(Connection connect = ConnectionMysql.getInstance()) {
+		try(Connection connect = connector.getInstance()) {
 			String sqlRequest = "UPDATE computer SET name = '" + obj.getName() + "'";
 			if(obj.getIntroduced() != null) {
 				sqlRequest += ", introduced = '" + Date.valueOf(obj.getIntroduced()) + "'";
@@ -108,7 +126,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 	@Override
 	public void delete(Computer obj) {
-		try(Connection connect = ConnectionMysql.getInstance();
+		try(Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(deleteSql)){
 			prepare.setInt(1, obj.getIdComputer());
 			prepare.executeUpdate();
@@ -121,13 +139,16 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 	@Override
 	public List<Computer> findBetween(Integer offset, Integer nb) {
-		List<Computer> allComputer = null;
-		try(Connection connect = ConnectionMysql.getInstance();
+		List<Computer> allComputer = new ArrayList<>();
+		try(Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(limitSql)) {
 			prepare.setInt(1, offset);
 			prepare.setInt(2, nb);
 			ResultSet result = prepare.executeQuery();
-			allComputer = ComputerMapper.resultToList(result);
+			while(result.next()) {
+				Computer computer = ComputerMapper.resultToObject(result);
+				allComputer.add(computer);
+			}
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting Computers between");
 			eSQL.printStackTrace();
@@ -139,7 +160,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 	@Override
 	public Integer count() {
 		Integer nb = 0;
-		try(Connection connect = ConnectionMysql.getInstance();
+		try(Connection connect = connector.getInstance();
 			ResultSet result =connect.createStatement().executeQuery(countSql)) {
 			if(result.first()) {
 				nb =result.getInt(1);

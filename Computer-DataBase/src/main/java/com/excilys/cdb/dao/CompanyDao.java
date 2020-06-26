@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -11,7 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.mappers.CompanyMapper;
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.ConnectionH2;
 import com.excilys.cdb.persistence.ConnectionMysql;
+import com.excilys.cdb.persistence.Connector;
 
 public class CompanyDao extends AbstractDao<Company> {
 	
@@ -24,15 +27,27 @@ public class CompanyDao extends AbstractDao<Company> {
 	private static String countSql = "SELECT COUNT(id) FROM company";
 	
 	private static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
+	
+	private Connector connector;
+	
+	public CompanyDao() {
+		this.connector = new ConnectionMysql();
+	}
+	
+	public CompanyDao(int h2) {
+		this.connector = new ConnectionH2();
+	}
 
 	@Override
 	public Company find(Integer id) {
 		Company company = null;
-		try(Connection connect = ConnectionMysql.getInstance();
+		try(Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(findSql)){	
 			prepare.setInt(1, id);
 			ResultSet result = prepare.executeQuery();
-			company = CompanyMapper.resultToObject(result);
+			if(result.first()) {
+				company = CompanyMapper.resultToObject(result);
+			}	
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting campany");
 			eSQL.printStackTrace();
@@ -42,10 +57,13 @@ public class CompanyDao extends AbstractDao<Company> {
 
 	@Override
 	public List<Company> findAll() {
-		List<Company> allCompany = null;
-		try(Connection connect = ConnectionMysql.getInstance();
+		List<Company> allCompany = new ArrayList<>();
+		try(Connection connect = connector.getInstance();
 			ResultSet result = connect.createStatement().executeQuery(findAllSql)) {
-			allCompany = CompanyMapper.resultToList(result);
+			while(result.next()) {
+				Company company = CompanyMapper.resultToObject(result);
+				allCompany.add(company);
+			}
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting campanies");
 			eSQL.printStackTrace();
@@ -73,13 +91,16 @@ public class CompanyDao extends AbstractDao<Company> {
 
 	@Override
 	public List<Company> findBetween(Integer offset, Integer nb) {
-		List<Company> allCompanies = null;
-		try (Connection connect = ConnectionMysql.getInstance();
+		List<Company> allCompanies = new ArrayList<>();
+		try (Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(limitSql)){
 			prepare.setInt(1, offset);
 			prepare.setInt(2, nb);
 			ResultSet result = prepare.executeQuery();
-			allCompanies = CompanyMapper.resultToList(result);
+			while(result.next()) {
+				Company company = CompanyMapper.resultToObject(result);
+				allCompanies.add(company);
+			}
 		}catch(SQLException eSQL) {
 			logger.error("Error getting companies between");
 			eSQL.printStackTrace();
@@ -90,7 +111,7 @@ public class CompanyDao extends AbstractDao<Company> {
 	@Override
 	public Integer count() {
 		Integer nb = 0;
-		try(Connection connect = ConnectionMysql.getInstance();
+		try(Connection connect = connector.getInstance();
 			ResultSet result = connect.createStatement().executeQuery(countSql)) {
 			if(result.first()) {
 				nb =result.getInt(1);

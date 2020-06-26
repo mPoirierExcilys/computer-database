@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 
 public interface CompanyDBService {
 	List<Company> getAllCompanies();
@@ -12,7 +13,7 @@ public interface CompanyDBService {
 	
 	Company getCompanyFromComputer(Computer computer);
 	
-	List<Company> getCompaniesByPage(Integer page);
+	List<Company> getCompaniesByPage(Page page);
 	
-	Integer getCompaniesNbPages();
+	Integer getCompaniesNbPages(Page page);
 }
