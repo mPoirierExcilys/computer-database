@@ -62,7 +62,7 @@ public class DashBoardServlet extends HttpServlet {
 			ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, companyService.getCompanyFromComputer(computer));
 			computersDto.add(computerDto);
 		}
-		request.setAttribute("currentPage", page.getCurrentPage());
+		request.setAttribute("page", page);
 		request.setAttribute("nbPagesMax", computerService.getComputersNbPages(page));
 		request.setAttribute("nbComputers", computerService.getNbComputers());
 		request.setAttribute("computers", computersDto);

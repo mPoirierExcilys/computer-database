@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.excilys.cdb.dto.CompanyDto;
 import com.excilys.cdb.model.Company;
 
 public class CompanyMapperTest {
@@ -32,6 +33,20 @@ public class CompanyMapperTest {
 		Company company = CompanyMapper.resultToObject(resultSet);
 		Company companyExpected = new Company(idCompany,companyName);
 		assertEquals(companyExpected,company);
+	}
+	
+	@Test
+	public void companyToCompanyDto() {
+		CompanyDto companyDto = CompanyMapper.companyToCompanyDto(new Company(idCompany, companyName));
+		CompanyDto companyDtoExpected = new CompanyDto(idCompany, companyName);
+		assertEquals(companyDtoExpected, companyDto);
+	}
+	
+	@Test
+	public void companyDtoToCompany() {
+		Company company = CompanyMapper.companyDtoToCompany(new CompanyDto(idCompany,companyName));
+		Company companyExpected = new Company(idCompany, companyName);
+		assertEquals(companyExpected, company);
 	}
 
 }

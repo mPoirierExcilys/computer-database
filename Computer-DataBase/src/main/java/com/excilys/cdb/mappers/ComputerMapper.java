@@ -38,22 +38,24 @@ public class ComputerMapper{
 			computerDto.setDiscontinued(computer.getDiscontinued().toString());
 		}
 		if(computer.getCompanyId() != null) {
-			computerDto.setCompany(CompanyMapper.CompanyToCompanyDto(company));
+			computerDto.setCompany(CompanyMapper.companyToCompanyDto(company));
 		}
 		return computerDto;
 	}
 	
 	public static Computer computerDtoToComputer(ComputerDto computerDto) {
 		Computer computer = new Computer();
-		computer.setIdComputer(computerDto.getIdComputer());
+		if(computerDto.getIdComputer() != null) {
+			computer.setIdComputer(computerDto.getIdComputer());
+		}
 		computer.setName(computerDto.getName());
-		if(computer.getIntroduced() != null) {
+		if(computerDto.getIntroduced() != null) {
 			computer.setIntroduced(LocalDate.parse(computerDto.getIntroduced()));	
 		}
-		if(computer.getDiscontinued() != null) {
+		if(computerDto.getDiscontinued() != null) {
 			computer.setDiscontinued(LocalDate.parse(computerDto.getDiscontinued()));
 		}
-		if(computerDto.getCompany().getIdCompany() != null) {
+		if(computerDto.getCompany() != null && computerDto.getCompany().getIdCompany() != null) {
 			computer.setCompanyId(computerDto.getCompany().getIdCompany());	
 		}
 		return computer;

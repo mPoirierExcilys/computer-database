@@ -100,34 +100,50 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                	<c:if test="${currentPage > 1}">
-                    	<a href="/Computer-DataBase/dashboard?page=${currentPage-1}" aria-label="Previous">
+                	<c:if test="${page.currentPage > 1}">
+                    	<a href="/Computer-DataBase/dashboard?page=${page.currentPage-1}" aria-label="Previous">
                       		<span aria-hidden="true">&laquo;</span>
                   		</a>
                 	</c:if>
               	</li>
               	<c:forEach var="i" begin="1" end="2">
-              		<c:if test="${currentPage-(3-i) >= 1}">
-              			<li><a href="/Computer-DataBase/dashboard?page=${currentPage-(3-i)}"><c:out value="${currentPage-(3-i)}"/></a></li>
+              		<c:if test="${page.currentPage-(3-i) >= 1}">
+              			<li><a href="/Computer-DataBase/dashboard?page=${page.currentPage-(3-i)}"><c:out value="${page.currentPage-(3-i)}"/></a></li>
               		</c:if>
               	</c:forEach>
               	<c:forEach var="i" begin="0" end="2">
-              		<c:if test="${currentPage+i <= nbPagesMax}">
-              			<li><a href="/Computer-DataBase/dashboard?page=${currentPage+i}"><c:out value="${currentPage+i}"/></a></li>
+              		<c:if test="${page.currentPage+i <= nbPagesMax}">
+              			<c:set var="active" value=""/>
+                        <c:if test = "${page.currentPage+i ==  page.currentPage}">
+                          <c:set var="active" value="active"/>
+                         </c:if>
+              			<li class="${active}"><a href="/Computer-DataBase/dashboard?page=${page.currentPage+i}"><c:out value="${page.currentPage+i}"/></a></li>
               		</c:if>
               	</c:forEach>
               	<li>
-              		<c:if test="${currentPage < nbPagesMax}">
-                		<a href="/Computer-DataBase/dashboard?page=${currentPage+1}" aria-label="Next">
+              		<c:if test="${page.currentPage < nbPagesMax}">
+                		<a href="/Computer-DataBase/dashboard?page=${page.currentPage+1}" aria-label="Next">
                     		<span aria-hidden="true">&raquo;</span>
                 		</a>
                 	</c:if>
             	</li>
         	</ul>
         	<div class="btn-group btn-group-sm pull-right" role="group" >
-            <a href="/Computer-DataBase/dashboard?nbByPage=10"><button type="button" class="btn btn-default">10</button></a>
-            <a href="/Computer-DataBase/dashboard?nbByPage=50"><button type="button" class="btn btn-default">50</button></a>
-            <a href="/Computer-DataBase/dashboard?nbByPage=100"><button type="button" class="btn btn-default">100</button></a>
+        	<c:set var="active" value=""/>
+            <c:if test = "${page.itemsByPage == 10}">
+               <c:set var="active" value="active"/>
+            </c:if>
+            <a href="/Computer-DataBase/dashboard?nbByPage=10"><button type="button" class="btn btn-default ${active}">10</button></a>
+            <c:set var="active" value=""/>
+            <c:if test = "${page.itemsByPage == 50}">
+               <c:set var="active" value="active"/>
+            </c:if>
+            <a href="/Computer-DataBase/dashboard?nbByPage=50"><button type="button" class="btn btn-default ${active}">50</button></a>
+            <c:set var="active" value=""/>
+            <c:if test = "${page.itemsByPage == 100}">
+               <c:set var="active" value="active"/>
+            </c:if>
+            <a href="/Computer-DataBase/dashboard?nbByPage=100"><button type="button" class="btn btn-default ${active}">100</button></a>
         	</div>
         </div>
 

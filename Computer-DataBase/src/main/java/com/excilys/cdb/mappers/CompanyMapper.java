@@ -13,14 +13,14 @@ public class CompanyMapper{
 		return company;
 	}
 	
-	public static CompanyDto CompanyToCompanyDto(Company company) {
+	public static CompanyDto companyToCompanyDto(Company company) {
 		CompanyDto companyDto = new CompanyDto();
 		companyDto.setIdCompany(company.getIdCompany());
 		companyDto.setName(company.getName());
 		return companyDto;
 	}
 	
-	public static Company CompanyDtoToCompany(CompanyDto companyDto) {
+	public static Company companyDtoToCompany(CompanyDto companyDto) {
 		Company company = new Company(companyDto.getIdCompany(),companyDto.getName());
 		return company;
 	}

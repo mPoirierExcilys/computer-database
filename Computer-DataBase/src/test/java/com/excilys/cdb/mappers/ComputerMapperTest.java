@@ -11,6 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.excilys.cdb.dto.CompanyDto;
+import com.excilys.cdb.dto.ComputerDto;
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 public class ComputerMapperTest {
@@ -26,6 +29,7 @@ public class ComputerMapperTest {
     private static final LocalDate introduced = LocalDate.of(2019, 8, 8);
     private static final LocalDate discontinued = LocalDate.of(2020, 8, 8);
     private static final Integer idCompany = 20;
+    private static final String companyName = "Company";
     
     private ResultSet resultSet = Mockito.mock(ResultSet.class);
 
@@ -80,6 +84,23 @@ public class ComputerMapperTest {
 		computerExpected.setIntroduced(introduced);
 		assertEquals(computerExpected,computer);
 		
+	}
+	
+	@Test
+	public void computerDtoToComputer() {
+		Computer computerExpected = new Computer(idComputer, nameComputer,introduced,discontinued,idCompany);
+		ComputerDto computerDto = new ComputerDto(idComputer,nameComputer,introduced.toString(),discontinued.toString(),new CompanyDto(idCompany, companyName));
+		Computer computer = ComputerMapper.computerDtoToComputer(computerDto);
+		assertEquals(computerExpected,computer);
+	}
+	
+	@Test
+	public void computerToComputerDto() {
+		ComputerDto computerDtoExpected = new ComputerDto(idComputer,nameComputer,introduced.toString(),discontinued.toString(),new CompanyDto(idCompany, companyName));
+		Computer computer = new Computer(idComputer, nameComputer,introduced,discontinued,idCompany);
+		Company company = new Company(idCompany, companyName);
+		ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, company);
+		assertEquals(computerDtoExpected, computerDto);
 	}
 
 }
