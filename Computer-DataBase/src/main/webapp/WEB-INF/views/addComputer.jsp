@@ -24,7 +24,7 @@
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
                     <c:if test="${not empty success}"><c:out value="${success}" /></c:if>
-                    <form action="addComputer" method="POST">
+                    <form action="addComputer" method="POST" onsubmit="return checkDate()">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -62,5 +62,7 @@
             </div>
         </div>
     </section>
+<script src="js/jquery.min.js"></script>
+<script src="js/addComputer.js"></script>
 </body>
 </html>
