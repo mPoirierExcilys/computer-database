@@ -22,7 +22,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                ${nbComputers} Computers found
+               <c:out value="${nbComputers}"/> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -84,11 +84,11 @@
                             	<input type="checkbox" name="cb" class="cb" value="0">
                         	</td>
                         	<td>
-                            	<a href="editComputer" onclick="">${computer.name}</a>
+                            	<a href="editComputer" onclick=""><c:out value="${computer.name}"/></a>
                         	</td>
-                        	<td><c:if test="${not empty computer.introduced}">${computer.introduced} </c:if></td>
-                        	<td><c:if test="${not empty computer.discontinued}">${computer.discontinued} </c:if></td>
-                        	<td><c:if test="${not empty computer.company}">${computer.company.name} </c:if></td>
+                        	<td><c:if test="${not empty computer.introduced}"><c:out value="${computer.introduced}"/></c:if></td>
+                        	<td><c:if test="${not empty computer.discontinued}"><c:out value="${computer.discontinued}"/></c:if></td>
+                        	<td><c:if test="${not empty computer.company}"><c:out value="${computer.company.name}"/></c:if></td>
                 		</tr>
                 	</c:forEach>
                 </tbody>
@@ -100,25 +100,34 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="#" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                  	</a>
+                	<c:if test="${currentPage > 1}">
+                    	<a href="/Computer-DataBase/dashboard?page=${currentPage-1}" aria-label="Previous">
+                      		<span aria-hidden="true">&laquo;</span>
+                  		</a>
+                	</c:if>
               	</li>
-              	<li><a href="/Computer-DataBase/dashboard?page=1">1</a></li>
-              	<li><a href="/Computer-DataBase/dashboard?page=2">2</a></li>
-              	<li><a href="/Computer-DataBase/dashboard?page=3">3</a></li>
-              	<li><a href="/Computer-DataBase/dashboard?page=4">4</a></li>
-              	<li><a href="/Computer-DataBase/dashboard?page=5">5</a></li>
+              	<c:forEach var="i" begin="1" end="2">
+              		<c:if test="${currentPage-(3-i) >= 1}">
+              			<li><a href="/Computer-DataBase/dashboard?page=${currentPage-(3-i)}"><c:out value="${currentPage-(3-i)}"/></a></li>
+              		</c:if>
+              	</c:forEach>
+              	<c:forEach var="i" begin="0" end="2">
+              		<c:if test="${currentPage+i <= nbPagesMax}">
+              			<li><a href="/Computer-DataBase/dashboard?page=${currentPage+i}"><c:out value="${currentPage+i}"/></a></li>
+              		</c:if>
+              	</c:forEach>
               	<li>
-                	<a href="#" aria-label="Next">
-                    	<span aria-hidden="true">&raquo;</span>
-                	</a>
+              		<c:if test="${currentPage < nbPagesMax}">
+                		<a href="/Computer-DataBase/dashboard?page=${currentPage+1}" aria-label="Next">
+                    		<span aria-hidden="true">&raquo;</span>
+                		</a>
+                	</c:if>
             	</li>
         	</ul>
         	<div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+            <a href="/Computer-DataBase/dashboard?nbByPage=10"><button type="button" class="btn btn-default">10</button></a>
+            <a href="/Computer-DataBase/dashboard?nbByPage=50"><button type="button" class="btn btn-default">50</button></a>
+            <a href="/Computer-DataBase/dashboard?nbByPage=100"><button type="button" class="btn btn-default">100</button></a>
         	</div>
         </div>
 

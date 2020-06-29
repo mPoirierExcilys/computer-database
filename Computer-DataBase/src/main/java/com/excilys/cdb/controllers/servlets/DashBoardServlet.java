@@ -46,16 +46,24 @@ public class DashBoardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<ComputerDto> computersDto = new ArrayList<>();
 		List<Computer> computers = new ArrayList<>();
+		if(request.getParameter("nbByPage") != null) {
+			String nbByPage = request.getParameter("nbByPage");
+			page.setItemsByPage(Integer.parseInt(nbByPage));
+		}
 		if(request.getParameter("page") != null) {
 			String pageWish = request.getParameter("page");
-			Integer currentPage = Integer.parseInt(pageWish);
-			page.setCurrentPage(currentPage);
+			page.setCurrentPage(Integer.parseInt(pageWish));
+		}
+		else {
+			page.setCurrentPage(1);
 		}
 		computers = computerService.getComputersByPage(page);
 		for(Computer computer: computers) {
 			ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, companyService.getCompanyFromComputer(computer));
 			computersDto.add(computerDto);
 		}
+		request.setAttribute("currentPage", page.getCurrentPage());
+		request.setAttribute("nbPagesMax", computerService.getComputersNbPages(page));
 		request.setAttribute("nbComputers", computerService.getNbComputers());
 		request.setAttribute("computers", computersDto);
 		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
