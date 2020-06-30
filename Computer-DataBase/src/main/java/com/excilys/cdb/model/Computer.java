@@ -21,8 +21,8 @@ public class Computer {
 	public Computer(Integer idComputer, String name, LocalDate introduced, LocalDate discontinued, Integer companyId) {
 		this.idComputer = idComputer;
 		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
+		this.setIntroduced(introduced);
+		this.setDiscontinued(discontinued);
 		this.companyId = companyId;
 	}
 
