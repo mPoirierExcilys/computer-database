@@ -11,4 +11,4 @@ Computer-DataBase/.settings/
 Computer-DataBase/.classpath
 
 #ignore jdbc properties
-Computer-DataBase/src/main/ressources/datasource.properties
+Computer-DataBase/src/main/resources/datasource.properties
