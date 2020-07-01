@@ -3,6 +3,8 @@ package com.excilys.cdb.controllers.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -73,6 +75,15 @@ public class DashBoardServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getParameter("selection") != null && !request.getParameter("selection").equals("")) {
+			String listInt = request.getParameter("selection");
+			List<Integer> ids = Stream.of(listInt.split(","))
+	                .map(Integer::parseInt)
+	                .collect(Collectors.toList());
+			for(Integer id: ids) {
+				computerService.deleteComputer(computerService.getComputer(id));
+			}
+		}
 		doGet(request, response);
 	}
 
