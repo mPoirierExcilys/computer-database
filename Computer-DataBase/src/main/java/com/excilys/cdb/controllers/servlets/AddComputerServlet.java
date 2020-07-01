@@ -75,11 +75,11 @@ public class AddComputerServlet extends HttpServlet {
 		try {
 			Computer newComputer = ComputerMapper.computerDtoToComputer(computerDto);
 			newComputer = computerService.createComputer(newComputer);
-			String success = "Computer " + newComputer.getName() + " was successfully add";
+			String success = "Computer " + newComputer.getName() + " was successfully added";
 			request.setAttribute("success", success);
 			
 		}catch(IllegalArgumentException e) {
-			request.setAttribute("success", e.getMessage());
+			request.setAttribute("error", e.getMessage());
 			request.setAttribute("newComputer", computerDto);
 		}finally {
 			doGet(request, response);

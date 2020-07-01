@@ -18,7 +18,7 @@ public class ConnectionMysql implements Connector {
 	private static HikariDataSource ds = new HikariDataSource(new HikariConfig("/datasource.properties"));
 	
 	
-	public Connection getInstance() throws SQLException {
+	public synchronized Connection getInstance() throws SQLException {
 		if(connect == null || connect.isClosed()) {
 			try {
 				connect = ds.getConnection();

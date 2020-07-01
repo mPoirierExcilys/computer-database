@@ -23,7 +23,8 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <c:if test="${not empty success}"><c:out value="${success}" /></c:if>
+                    <c:if test="${error != null}"><div class="alert alert-danger"><c:out value="${error}" /></div></c:if>
+					<c:if test="${success != null}"><div class="alert alert-success"><c:out value="${success}"/></div></c:if>
                     <form action="addComputer" method="POST" onsubmit="return checkDate()">
                         <fieldset>
                             <div class="form-group">
