@@ -48,6 +48,9 @@ public class DashBoardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<ComputerDto> computersDto = new ArrayList<>();
 		List<Computer> computers = new ArrayList<>();
+		String search = "";
+		page.setCurrentPage(1);
+		page.setItemsByPage(10);
 		if(request.getParameter("nbByPage") != null) {
 			String nbByPage = request.getParameter("nbByPage");
 			page.setItemsByPage(Integer.parseInt(nbByPage));
@@ -56,17 +59,27 @@ public class DashBoardServlet extends HttpServlet {
 			String pageWish = request.getParameter("page");
 			page.setCurrentPage(Integer.parseInt(pageWish));
 		}
-		else {
-			page.setCurrentPage(1);
+		if(request.getParameter("search") != null && !request.getParameter("search").equals("")) {
+			search = request.getParameter("search");
+			computers = computerService.getComputersByPagesSearch(page, search);
+			for(Computer computer: computers) {
+				ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, companyService.getCompanyFromComputer(computer));
+				computersDto.add(computerDto);
+			}
+			request.setAttribute("nbPagesMax", computerService.getNbComputersPagesSearch(page, search));
+			request.setAttribute("nbComputers", computerService.getNbComputersSearch(search));
+		}else {
+			computers = computerService.getComputersByPage(page);
+			for(Computer computer: computers) {
+				ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, companyService.getCompanyFromComputer(computer));
+				computersDto.add(computerDto);
+			}
+			request.setAttribute("nbPagesMax", computerService.getComputersNbPages(page));
+			request.setAttribute("nbComputers", computerService.getNbComputers());
 		}
-		computers = computerService.getComputersByPage(page);
-		for(Computer computer: computers) {
-			ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, companyService.getCompanyFromComputer(computer));
-			computersDto.add(computerDto);
-		}
+		request.setAttribute("nbByPage", page.getItemsByPage());
+		request.setAttribute("search", search);
 		request.setAttribute("page", page);
-		request.setAttribute("nbPagesMax", computerService.getComputersNbPages(page));
-		request.setAttribute("nbComputers", computerService.getNbComputers());
 		request.setAttribute("computers", computersDto);
 		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}

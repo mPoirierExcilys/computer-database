@@ -57,4 +57,22 @@ public class ComputerDBServiceImpl implements ComputerDBService{
 		return computerDao.count();
 	}
 
+	@Override
+	public Integer getNbComputersPagesSearch(Page page,String search) {
+		Integer nbEntries = computerDao.countSearch(search);
+		Integer nbPages = nbEntries/page.getItemsByPage();
+		return nbEntries%page.getItemsByPage() == 0?nbPages:nbPages+1;
+	}
+
+	@Override
+	public List<Computer> getComputersByPagesSearch(Page page, String search) {
+		Integer offset = (page.getCurrentPage()-1)*page.getItemsByPage();
+		return computerDao.findBetweenWithSearch(offset, page.getItemsByPage(), search);
+	}
+
+	@Override
+	public Integer getNbComputersSearch(String search) {
+		return computerDao.countSearch(search);
+	}
+
 }

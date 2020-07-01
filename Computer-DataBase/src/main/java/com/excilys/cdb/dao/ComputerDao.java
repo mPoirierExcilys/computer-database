@@ -33,6 +33,12 @@ public class ComputerDao extends AbstractDao<Computer>{
 	
 	private static String countSql = "SELECT COUNT(id) FROM computer";
 	
+	private static String searchSql = "SELECT computer.id,computer.name,introduced,discontinued,company_id "
+			+ "FROM computer LEFT JOIN company as cp on computer.company_id = cp.id "
+			+ "WHERE computer.name like ? OR cp.name like ? Order By computer.id LIMIT ?,?";
+	
+	private static String countSearchSql = "SELECT COUNT(computer.id) FROM computer LEFT JOIN company as cp on computer.company_id = cp.id WHERE computer.name like ? OR cp.name like ?";
+	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 	
 	private Connector connector;
@@ -156,7 +162,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 		return allComputer;
 	}
 
-
+	
 	@Override
 	public Integer count() {
 		Integer nb = 0;
@@ -167,6 +173,43 @@ public class ComputerDao extends AbstractDao<Computer>{
 			}
 		}catch(SQLException eSQL) {
 			logger.error("Error counting Computers");
+			eSQL.printStackTrace();
+		}
+		return nb;
+	}
+	
+	public List<Computer> findBetweenWithSearch(Integer offset, Integer nb, String search){
+		List<Computer> allComputer = new ArrayList<>();
+		try(Connection connect = connector.getInstance();
+			PreparedStatement prepare = connect.prepareStatement(searchSql)) {
+			prepare.setString(1, "%"+search+"%");
+			prepare.setString(2, "%"+search+"%");
+			prepare.setInt(3, offset);
+			prepare.setInt(4, nb);
+			ResultSet result = prepare.executeQuery();
+			while(result.next()) {
+				Computer computer = ComputerMapper.resultToObject(result);
+				allComputer.add(computer);
+			}
+		}catch(SQLException eSQL) {
+			logger.error("Error Getting Computers between Search");
+			eSQL.printStackTrace();
+		}
+		return allComputer;
+	}
+	
+	public Integer countSearch(String search) {
+		Integer nb = 0;
+		try(Connection connect = connector.getInstance();
+			PreparedStatement prepare = connect.prepareStatement(countSearchSql)) {
+			prepare.setString(1, "%"+search+"%");
+			prepare.setString(2, "%"+search+"%");
+			ResultSet result = prepare.executeQuery();
+			if(result.first()) {
+				nb =result.getInt(1);
+			}
+		}catch(SQLException eSQL) {
+			logger.error("Error counting Computers Search");
 			eSQL.printStackTrace();
 		}
 		return nb;

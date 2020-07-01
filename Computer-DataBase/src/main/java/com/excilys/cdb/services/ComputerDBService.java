@@ -21,5 +21,11 @@ public interface ComputerDBService {
 	Integer getComputersNbPages(Page page);
 	
 	Integer getNbComputers();
+	
+	Integer getNbComputersPagesSearch(Page page, String search);
+	
+	List<Computer> getComputersByPagesSearch(Page page, String search);
+	
+	Integer getNbComputersSearch(String search);
 
 }
