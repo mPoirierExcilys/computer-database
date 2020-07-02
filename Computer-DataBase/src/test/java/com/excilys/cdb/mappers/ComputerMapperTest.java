@@ -23,6 +23,7 @@ public class ComputerMapperTest {
     private static final String ATTRIBUT_INTRODUCED = "introduced";
     private static final String ATTRIBUT_DISCONTINUED = "discontinued";
     private static final String ATTRIBUT_COMPANY_ID = "company_id";
+    private static final String ATTRIBUT_COMPANY_NAME = "companyName";
     
     private static final Integer idComputer = 10;
     private static final String nameComputer = "Computer";
@@ -44,8 +45,9 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getDate(ATTRIBUT_INTRODUCED)).thenReturn(Date.valueOf(introduced));
 		Mockito.when(resultSet.getDate(ATTRIBUT_DISCONTINUED)).thenReturn(Date.valueOf(discontinued));
 		Mockito.when(resultSet.getInt(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
+		Mockito.when(resultSet.getString(ATTRIBUT_COMPANY_NAME)).thenReturn(companyName);
 		Computer computer = ComputerMapper.resultToObject(resultSet);
-		Computer computerExpected = new Computer(idComputer,nameComputer,introduced,discontinued,idCompany);
+		Computer computerExpected = new Computer(idComputer,nameComputer,introduced,discontinued,new Company(idCompany, companyName));
 		assertEquals(computerExpected,computer);
 	}
 	
@@ -66,10 +68,11 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getDate(ATTRIBUT_INTRODUCED)).thenReturn(null);
 		Mockito.when(resultSet.getDate(ATTRIBUT_DISCONTINUED)).thenReturn(Date.valueOf(discontinued));
 		Mockito.when(resultSet.getInt(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
+		Mockito.when(resultSet.getString(ATTRIBUT_COMPANY_NAME)).thenReturn(companyName);
 		Computer computer = ComputerMapper.resultToObject(resultSet);
 		Computer computerExpected = new Computer(idComputer,nameComputer);
 		computerExpected.setDiscontinued(discontinued);
-		computerExpected.setCompanyId(idCompany);
+		computerExpected.setCompany(new Company(idCompany, companyName));
 		assertEquals(computerExpected,computer);	
 	}
 	
@@ -78,9 +81,10 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getDate(ATTRIBUT_INTRODUCED)).thenReturn(Date.valueOf(introduced));
 		Mockito.when(resultSet.getDate(ATTRIBUT_DISCONTINUED)).thenReturn(null);
 		Mockito.when(resultSet.getInt(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
+		Mockito.when(resultSet.getString(ATTRIBUT_COMPANY_NAME)).thenReturn(companyName);
 		Computer computer = ComputerMapper.resultToObject(resultSet);
 		Computer computerExpected = new Computer(idComputer,nameComputer);
-		computerExpected.setCompanyId(idCompany);
+		computerExpected.setCompany(new Company(idCompany, companyName));
 		computerExpected.setIntroduced(introduced);
 		assertEquals(computerExpected,computer);
 		
@@ -88,7 +92,7 @@ public class ComputerMapperTest {
 	
 	@Test
 	public void computerDtoToComputer() {
-		Computer computerExpected = new Computer(idComputer, nameComputer,introduced,discontinued,idCompany);
+		Computer computerExpected = new Computer(idComputer, nameComputer,introduced,discontinued,new Company(idCompany, companyName));
 		ComputerDto computerDto = new ComputerDto(idComputer,nameComputer,introduced.toString(),discontinued.toString(),new CompanyDto(idCompany, companyName));
 		Computer computer = ComputerMapper.computerDtoToComputer(computerDto);
 		assertEquals(computerExpected,computer);
@@ -97,9 +101,8 @@ public class ComputerMapperTest {
 	@Test
 	public void computerToComputerDto() {
 		ComputerDto computerDtoExpected = new ComputerDto(idComputer,nameComputer,introduced.toString(),discontinued.toString(),new CompanyDto(idCompany, companyName));
-		Computer computer = new Computer(idComputer, nameComputer,introduced,discontinued,idCompany);
-		Company company = new Company(idCompany, companyName);
-		ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, company);
+		Computer computer = new Computer(idComputer, nameComputer,introduced,discontinued,new Company(idCompany, companyName));
+		ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer);
 		assertEquals(computerDtoExpected, computerDto);
 	}
 

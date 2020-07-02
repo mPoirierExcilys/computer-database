@@ -23,9 +23,9 @@ public class ComputerDao extends AbstractDao<Computer>{
 	
 	private static String insertSql = "INSERT INTO computer (name) VALUES(?)";
 	
-	private static String findAllSql = "SELECT id,name,introduced,discontinued,company_id FROM computer";
+	private static String findAllSql = "SELECT computer.id,computer.name,introduced,discontinued,company_id,cp.name as companyName FROM computer LEFT JOIN company as cp on computer.company_id = cp.id";
 	
-	private static String findSql = "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE id = ?";
+	private static String findSql = "SELECT computer.id,computer.name,introduced,discontinued,company_id,cp.name as companyName FROM computer LEFT JOIN company cp on computer.company_id = cp.id WHERE computer.id = ?;";
 	
 	private static String deleteSql = "DELETE FROM computer WHERE id = ?";
 	
@@ -34,15 +34,15 @@ public class ComputerDao extends AbstractDao<Computer>{
 	private static String countSearchSql = "SELECT COUNT(computer.id) FROM computer LEFT JOIN company as cp on computer.company_id = cp.id WHERE computer.name like ? OR cp.name like ?";
 	
 	private String limitOrderSql(String order, String ascending) {
-		return "SELECT computer.id,computer.name,introduced,discontinued,company_id "
+		return "SELECT computer.id,computer.name,introduced,discontinued,company_id,cp.name as companyName "
 				+ "FROM computer LEFT JOIN company as cp on computer.company_id = cp.id "
-				+ "Order By ISNULL("+order+"), "+ order+ " "+ascending+" LIMIT ?,?";
+				+ "Order By "+order+" IS NULL, "+order+ " "+ascending+" LIMIT ?,?";
 	}
 	
 	private String limitSearchOrderSql(String order, String ascending) {
-		return "SELECT computer.id,computer.name,introduced,discontinued,company_id "
+		return "SELECT computer.id,computer.name,introduced,discontinued,company_id,cp.name as companyName "
 				+ "FROM computer LEFT JOIN company as cp on computer.company_id = cp.id "
-				+ "WHERE computer.name like ? OR cp.name like ? Order By ISNULL("+order+"), "+order + " " +ascending+" LIMIT ?,?";
+				+ "WHERE computer.name like ? OR cp.name like ? Order By "+order+" IS NULL, "+order + " " +ascending+" LIMIT ?,?";
 	}
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
@@ -122,25 +122,24 @@ public class ComputerDao extends AbstractDao<Computer>{
 			if(obj.getDiscontinued() != null) {
 				sqlRequest += ", discontinued = '" + Date.valueOf(obj.getDiscontinued()) + "'";
 			}		
-			if(obj.getCompanyId() != null) {
-				sqlRequest += ", company_id = '" +obj.getCompanyId() + "'"; 
+			if(obj.getCompany() != null && obj.getCompany().getIdCompany() != null) {
+				sqlRequest += ", company_id = " +obj.getCompany().getIdCompany() + ""; 
 			}		
 			sqlRequest += " WHERE id = "+ obj.getIdComputer();
-			
 			connect.createStatement().executeUpdate(sqlRequest);
-			obj = this.find(obj.getIdComputer());
+			return this.find(obj.getIdComputer());
 		}catch(SQLException eSQL) {
 			logger.error("Error Update Computer");
 			eSQL.printStackTrace();
 		}
-		return obj;
+		return null;
 	}
 
 	@Override
-	public void delete(Computer obj) {
+	public void delete(Integer id) {
 		try(Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(deleteSql)){
-			prepare.setInt(1, obj.getIdComputer());
+			prepare.setInt(1, id);
 			prepare.executeUpdate();
 		}catch(SQLException eSQL) {
 			logger.error("Error Delete Computer");

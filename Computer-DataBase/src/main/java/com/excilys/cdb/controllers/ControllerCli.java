@@ -93,7 +93,7 @@ public class ControllerCli {
 			case "6":
 				cliUi.deleteComputer();
 				int computerId2 = Integer.parseInt(sc.next());
-				computerService.deleteComputer(computerService.getComputer(computerId2));
+				computerService.deleteComputer(computerId2);
 				break;
 			case "7":
 				run = false;

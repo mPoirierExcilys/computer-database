@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 
 public class CompanyDBServiceImpl implements CompanyDBService {
@@ -23,14 +22,6 @@ public class CompanyDBServiceImpl implements CompanyDBService {
 	@Override
 	public Company getCompany(Integer id) {
 		return companyDao.find(id);
-	}
-
-	@Override
-	public Company getCompanyFromComputer(Computer computer) {
-		if(computer.getCompanyId() != null) {
-			return companyDao.find(computer.getCompanyId());
-		}
-		return null;
 	}
 
 	@Override

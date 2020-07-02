@@ -14,7 +14,7 @@ public interface ComputerDBService {
 	
 	Computer createComputer(Computer computer);
 	
-	void deleteComputer(Computer computer);
+	void deleteComputer(Integer id);
 	
 	List<Computer> getComputersByPage(Page page, String order, String ascending);
 	

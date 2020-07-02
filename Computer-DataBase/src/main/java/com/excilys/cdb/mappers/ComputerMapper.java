@@ -22,12 +22,13 @@ public class ComputerMapper{
 			}
 			
 			if(result.getInt("company_id") != 0) {
-				computer.setCompanyId(result.getInt("company_id"));
+				Company company = new Company(result.getInt("company_id"),result.getString("companyName"));
+				computer.setCompany(company);
 			}
 		return computer;
 	}
 	
-	public static ComputerDto computerToComputerDto(Computer computer, Company company) {
+	public static ComputerDto computerToComputerDto(Computer computer) {
 		ComputerDto computerDto = new ComputerDto();
 		computerDto.setIdComputer(computer.getIdComputer());
 		computerDto.setName(computer.getName());
@@ -37,8 +38,8 @@ public class ComputerMapper{
 		if(computer.getDiscontinued() != null) {
 			computerDto.setDiscontinued(computer.getDiscontinued().toString());
 		}
-		if(computer.getCompanyId() != null) {
-			computerDto.setCompany(CompanyMapper.companyToCompanyDto(company));
+		if(computer.getCompany() != null) {
+			computerDto.setCompany(CompanyMapper.companyToCompanyDto(computer.getCompany()));
 		}
 		return computerDto;
 	}
@@ -56,7 +57,7 @@ public class ComputerMapper{
 			computer.setDiscontinued(LocalDate.parse(computerDto.getDiscontinued()));
 		}
 		if(computerDto.getCompany() != null && computerDto.getCompany().getIdCompany() != null) {
-			computer.setCompanyId(computerDto.getCompany().getIdCompany());	
+			computer.setCompany(CompanyMapper.companyDtoToCompany(computerDto.getCompany()));	
 		}
 		return computer;
 	}

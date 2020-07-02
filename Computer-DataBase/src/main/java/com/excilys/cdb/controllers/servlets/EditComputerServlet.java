@@ -57,7 +57,7 @@ public class EditComputerServlet extends HttpServlet {
 			try {
 				Integer id = Integer.parseInt(request.getParameter("id"));
 				Computer computer = computerService.getComputer(id);
-				ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, companyService.getCompanyFromComputer(computer));
+				ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer);
 				request.setAttribute("computer", computerDto);
 			}catch(NumberFormatException e) {
 				error = "Id is not an Integer";
@@ -76,7 +76,7 @@ public class EditComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Integer id = Integer.parseInt(request.getParameter("id"));
 		Computer computer = computerService.getComputer(id);
-		ComputerDto computerDtoOld = ComputerMapper.computerToComputerDto(computer, companyService.getCompanyFromComputer(computer));
+		ComputerDto computerDtoOld = ComputerMapper.computerToComputerDto(computer);
 		ComputerDto computerDto = new ComputerDto();
 		computerDto.setName(request.getParameter("computerName"));
 		if(request.getParameter("introduced") != null && !request.getParameter("introduced").equals("")) {		
@@ -98,7 +98,7 @@ public class EditComputerServlet extends HttpServlet {
 			newComputer = computerService.updateComputer(newComputer);
 			String success = "Computer " + newComputer.getName() + " was successfully updated";
 			request.setAttribute("success", success);
-			request.setAttribute("computer", ComputerMapper.computerToComputerDto(newComputer, companyService.getCompanyFromComputer(newComputer)));
+			request.setAttribute("computer", ComputerMapper.computerToComputerDto(newComputer));
 		}catch(IllegalArgumentException e) {
 			request.setAttribute("error", e.getMessage());
 			request.setAttribute("computer", computerDtoOld);

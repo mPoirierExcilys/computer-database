@@ -22,6 +22,14 @@ public class Company {
 		return name;
 	}
 	
+	public void setIdCompany(Integer idCompany) {
+		this.idCompany = idCompany;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public String toString() {
 		return name +"\n--------------------------------------------------------\n";

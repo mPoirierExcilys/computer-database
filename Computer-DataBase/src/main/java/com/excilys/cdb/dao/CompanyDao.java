@@ -84,7 +84,7 @@ public class CompanyDao extends AbstractDao<Company> {
 	}
 
 	@Override
-	public void delete(Company obj) {
+	public void delete(Integer id) {
 		// TODO Auto-generated method stub
 		
 	}

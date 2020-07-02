@@ -34,8 +34,8 @@ public class ComputerDBServiceImpl implements ComputerDBService{
 	}
 
 	@Override
-	public void deleteComputer(Computer computer) {
-		computerDao.delete(computer);
+	public void deleteComputer(Integer id) {
+		computerDao.delete(id);
 		
 	}
 	

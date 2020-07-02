@@ -56,7 +56,8 @@ public class CliUi {
 		if(nextInput.equals("yes")) {
 			System.out.println("Enter the idCompany (Integer) : ");
 			int idCompany = Integer.parseInt(sc.nextLine());
-			computer.setCompanyId(idCompany);
+			computer.setCompany(new Company());
+			computer.getCompany().setIdCompany(idCompany);
 		}
 		System.out.println("Would you like to insert introduced Date ? (yes or anything for no)");
 		nextInput = sc.nextLine();
@@ -124,7 +125,8 @@ public class CliUi {
 		if(nextInput.equals("yes")) {
 			System.out.println("Enter the idCompany (Integer) : ");
 			int idCompany = Integer.parseInt(sc.nextLine());
-			computer.setCompanyId(idCompany);
+			computer.setCompany(new Company());
+			computer.getCompany().setIdCompany(idCompany);
 		}
 		System.out.println("Would you like to change the introduced Date ? (yes or anything for no)");
 		nextInput = sc.nextLine();

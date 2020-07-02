@@ -8,7 +8,7 @@ public class Computer {
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-	private Integer companyId;
+	private Company company;
 	
 	public Computer() {
 	}
@@ -18,12 +18,12 @@ public class Computer {
 		this.name = name;
 	}
 	
-	public Computer(Integer idComputer, String name, LocalDate introduced, LocalDate discontinued, Integer companyId) {
+	public Computer(Integer idComputer, String name, LocalDate introduced, LocalDate discontinued, Company company) {
 		this.idComputer = idComputer;
 		this.name = name;
 		this.setIntroduced(introduced);
 		this.setDiscontinued(discontinued);
-		this.companyId = companyId;
+		this.company = company;
 	}
 
 	public String getName() {
@@ -70,14 +70,6 @@ public class Computer {
 		}
 	}
 
-	public Integer getCompanyId() {
-		return companyId;
-	}
-
-	public void setCompanyId(Integer companyId) {
-		this.companyId = companyId;
-	}
-
 	public Integer getIdComputer() {
 		return idComputer;
 	}
@@ -86,17 +78,25 @@ public class Computer {
 		this.idComputer = idComputer;
 	}
 	
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
 	@Override
 	public String toString() {
-		return name + " with id : "+ idComputer +" from Company id :" + companyId + " introduced " + introduced + " and discontinued " + discontinued + "\n" +
+		return name + " with id : "+ idComputer +" from Company id :" + company.getIdCompany() + " introduced " + introduced + " and discontinued " + discontinued + "\n" +
 				"-------------------------------------------------- \n";
 	}
-	
-	 @Override
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((companyId == null) ? 0 : companyId.hashCode());
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
 		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
 		result = prime * result + ((idComputer == null) ? 0 : idComputer.hashCode());
 		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
@@ -113,10 +113,10 @@ public class Computer {
 		if (getClass() != obj.getClass())
 			return false;
 		Computer other = (Computer) obj;
-		if (companyId == null) {
-			if (other.companyId != null)
+		if (company == null) {
+			if (other.company != null)
 				return false;
-		} else if (!companyId.equals(other.companyId))
+		} else if (!company.equals(other.company))
 			return false;
 		if (discontinued == null) {
 			if (other.discontinued != null)
@@ -140,6 +140,7 @@ public class Computer {
 			return false;
 		return true;
 	}
-	 
+	
+	
 
 }

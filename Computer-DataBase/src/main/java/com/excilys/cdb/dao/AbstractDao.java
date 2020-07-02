@@ -13,7 +13,7 @@ public abstract class AbstractDao<T> {
 	
 	public abstract T update(T obj);
 	
-	public abstract void delete(T obj);
+	public abstract void delete(Integer id);
 	
 	public abstract List<T> findBetween(Integer offset, Integer nb, String order, String ascending);
 	

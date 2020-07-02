@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 public class ComputerDaoTest {
@@ -29,7 +30,7 @@ public class ComputerDaoTest {
 	@Test
 	public void find() {
 		Computer computer = new Computer(1,"MacBook Pro 15.4 inch");
-		computer.setCompanyId(1);
+		computer.setCompany(new Company(1,"Apple Inc."));
 		assertEquals(computerDao.find(1), computer);
 	}
 	
@@ -49,17 +50,16 @@ public class ComputerDaoTest {
 	
 	@Test
 	public void delete() {
-		Computer computer = new Computer(2,"MacBook Pro 15.4 inch");
-		computerDao.delete(computer);
+		computerDao.delete(2);
 		assertTrue(computerDao.count() == 49);
 	}
 	
 	@Test
 	public void update() {
 		Computer computer = new Computer(1,"MacBook Pro 15.4 inch");
-		computer.setCompanyId(2);
+		computer.setCompany(new Company(2,"Thinking Machines"));
 		computer = computerDao.update(computer);
-		assertTrue(computer.getCompanyId() == 2);
+		assertTrue(computer.getCompany().getIdCompany() == 2);
 	}
 
 }
