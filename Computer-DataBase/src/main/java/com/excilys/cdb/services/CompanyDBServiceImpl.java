@@ -36,7 +36,7 @@ public class CompanyDBServiceImpl implements CompanyDBService {
 	@Override
 	public List<Company> getCompaniesByPage(Page page) {
 		Integer offset = (page.getCurrentPage()-1)*page.getItemsByPage();
-		return companyDao.findBetween(offset, page.getItemsByPage());
+		return companyDao.findBetween(offset, page.getItemsByPage(),"company.id","ASC");
 	}
 
 	@Override

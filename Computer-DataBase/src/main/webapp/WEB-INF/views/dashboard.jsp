@@ -28,6 +28,16 @@
 	<c:if test="${nbByPage != null && nbByPage != ''}">
 		<c:set var="nbByPageValue" value="&nbByPage=${nbByPage}" />
 	</c:if>
+	
+	<c:set var="orderValue" value="" />
+	<c:if test="${order != null && order != ''}">
+		<c:set var="orderValue" value="&order=${order}" />
+	</c:if>
+	
+	<c:set var="ascendingValue" value="" />
+	<c:if test="${ascending != null && ascending != ''}">
+		<c:set var="ascendingValue" value="&ascending=${ascending}" />
+	</c:if>
 
     <section id="main">
         <div class="container">
@@ -70,18 +80,28 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                        	<c:if test="${order == 'computer.name' && ascending == 'ASC'}"><a href="dashboard?order=computer.name&ascending=DESC${nbByPageValue}${searchValue}" >Computer name</a></c:if>
+                        	<c:if test="${order == 'computer.name' && ascending == 'DESC'}"><a href="dashboard?order=computer.name&ascending=ASC${nbByPageValue}${searchValue}" >Computer name</a></c:if>
+                        	<c:if test="${order != 'computer.name'}"><a href="dashboard?order=computer.name&ascending=ASC${nbByPageValue}${searchValue}" >Computer name</a></c:if>
+                            
                         </th>
                         <th>
-                            Introduced date
+                        	<c:if test="${order == 'computer.introduced' && ascending == 'ASC'}"><a href="dashboard?order=computer.introduced&ascending=DESC${nbByPageValue}${searchValue}">Introduced date</a></c:if>
+                        	<c:if test="${order == 'computer.introduced' && ascending == 'DESC'}"><a href="dashboard?order=computer.introduced&ascending=ASC${nbByPageValue}${searchValue}">Introduced date</a></c:if>
+                        	<c:if test="${order != 'computer.introduced'}"><a href="dashboard?order=computer.introduced&ascending=ASC${nbByPageValue}${searchValue}">Introduced date</a></c:if>
+                            
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                        	<c:if test="${order == 'computer.discontinued' && ascending == 'ASC'}"><a href="dashboard?order=computer.discontinued&ascending=DESC${nbByPageValue}${searchValue}">Discontinued date</a></c:if>
+                        	<c:if test="${order == 'computer.discontinued' && ascending == 'DESC'}"><a href="dashboard?order=computer.discontinued&ascending=ASC${nbByPageValue}${searchValue}">Discontinued date</a></c:if>
+                        	<c:if test="${order != 'computer.discontinued'}"><a href="dashboard?order=computer.discontinued&ascending=ASC${nbByPageValue}${searchValue}">Discontinued date</a></c:if>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                        	<c:if test="${order == 'cp.name' && ascending == 'ASC'}"> <a href="dashboard?order=cp.name&ascending=DESC${nbByPageValue}${searchValue}">Company</a></c:if>
+                        	<c:if test="${order == 'cp.name' && ascending == 'DESC'}"> <a href="dashboard?order=cp.name&ascending=ASC${nbByPageValue}${searchValue}">Company</a></c:if>
+                        	<c:if test="${order != 'cp.name'}"> <a href="dashboard?order=cp.name&ascending=ASC${nbByPageValue}${searchValue}">Company</a></c:if>
                         </th>
 
                     </tr>
@@ -111,14 +131,14 @@
             <ul class="pagination">
                 <li>
                 	<c:if test="${page.currentPage > 1}">
-                    	<a href="/Computer-DataBase/dashboard?page=${page.currentPage-1}${nbByPageValue}${searchValue}" aria-label="Previous">
+                    	<a href="/Computer-DataBase/dashboard?page=${page.currentPage-1}${nbByPageValue}${searchValue}${orderValue}${ascendingValue}" aria-label="Previous">
                       		<span aria-hidden="true">&laquo;</span>
                   		</a>
                 	</c:if>
               	</li>
               	<c:forEach var="i" begin="1" end="2">
               		<c:if test="${page.currentPage-(3-i) >= 1}">
-              			<li><a href="/Computer-DataBase/dashboard?page=${page.currentPage-(3-i)}${nbByPageValue}${searchValue}"><c:out value="${page.currentPage-(3-i)}"/></a></li>
+              			<li><a href="/Computer-DataBase/dashboard?page=${page.currentPage-(3-i)}${nbByPageValue}${searchValue}${orderValue}${ascendingValue}"><c:out value="${page.currentPage-(3-i)}"/></a></li>
               		</c:if>
               	</c:forEach>
               	<c:forEach var="i" begin="0" end="2">
@@ -127,12 +147,12 @@
                         <c:if test = "${page.currentPage+i ==  page.currentPage}">
                           <c:set var="active" value="active"/>
                          </c:if>
-              			<li class="${active}"><a href="/Computer-DataBase/dashboard?page=${page.currentPage+i}${nbByPageValue}${searchValue}"><c:out value="${page.currentPage+i}"/></a></li>
+              			<li class="${active}"><a href="/Computer-DataBase/dashboard?page=${page.currentPage+i}${nbByPageValue}${searchValue}${orderValue}${ascendingValue}"><c:out value="${page.currentPage+i}"/></a></li>
               		</c:if>
               	</c:forEach>
               	<li>
               		<c:if test="${page.currentPage < nbPagesMax}">
-                		<a href="/Computer-DataBase/dashboard?page=${page.currentPage+1}${nbByPageValue}${searchValue}" aria-label="Next">
+                		<a href="/Computer-DataBase/dashboard?page=${page.currentPage+1}${nbByPageValue}${searchValue}${orderValue}${ascendingValue}" aria-label="Next">
                     		<span aria-hidden="true">&raquo;</span>
                 		</a>
                 	</c:if>
@@ -143,17 +163,17 @@
             <c:if test = "${page.itemsByPage == 10}">
                <c:set var="active" value="active"/>
             </c:if>
-            <a href="/Computer-DataBase/dashboard?nbByPage=10${searchValue}"><button type="button" class="btn btn-default ${active}">10</button></a>
+            <a href="/Computer-DataBase/dashboard?nbByPage=10${searchValue}${orderValue}${ascendingValue}"><button type="button" class="btn btn-default ${active}">10</button></a>
             <c:set var="active" value=""/>
             <c:if test = "${page.itemsByPage == 50}">
                <c:set var="active" value="active"/>
             </c:if>
-            <a href="/Computer-DataBase/dashboard?nbByPage=50${searchValue}"><button type="button" class="btn btn-default ${active}">50</button></a>
+            <a href="/Computer-DataBase/dashboard?nbByPage=50${searchValue}${orderValue}${ascendingValue}"><button type="button" class="btn btn-default ${active}">50</button></a>
             <c:set var="active" value=""/>
             <c:if test = "${page.itemsByPage == 100}">
                <c:set var="active" value="active"/>
             </c:if>
-            <a href="/Computer-DataBase/dashboard?nbByPage=100${searchValue}"><button type="button" class="btn btn-default ${active}">100</button></a>
+            <a href="/Computer-DataBase/dashboard?nbByPage=100${searchValue}${orderValue}${ascendingValue}"><button type="button" class="btn btn-default ${active}">100</button></a>
         	</div>
         </div>
 

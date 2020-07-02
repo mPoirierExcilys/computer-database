@@ -23,7 +23,7 @@ public class ComputerDaoTest {
 	
 	@Test
 	public void findBetween() {
-		assertTrue(computerDao.findBetween(0, 10).size() == 10);
+		assertTrue(computerDao.findBetween(0, 10, "computer.id","ASC").size() == 10);
 	}
 	
 	@Test

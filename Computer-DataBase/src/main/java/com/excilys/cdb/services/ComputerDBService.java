@@ -16,7 +16,7 @@ public interface ComputerDBService {
 	
 	void deleteComputer(Computer computer);
 	
-	List<Computer> getComputersByPage(Page page);
+	List<Computer> getComputersByPage(Page page, String order, String ascending);
 	
 	Integer getComputersNbPages(Page page);
 	
@@ -24,7 +24,7 @@ public interface ComputerDBService {
 	
 	Integer getNbComputersPagesSearch(Page page, String search);
 	
-	List<Computer> getComputersByPagesSearch(Page page, String search);
+	List<Computer> getComputersByPagesSearch(Page page, String search, String order, String ascending);
 	
 	Integer getNbComputersSearch(String search);
 

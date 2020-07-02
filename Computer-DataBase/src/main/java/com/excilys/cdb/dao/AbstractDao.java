@@ -15,7 +15,7 @@ public abstract class AbstractDao<T> {
 	
 	public abstract void delete(T obj);
 	
-	public abstract List<T> findBetween(Integer offset, Integer nb);
+	public abstract List<T> findBetween(Integer offset, Integer nb, String order, String ascending);
 	
 	public abstract Integer count();
 }

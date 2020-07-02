@@ -90,7 +90,7 @@ public class CompanyDao extends AbstractDao<Company> {
 	}
 
 	@Override
-	public List<Company> findBetween(Integer offset, Integer nb) {
+	public List<Company> findBetween(Integer offset, Integer nb, String order, String ascending) {
 		List<Company> allCompanies = new ArrayList<>();
 		try (Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(limitSql)){

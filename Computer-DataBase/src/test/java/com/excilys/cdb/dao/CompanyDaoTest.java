@@ -35,7 +35,7 @@ public class CompanyDaoTest {
 	
 	@Test
 	public void findBetween(){
-		assertTrue(companyDao.findBetween(0, 10).size() == 10);
+		assertTrue(companyDao.findBetween(0, 10,"company.id","ASC").size() == 10);
 	}
 
 }

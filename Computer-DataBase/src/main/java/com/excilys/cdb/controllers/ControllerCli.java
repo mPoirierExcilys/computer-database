@@ -17,6 +17,8 @@ public class ControllerCli {
 	private final CliUi cliUi;
 	private Scanner sc;
 	private Page page;
+	private final String order="computer.id";
+	private final String ascending="ASC";
 	
 	public ControllerCli() {
 		this.computerService = new ComputerDBServiceImpl();
@@ -56,7 +58,7 @@ public class ControllerCli {
 				page.setCurrentPage(1);
 				page.setNbPage(computerService.getComputersNbPages(page));
 				do {
-					cliUi.listAllComputers(computerService.getComputersByPage(page),page.getCurrentPage(),page.getNbPage());
+					cliUi.listAllComputers(computerService.getComputersByPage(page, order, ascending),page.getCurrentPage(),page.getNbPage());
 					String input1 = sc.next();
 					try {
 						Integer pageWish = Integer.parseInt(input1);

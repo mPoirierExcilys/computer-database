@@ -29,15 +29,21 @@ public class ComputerDao extends AbstractDao<Computer>{
 	
 	private static String deleteSql = "DELETE FROM computer WHERE id = ?";
 	
-	private static String limitSql = "SELECT id,name,introduced,discontinued,company_id FROM computer LIMIT ?, ?";
-	
 	private static String countSql = "SELECT COUNT(id) FROM computer";
 	
-	private static String searchSql = "SELECT computer.id,computer.name,introduced,discontinued,company_id "
-			+ "FROM computer LEFT JOIN company as cp on computer.company_id = cp.id "
-			+ "WHERE computer.name like ? OR cp.name like ? Order By computer.id LIMIT ?,?";
-	
 	private static String countSearchSql = "SELECT COUNT(computer.id) FROM computer LEFT JOIN company as cp on computer.company_id = cp.id WHERE computer.name like ? OR cp.name like ?";
+	
+	private String limitOrderSql(String order, String ascending) {
+		return "SELECT computer.id,computer.name,introduced,discontinued,company_id "
+				+ "FROM computer LEFT JOIN company as cp on computer.company_id = cp.id "
+				+ "Order By ISNULL("+order+"), "+ order+ " "+ascending+" LIMIT ?,?";
+	}
+	
+	private String limitSearchOrderSql(String order, String ascending) {
+		return "SELECT computer.id,computer.name,introduced,discontinued,company_id "
+				+ "FROM computer LEFT JOIN company as cp on computer.company_id = cp.id "
+				+ "WHERE computer.name like ? OR cp.name like ? Order By ISNULL("+order+"), "+order + " " +ascending+" LIMIT ?,?";
+	}
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 	
@@ -144,10 +150,10 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 
 	@Override
-	public List<Computer> findBetween(Integer offset, Integer nb) {
+	public List<Computer> findBetween(Integer offset, Integer nb, String order, String ascending) {
 		List<Computer> allComputer = new ArrayList<>();
 		try(Connection connect = connector.getInstance();
-			PreparedStatement prepare = connect.prepareStatement(limitSql)) {
+			PreparedStatement prepare = connect.prepareStatement(limitOrderSql(order, ascending))) {
 			prepare.setInt(1, offset);
 			prepare.setInt(2, nb);
 			ResultSet result = prepare.executeQuery();
@@ -178,10 +184,10 @@ public class ComputerDao extends AbstractDao<Computer>{
 		return nb;
 	}
 	
-	public List<Computer> findBetweenWithSearch(Integer offset, Integer nb, String search){
+	public List<Computer> findBetweenWithSearch(Integer offset, Integer nb, String search, String order, String ascending){
 		List<Computer> allComputer = new ArrayList<>();
 		try(Connection connect = connector.getInstance();
-			PreparedStatement prepare = connect.prepareStatement(searchSql)) {
+			PreparedStatement prepare = connect.prepareStatement(limitSearchOrderSql(order, ascending))) {
 			prepare.setString(1, "%"+search+"%");
 			prepare.setString(2, "%"+search+"%");
 			prepare.setInt(3, offset);

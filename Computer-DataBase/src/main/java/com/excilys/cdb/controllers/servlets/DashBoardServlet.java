@@ -49,6 +49,8 @@ public class DashBoardServlet extends HttpServlet {
 		List<ComputerDto> computersDto = new ArrayList<>();
 		List<Computer> computers = new ArrayList<>();
 		String search = "";
+		String order = "computer.id";
+		String ascending = "ASC";
 		page.setCurrentPage(1);
 		page.setItemsByPage(10);
 		if(request.getParameter("nbByPage") != null) {
@@ -58,10 +60,21 @@ public class DashBoardServlet extends HttpServlet {
 		if(request.getParameter("page") != null) {
 			String pageWish = request.getParameter("page");
 			page.setCurrentPage(Integer.parseInt(pageWish));
+			if(page.getCurrentPage() < 1) {
+				page.setCurrentPage(1);
+			}
+		}
+		if(request.getParameter("order") != null && !request.getParameter("order").equals("")) {
+			order = request.getParameter("order");
+			request.setAttribute("order", order);
+		}
+		if(request.getParameter("ascending") != null && !request.getParameter("ascending").equals("")) {
+			ascending = request.getParameter("ascending");
+			request.setAttribute("ascending", ascending);
 		}
 		if(request.getParameter("search") != null && !request.getParameter("search").equals("")) {
 			search = request.getParameter("search");
-			computers = computerService.getComputersByPagesSearch(page, search);
+			computers = computerService.getComputersByPagesSearch(page, search, order,ascending);
 			for(Computer computer: computers) {
 				ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, companyService.getCompanyFromComputer(computer));
 				computersDto.add(computerDto);
@@ -69,7 +82,7 @@ public class DashBoardServlet extends HttpServlet {
 			request.setAttribute("nbPagesMax", computerService.getNbComputersPagesSearch(page, search));
 			request.setAttribute("nbComputers", computerService.getNbComputersSearch(search));
 		}else {
-			computers = computerService.getComputersByPage(page);
+			computers = computerService.getComputersByPage(page, order, ascending);
 			for(Computer computer: computers) {
 				ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer, companyService.getCompanyFromComputer(computer));
 				computersDto.add(computerDto);

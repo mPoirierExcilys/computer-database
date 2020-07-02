@@ -40,9 +40,9 @@ public class ComputerDBServiceImpl implements ComputerDBService{
 	}
 	
 	@Override
-	public List<Computer> getComputersByPage(Page page) {
+	public List<Computer> getComputersByPage(Page page, String order, String ascending) {
 		Integer offset = (page.getCurrentPage()-1)*page.getItemsByPage();
-		return computerDao.findBetween(offset, page.getItemsByPage());
+		return computerDao.findBetween(offset, page.getItemsByPage(), order, ascending);
 	}
 
 	@Override
@@ -65,9 +65,9 @@ public class ComputerDBServiceImpl implements ComputerDBService{
 	}
 
 	@Override
-	public List<Computer> getComputersByPagesSearch(Page page, String search) {
+	public List<Computer> getComputersByPagesSearch(Page page, String search, String order, String ascending) {
 		Integer offset = (page.getCurrentPage()-1)*page.getItemsByPage();
-		return computerDao.findBetweenWithSearch(offset, page.getItemsByPage(), search);
+		return computerDao.findBetweenWithSearch(offset, page.getItemsByPage(), search, order, ascending);
 	}
 
 	@Override
