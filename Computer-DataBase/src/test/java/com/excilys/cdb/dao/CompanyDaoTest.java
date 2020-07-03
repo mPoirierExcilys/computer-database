@@ -37,5 +37,14 @@ public class CompanyDaoTest {
 	public void findBetween(){
 		assertTrue(companyDao.findBetween(0, 10,"company.id","ASC").size() == 10);
 	}
+	
+	@Test
+	public void delete() {
+		ComputerDao computerDao = new ComputerDao(1);
+		companyDao.delete(1);
+		assertTrue(companyDao.count() == 19);
+		assertTrue(computerDao.count()== 32);
+		
+	}
 
 }

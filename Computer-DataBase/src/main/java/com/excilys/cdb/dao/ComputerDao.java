@@ -72,9 +72,8 @@ public class ComputerDao extends AbstractDao<Computer>{
 				comp = this.find(computerId);
 			}	
 		}catch(SQLException eSQL) {
-			logger.error("Error Created Computer");
+			logger.error("Error Created Computer",eSQL);
 			logger.error(eSQL.getMessage());
-			eSQL.printStackTrace();
 		}
 		return comp;
 	}
@@ -90,8 +89,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 				computer = ComputerMapper.resultToObject(result);
 			}
 		}catch(SQLException eSQL) {
-			logger.error("Error Getting computer");
-			eSQL.printStackTrace();
+			logger.error("Error Getting computer",eSQL);
 		}
 		return computer;
 	}
@@ -106,8 +104,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 				allComputer.add(computer);
 			}
 		}catch(SQLException eSQL) {
-			logger.error("Error Getting computers");
-			eSQL.printStackTrace();
+			logger.error("Error Getting computers",eSQL);
 		}
 		return allComputer;
 	}
@@ -129,8 +126,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			connect.createStatement().executeUpdate(sqlRequest);
 			return this.find(obj.getIdComputer());
 		}catch(SQLException eSQL) {
-			logger.error("Error Update Computer");
-			eSQL.printStackTrace();
+			logger.error("Error Update Computer",eSQL);
 		}
 		return null;
 	}
@@ -142,8 +138,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			prepare.setInt(1, id);
 			prepare.executeUpdate();
 		}catch(SQLException eSQL) {
-			logger.error("Error Delete Computer");
-			eSQL.printStackTrace();
+			logger.error("Error Delete Computer",eSQL);
 		}
 	}
 
@@ -161,8 +156,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 				allComputer.add(computer);
 			}
 		}catch(SQLException eSQL) {
-			logger.error("Error Getting Computers between");
-			eSQL.printStackTrace();
+			logger.error("Error Getting Computers between",eSQL);
 		}
 		return allComputer;
 	}
@@ -177,8 +171,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 				nb =result.getInt(1);
 			}
 		}catch(SQLException eSQL) {
-			logger.error("Error counting Computers");
-			eSQL.printStackTrace();
+			logger.error("Error counting Computers",eSQL);
 		}
 		return nb;
 	}
@@ -197,8 +190,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 				allComputer.add(computer);
 			}
 		}catch(SQLException eSQL) {
-			logger.error("Error Getting Computers between Search");
-			eSQL.printStackTrace();
+			logger.error("Error Getting Computers between Search",eSQL);
 		}
 		return allComputer;
 	}
@@ -214,8 +206,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 				nb =result.getInt(1);
 			}
 		}catch(SQLException eSQL) {
-			logger.error("Error counting Computers Search");
-			eSQL.printStackTrace();
+			logger.error("Error counting Computers Search",eSQL);
 		}
 		return nb;
 	}

@@ -53,8 +53,7 @@ public class CompanyDao extends AbstractDao<Company> {
 				company = CompanyMapper.resultToObject(result);
 			}	
 		}catch(SQLException eSQL) {
-			logger.error("Error Getting campany");
-			eSQL.printStackTrace();
+			logger.error("Error Getting campany",eSQL);
 		}
 		return company;
 	}
@@ -69,8 +68,7 @@ public class CompanyDao extends AbstractDao<Company> {
 				allCompany.add(company);
 			}
 		}catch(SQLException eSQL) {
-			logger.error("Error Getting campanies");
-			eSQL.printStackTrace();
+			logger.error("Error Getting campanies",eSQL);
 		}
 		return allCompany;
 	}
@@ -92,14 +90,12 @@ public class CompanyDao extends AbstractDao<Company> {
 		try(Connection connect = connector.getInstance();
 			PreparedStatement prepareComputers = connect.prepareStatement(deleteComputerSql);
 			PreparedStatement prepare = connect.prepareStatement(deleteCompanySql)){
-			System.out.println("before set autocommit");
 			connect.setAutoCommit(false);
 			prepareComputers.setInt(1,id);
 			prepareComputers.executeUpdate();
 			prepare.setInt(1, id);
 			prepare.executeUpdate();
 			connect.commit();
-			System.out.println("executed");
 		}catch(SQLException eSQL) {
 			logger.error("Error deleting company with computers", eSQL);
 		}
@@ -118,8 +114,7 @@ public class CompanyDao extends AbstractDao<Company> {
 				allCompanies.add(company);
 			}
 		}catch(SQLException eSQL) {
-			logger.error("Error getting companies between");
-			eSQL.printStackTrace();
+			logger.error("Error getting companies between",eSQL);
 		}
 		return allCompanies;
 	}
@@ -133,8 +128,7 @@ public class CompanyDao extends AbstractDao<Company> {
 				nb =result.getInt(1);
 			}
 		}catch(SQLException eSQL) {
-			logger.error("Error counting Computers");
-			eSQL.printStackTrace();
+			logger.error("Error counting Computers",eSQL);
 		}
 		return nb;
 	}

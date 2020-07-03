@@ -61,5 +61,15 @@ public class ComputerDaoTest {
 		computer = computerDao.update(computer);
 		assertTrue(computer.getCompany().getIdCompany() == 2);
 	}
+	
+	@Test
+	public void countSearch() {
+		assertTrue(computerDao.countSearch("Mac") == 25);
+	}
+	
+	@Test
+	public void findBetweenWithSearch() {
+		assertTrue(computerDao.findBetweenWithSearch(0, 10, "Dragon", "computer.id","ASC").size() == 1);
+	}
 
 }

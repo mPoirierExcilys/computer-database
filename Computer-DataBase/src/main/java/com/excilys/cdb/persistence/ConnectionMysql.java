@@ -23,9 +23,7 @@ public class ConnectionMysql implements Connector {
 			try {
 				connect = ds.getConnection();
 			} catch(SQLException eSQL) {
-				logger.error("Error connection to DB");
-				eSQL.printStackTrace();
-				
+				logger.error("Error connection to DB",eSQL);		
 			}
 		}
 		return connect;
