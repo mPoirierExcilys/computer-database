@@ -86,7 +86,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			PreparedStatement prepare = connect.prepareStatement(findSql)) {
 			prepare.setInt(1, id);
 			ResultSet result = prepare.executeQuery();
-			if(result.first()) {
+			if(result.next()) {
 				computer = ComputerMapper.resultToObject(result);
 			}
 		}catch(SQLException eSQL) {
@@ -173,7 +173,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 		Integer nb = 0;
 		try(Connection connect = connector.getInstance();
 			ResultSet result =connect.createStatement().executeQuery(countSql)) {
-			if(result.first()) {
+			if(result.next()) {
 				nb =result.getInt(1);
 			}
 		}catch(SQLException eSQL) {
@@ -210,7 +210,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			prepare.setString(1, "%"+search+"%");
 			prepare.setString(2, "%"+search+"%");
 			ResultSet result = prepare.executeQuery();
-			if(result.first()) {
+			if(result.next()) {
 				nb =result.getInt(1);
 			}
 		}catch(SQLException eSQL) {
