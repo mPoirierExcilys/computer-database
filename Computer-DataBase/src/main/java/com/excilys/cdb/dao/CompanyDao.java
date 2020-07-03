@@ -26,6 +26,10 @@ public class CompanyDao extends AbstractDao<Company> {
 	
 	private static String countSql = "SELECT COUNT(id) FROM company";
 	
+	private static String deleteComputerSql = "DELETE FROM computer WHERE company_id = ?";
+	
+	private static String deleteCompanySql = "DELETE FROM company WHERE id = ?";
+	
 	private static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
 	
 	private Connector connector;
@@ -85,8 +89,20 @@ public class CompanyDao extends AbstractDao<Company> {
 
 	@Override
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
-		
+		try(Connection connect = connector.getInstance();
+			PreparedStatement prepareComputers = connect.prepareStatement(deleteComputerSql);
+			PreparedStatement prepare = connect.prepareStatement(deleteCompanySql)){
+			System.out.println("before set autocommit");
+			connect.setAutoCommit(false);
+			prepareComputers.setInt(1,id);
+			prepareComputers.executeUpdate();
+			prepare.setInt(1, id);
+			prepare.executeUpdate();
+			connect.commit();
+			System.out.println("executed");
+		}catch(SQLException eSQL) {
+			logger.error("Error deleting company with computers", eSQL);
+		}
 	}
 
 	@Override

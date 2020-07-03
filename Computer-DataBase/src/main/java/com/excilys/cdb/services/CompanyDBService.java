@@ -13,4 +13,6 @@ public interface CompanyDBService {
 	List<Company> getCompaniesByPage(Page page);
 	
 	Integer getCompaniesNbPages(Page page);
+	
+	void deleteCompany(Integer id);
 }

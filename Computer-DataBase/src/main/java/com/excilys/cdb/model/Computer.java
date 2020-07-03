@@ -88,7 +88,11 @@ public class Computer {
 
 	@Override
 	public String toString() {
-		return name + " with id : "+ idComputer +" from Company id :" + company.getIdCompany() + " introduced " + introduced + " and discontinued " + discontinued + "\n" +
+		String companyId = "null";
+		if(company != null) {
+			companyId = String.valueOf(company.getIdCompany());
+		}
+		return name + " with id : "+ idComputer +" from Company id :" + companyId + " introduced " + introduced + " and discontinued " + discontinued + "\n" +
 				"-------------------------------------------------- \n";
 	}
 

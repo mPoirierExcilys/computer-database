@@ -96,6 +96,11 @@ public class ControllerCli {
 				computerService.deleteComputer(computerId2);
 				break;
 			case "7":
+				cliUi.deleteCompany();
+				int companyId = Integer.parseInt(sc.next());
+				companyService.deleteCompany(companyId);
+				break;
+			case "8":
 				run = false;
 				break;
 			default:

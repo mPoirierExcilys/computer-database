@@ -37,4 +37,10 @@ public class CompanyDBServiceImpl implements CompanyDBService {
 		return nbEntries%page.getItemsByPage() == 0?nbPages:nbPages+1;
 	}
 
+	@Override
+	public void deleteCompany(Integer id) {
+		companyDao.delete(id);
+		
+	}
+
 }

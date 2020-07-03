@@ -30,7 +30,8 @@ public class CliUi {
 		System.out.println("4. To create a new Computer press 4");
 		System.out.println("5. To update a computer press 5");
 		System.out.println("6. To delete a computer press 6");
-		System.out.println("7. To exit Computer Database press 7");
+		System.out.println("7. To delete a company press 7");
+		System.out.println("8. To exit Computer Database press 8");
 	}
 	
 	public void wrongInstruction() {
@@ -106,6 +107,10 @@ public class CliUi {
 	
 	public void deleteComputer() {
 		System.out.println("Enter the id of the computer you want to delete : ");
+	}
+	
+	public void deleteCompany() {
+		System.out.println("Enter the id of the company you want to delete : ");
 	}
 	
 	public void idComputerToUpdate() {

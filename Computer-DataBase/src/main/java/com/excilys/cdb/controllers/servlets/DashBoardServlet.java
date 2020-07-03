@@ -16,8 +16,6 @@ import com.excilys.cdb.dto.ComputerDto;
 import com.excilys.cdb.mappers.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.services.CompanyDBService;
-import com.excilys.cdb.services.CompanyDBServiceImpl;
 import com.excilys.cdb.services.ComputerDBService;
 import com.excilys.cdb.services.ComputerDBServiceImpl;
 
@@ -29,7 +27,6 @@ public class DashBoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private ComputerDBService computerService;
-	private CompanyDBService companyService;
 	private Page page;
        
     /**
@@ -38,7 +35,6 @@ public class DashBoardServlet extends HttpServlet {
     public DashBoardServlet() {
         super();
         computerService = new ComputerDBServiceImpl();
-        companyService = new CompanyDBServiceImpl();
         page = new Page(1,10);
     }
 
