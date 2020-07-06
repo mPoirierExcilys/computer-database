@@ -1,16 +1,17 @@
-package com.excilys.cdb.services;
+package com.excilys.cdb.services.implemented;
 
 import java.util.List;
 
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
+import com.excilys.cdb.services.CompanyService;
 
-public class CompanyDBServiceImpl implements CompanyDBService {
+public class CompanyServiceImpl implements CompanyService {
 	
 	private final CompanyDao companyDao;
 	
-	public CompanyDBServiceImpl() {
+	public CompanyServiceImpl() {
 		this.companyDao = new CompanyDao();
 	}
 

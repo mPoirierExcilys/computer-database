@@ -1,6 +1,6 @@
-package com.excilys.cdb.mappers;
+package com.excilys.cdb.dao.mappers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -11,12 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.excilys.cdb.dto.CompanyDto;
-import com.excilys.cdb.dto.ComputerDto;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
-public class ComputerMapperTest {
+public class ComputerDaoMapperTest {
 	
 	private static final String ATTRIBUT_ID_COMPUTER = "id";
     private static final String ATTRIBUT_NAME = "name";
@@ -46,7 +44,7 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getDate(ATTRIBUT_DISCONTINUED)).thenReturn(Date.valueOf(discontinued));
 		Mockito.when(resultSet.getInt(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
 		Mockito.when(resultSet.getString(ATTRIBUT_COMPANY_NAME)).thenReturn(companyName);
-		Computer computer = ComputerMapper.resultToObject(resultSet);
+		Computer computer = ComputerDaoMapper.resultToObject(resultSet);
 		Computer computerExpected = new Computer(idComputer,nameComputer,introduced,discontinued,new Company(idCompany, companyName));
 		assertEquals(computerExpected,computer);
 	}
@@ -56,7 +54,7 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getDate(ATTRIBUT_INTRODUCED)).thenReturn(Date.valueOf(introduced));
 		Mockito.when(resultSet.getDate(ATTRIBUT_DISCONTINUED)).thenReturn(Date.valueOf(discontinued));
 		Mockito.when(resultSet.getInt(ATTRIBUT_COMPANY_ID)).thenReturn(0);
-		Computer computer = ComputerMapper.resultToObject(resultSet);
+		Computer computer = ComputerDaoMapper.resultToObject(resultSet);
 		Computer computerExpected = new Computer(idComputer,nameComputer);
 		computerExpected.setIntroduced(introduced);
 		computerExpected.setDiscontinued(discontinued);
@@ -69,7 +67,7 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getDate(ATTRIBUT_DISCONTINUED)).thenReturn(Date.valueOf(discontinued));
 		Mockito.when(resultSet.getInt(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
 		Mockito.when(resultSet.getString(ATTRIBUT_COMPANY_NAME)).thenReturn(companyName);
-		Computer computer = ComputerMapper.resultToObject(resultSet);
+		Computer computer = ComputerDaoMapper.resultToObject(resultSet);
 		Computer computerExpected = new Computer(idComputer,nameComputer);
 		computerExpected.setDiscontinued(discontinued);
 		computerExpected.setCompany(new Company(idCompany, companyName));
@@ -82,28 +80,12 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getDate(ATTRIBUT_DISCONTINUED)).thenReturn(null);
 		Mockito.when(resultSet.getInt(ATTRIBUT_COMPANY_ID)).thenReturn(idCompany);
 		Mockito.when(resultSet.getString(ATTRIBUT_COMPANY_NAME)).thenReturn(companyName);
-		Computer computer = ComputerMapper.resultToObject(resultSet);
+		Computer computer = ComputerDaoMapper.resultToObject(resultSet);
 		Computer computerExpected = new Computer(idComputer,nameComputer);
 		computerExpected.setCompany(new Company(idCompany, companyName));
 		computerExpected.setIntroduced(introduced);
 		assertEquals(computerExpected,computer);
 		
-	}
-	
-	@Test
-	public void computerDtoToComputer() {
-		Computer computerExpected = new Computer(idComputer, nameComputer,introduced,discontinued,new Company(idCompany, companyName));
-		ComputerDto computerDto = new ComputerDto(idComputer,nameComputer,introduced.toString(),discontinued.toString(),new CompanyDto(idCompany, companyName));
-		Computer computer = ComputerMapper.computerDtoToComputer(computerDto);
-		assertEquals(computerExpected,computer);
-	}
-	
-	@Test
-	public void computerToComputerDto() {
-		ComputerDto computerDtoExpected = new ComputerDto(idComputer,nameComputer,introduced.toString(),discontinued.toString(),new CompanyDto(idCompany, companyName));
-		Computer computer = new Computer(idComputer, nameComputer,introduced,discontinued,new Company(idCompany, companyName));
-		ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer);
-		assertEquals(computerDtoExpected, computerDto);
 	}
 
 }

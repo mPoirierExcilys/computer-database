@@ -2,18 +2,13 @@ package com.excilys.cdb.model;
 
 public class Page {
 	
-	private Integer currentPage;
+	private Integer currentPage = 1;
 	
-	private Integer nbPage;
+	private Integer nbPage = 10;
 	
 	private Integer itemsByPage;
 	
 	public Page() {
-	}
-	
-	public Page(Integer currentPage, Integer itemsByPage) {
-		this.currentPage = currentPage;
-		this.itemsByPage = itemsByPage;
 	}
 	
 	public void incrementCurrentPage() {

@@ -4,7 +4,7 @@ import java.util.List;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 
-public interface ComputerDBService {
+public interface ComputerService {
 	
 	List<Computer> getAllComputers();
 	

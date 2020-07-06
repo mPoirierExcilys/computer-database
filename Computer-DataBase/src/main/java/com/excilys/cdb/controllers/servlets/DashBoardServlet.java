@@ -13,11 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dto.ComputerDto;
-import com.excilys.cdb.mappers.ComputerMapper;
+import com.excilys.cdb.dto.mappers.ComputerDtoMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.services.ComputerDBService;
-import com.excilys.cdb.services.ComputerDBServiceImpl;
+import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.services.implemented.ComputerServiceImpl;
 
 /**
  * Servlet implementation class DashBoardServlet
@@ -26,7 +26,7 @@ import com.excilys.cdb.services.ComputerDBServiceImpl;
 public class DashBoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private ComputerDBService computerService;
+	private ComputerService computerService;
 	private Page page;
        
     /**
@@ -34,8 +34,8 @@ public class DashBoardServlet extends HttpServlet {
      */
     public DashBoardServlet() {
         super();
-        computerService = new ComputerDBServiceImpl();
-        page = new Page(1,10);
+        computerService = new ComputerServiceImpl();
+        page = new Page();
     }
 
 	/**
@@ -72,7 +72,7 @@ public class DashBoardServlet extends HttpServlet {
 			search = request.getParameter("search");
 			computers = computerService.getComputersByPagesSearch(page, search, order,ascending);
 			for(Computer computer: computers) {
-				ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer);
+				ComputerDto computerDto = ComputerDtoMapper.computerToComputerDto(computer);
 				computersDto.add(computerDto);
 			}
 			request.setAttribute("nbPagesMax", computerService.getNbComputersPagesSearch(page, search));
@@ -80,7 +80,7 @@ public class DashBoardServlet extends HttpServlet {
 		}else {
 			computers = computerService.getComputersByPage(page, order, ascending);
 			for(Computer computer: computers) {
-				ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer);
+				ComputerDto computerDto = ComputerDtoMapper.computerToComputerDto(computer);
 				computersDto.add(computerDto);
 			}
 			request.setAttribute("nbPagesMax", computerService.getComputersNbPages(page));

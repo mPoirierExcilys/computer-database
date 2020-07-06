@@ -1,15 +1,16 @@
-package com.excilys.cdb.services;
+package com.excilys.cdb.services.implemented;
 
 import java.util.List;
 import com.excilys.cdb.dao.ComputerDao;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
+import com.excilys.cdb.services.ComputerService;
 
-public class ComputerDBServiceImpl implements ComputerDBService{
+public class ComputerServiceImpl implements ComputerService{
 	
 	private final ComputerDao computerDao;
 	
-	public ComputerDBServiceImpl() {
+	public ComputerServiceImpl() {
 		this.computerDao = new ComputerDao();
 	}
 

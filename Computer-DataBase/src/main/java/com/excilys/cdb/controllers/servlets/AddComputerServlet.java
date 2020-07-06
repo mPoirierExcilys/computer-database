@@ -12,14 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dto.CompanyDto;
 import com.excilys.cdb.dto.ComputerDto;
-import com.excilys.cdb.mappers.CompanyMapper;
-import com.excilys.cdb.mappers.ComputerMapper;
+import com.excilys.cdb.dto.mappers.CompanyDtoMapper;
+import com.excilys.cdb.dto.mappers.ComputerDtoMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.services.CompanyDBService;
-import com.excilys.cdb.services.CompanyDBServiceImpl;
-import com.excilys.cdb.services.ComputerDBService;
-import com.excilys.cdb.services.ComputerDBServiceImpl;
+import com.excilys.cdb.services.CompanyService;
+import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.services.implemented.CompanyServiceImpl;
+import com.excilys.cdb.services.implemented.ComputerServiceImpl;
 
 /**
  * Servlet implementation class AddComputerServlet
@@ -28,16 +28,16 @@ import com.excilys.cdb.services.ComputerDBServiceImpl;
 public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private CompanyDBService companyService;
-	private ComputerDBService computerService;
+	private CompanyService companyService;
+	private ComputerService computerService;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public AddComputerServlet() {
         super();
-        this.companyService = new CompanyDBServiceImpl();
-        this.computerService = new ComputerDBServiceImpl();
+        this.companyService = new CompanyServiceImpl();
+        this.computerService = new ComputerServiceImpl();
     }
 
 	/**
@@ -48,7 +48,7 @@ public class AddComputerServlet extends HttpServlet {
 		List<Company> companies = new ArrayList<>();
 		companies = companyService.getAllCompanies();
 		for(Company company: companies) {
-			CompanyDto companyDto = CompanyMapper.companyToCompanyDto(company);
+			CompanyDto companyDto = CompanyDtoMapper.companyToCompanyDto(company);
 			companiesDto.add(companyDto);
 		}
 		request.setAttribute("companies", companiesDto);
@@ -73,7 +73,7 @@ public class AddComputerServlet extends HttpServlet {
 			computerDto.setCompany(companyDto);
 		}
 		try {
-			Computer newComputer = ComputerMapper.computerDtoToComputer(computerDto);
+			Computer newComputer = ComputerDtoMapper.computerDtoToComputer(computerDto);
 			newComputer = computerService.createComputer(newComputer);
 			String success = "Computer " + newComputer.getName() + " was successfully added";
 			request.setAttribute("success", success);

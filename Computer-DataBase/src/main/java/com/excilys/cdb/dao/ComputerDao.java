@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 
-import com.excilys.cdb.mappers.ComputerMapper;
+import com.excilys.cdb.dao.mappers.ComputerDaoMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.ConnectionH2;
 import com.excilys.cdb.persistence.ConnectionMysql;
@@ -21,31 +22,27 @@ import com.excilys.cdb.persistence.Connector;
 
 public class ComputerDao extends AbstractDao<Computer>{
 	
-	private static String insertSql = "INSERT INTO computer (name) VALUES(?)";
+	private static final String insertSql = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES(?,?,?,?)";
 	
-	private static String findAllSql = "SELECT computer.id,computer.name,introduced,discontinued,company_id,cp.name as companyName FROM computer LEFT JOIN company as cp on computer.company_id = cp.id";
+	private static final String findAllSql = "SELECT computer.id,computer.name,introduced,discontinued,company_id,cp.name as companyName FROM computer LEFT JOIN company as cp on computer.company_id = cp.id ";
 	
-	private static String findSql = "SELECT computer.id,computer.name,introduced,discontinued,company_id,cp.name as companyName FROM computer LEFT JOIN company cp on computer.company_id = cp.id WHERE computer.id = ?;";
+	private static final String findSql = "SELECT computer.id,computer.name,introduced,discontinued,company_id,cp.name as companyName FROM computer LEFT JOIN company cp on computer.company_id = cp.id WHERE computer.id = ? ";
 	
-	private static String deleteSql = "DELETE FROM computer WHERE id = ?";
+	private static final String deleteSql = "DELETE FROM computer WHERE id = ?";
 	
-	private static String countSql = "SELECT COUNT(id) FROM computer";
+	private static final String countSql = "SELECT COUNT(id) FROM computer";
 	
-	private static String countSearchSql = "SELECT COUNT(computer.id) FROM computer LEFT JOIN company as cp on computer.company_id = cp.id WHERE computer.name like ? OR cp.name like ?";
+	private static final String countSearchSql = "SELECT COUNT(computer.id) FROM computer LEFT JOIN company as cp on computer.company_id = cp.id WHERE computer.name like ? OR cp.name like ?";
 	
 	private String limitOrderSql(String order, String ascending) {
-		return "SELECT computer.id,computer.name,introduced,discontinued,company_id,cp.name as companyName "
-				+ "FROM computer LEFT JOIN company as cp on computer.company_id = cp.id "
-				+ "Order By "+order+" IS NULL, "+order+ " "+ascending+" LIMIT ?,?";
+		return findAllSql+ "Order By "+order+" IS NULL, "+order+ " "+ascending+" LIMIT ?,?";
 	}
 	
 	private String limitSearchOrderSql(String order, String ascending) {
-		return "SELECT computer.id,computer.name,introduced,discontinued,company_id,cp.name as companyName "
-				+ "FROM computer LEFT JOIN company as cp on computer.company_id = cp.id "
-				+ "WHERE computer.name like ? OR cp.name like ? Order By "+order+" IS NULL, "+order + " " +ascending+" LIMIT ?,?";
+		return findAllSql + "WHERE computer.name like ? OR cp.name like ? Order By "+order+" IS NULL, "+order + " " +ascending+" LIMIT ?,?";
 	}
 	
-	private static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
+	private static final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 	
 	private Connector connector;
 	
@@ -63,12 +60,28 @@ public class ComputerDao extends AbstractDao<Computer>{
 		try(Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
 			prepare.setString(1, obj.getName());
+			if(obj.getIntroduced() != null) {
+				prepare.setDate(2, Date.valueOf(obj.getIntroduced()));
+			}else {
+				prepare.setNull(2, Types.DATE);
+			}
+			if(obj.getDiscontinued() != null) {
+				prepare.setDate(3, Date.valueOf(obj.getDiscontinued()));
+			}
+			else {
+				prepare.setNull(3, Types.DATE);
+			}
+			if(obj.getCompany() != null && obj.getCompany().getIdCompany() != null) {
+				prepare.setInt(4, obj.getCompany().getIdCompany());
+			}
+			else {
+				prepare.setNull(4, Types.BIGINT);
+			}
 			prepare.executeUpdate();
 			ResultSet resultKeys = prepare.getGeneratedKeys();
 			if(resultKeys.first()) {
 				Integer computerId = resultKeys.getInt(1);
 				obj.setIdComputer(computerId);
-				this.update(obj);
 				comp = this.find(computerId);
 			}	
 		}catch(SQLException eSQL) {
@@ -86,7 +99,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			prepare.setInt(1, id);
 			ResultSet result = prepare.executeQuery();
 			if(result.next()) {
-				computer = ComputerMapper.resultToObject(result);
+				computer = ComputerDaoMapper.resultToObject(result);
 			}
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting computer",eSQL);
@@ -100,7 +113,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 		try(Connection connect = connector.getInstance();
 			ResultSet result = connect.createStatement().executeQuery(findAllSql)) {
 			while(result.next()) {
-				Computer computer = ComputerMapper.resultToObject(result);
+				Computer computer = ComputerDaoMapper.resultToObject(result);
 				allComputer.add(computer);
 			}
 		}catch(SQLException eSQL) {
@@ -152,7 +165,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			prepare.setInt(2, nb);
 			ResultSet result = prepare.executeQuery();
 			while(result.next()) {
-				Computer computer = ComputerMapper.resultToObject(result);
+				Computer computer = ComputerDaoMapper.resultToObject(result);
 				allComputer.add(computer);
 			}
 		}catch(SQLException eSQL) {
@@ -186,7 +199,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 			prepare.setInt(4, nb);
 			ResultSet result = prepare.executeQuery();
 			while(result.next()) {
-				Computer computer = ComputerMapper.resultToObject(result);
+				Computer computer = ComputerDaoMapper.resultToObject(result);
 				allComputer.add(computer);
 			}
 		}catch(SQLException eSQL) {

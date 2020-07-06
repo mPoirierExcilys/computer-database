@@ -1,16 +1,11 @@
-package com.excilys.cdb.mappers;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
+package com.excilys.cdb.dto.mappers;
 
 import com.excilys.cdb.dto.CompanyDto;
 import com.excilys.cdb.model.Company;
 
-public class CompanyMapper{
-
-	public static Company resultToObject(ResultSet result) throws SQLException {
-		Company company = new Company(result.getInt("id"), result.getString("name"));
-		return company;
+public class CompanyDtoMapper {
+	
+	private CompanyDtoMapper() {
 	}
 	
 	public static CompanyDto companyToCompanyDto(Company company) {

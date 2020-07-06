@@ -10,7 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.mappers.CompanyMapper;
+import com.excilys.cdb.dao.mappers.CompanyDaoMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.ConnectionH2;
 import com.excilys.cdb.persistence.ConnectionMysql;
@@ -18,19 +18,19 @@ import com.excilys.cdb.persistence.Connector;
 
 public class CompanyDao extends AbstractDao<Company> {
 	
-	private static String findAllSql = "SELECT id,name FROM company";
+	private static final String findAllSql = "SELECT id,name FROM company";
 	
-	private static String findSql = "SELECT id,name FROM company WHERE id = ?";
+	private static final String findSql = "SELECT id,name FROM company WHERE id = ?";
 	
-	private static String limitSql = "SELECT id,name FROM company LIMIT ?, ?";
+	private static final String limitSql = "SELECT id,name FROM company LIMIT ?, ?";
 	
-	private static String countSql = "SELECT COUNT(id) FROM company";
+	private static final String countSql = "SELECT COUNT(id) FROM company";
 	
-	private static String deleteComputerSql = "DELETE FROM computer WHERE company_id = ?";
+	private static final String deleteComputerSql = "DELETE FROM computer WHERE company_id = ?";
 	
-	private static String deleteCompanySql = "DELETE FROM company WHERE id = ?";
+	private static final String deleteCompanySql = "DELETE FROM company WHERE id = ?";
 	
-	private static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
+	private static final Logger logger = LoggerFactory.getLogger(CompanyDao.class);
 	
 	private Connector connector;
 	
@@ -50,7 +50,7 @@ public class CompanyDao extends AbstractDao<Company> {
 			prepare.setInt(1, id);
 			ResultSet result = prepare.executeQuery();
 			if(result.first()) {
-				company = CompanyMapper.resultToObject(result);
+				company = CompanyDaoMapper.resultToObject(result);
 			}	
 		}catch(SQLException eSQL) {
 			logger.error("Error Getting campany",eSQL);
@@ -64,7 +64,7 @@ public class CompanyDao extends AbstractDao<Company> {
 		try(Connection connect = connector.getInstance();
 			ResultSet result = connect.createStatement().executeQuery(findAllSql)) {
 			while(result.next()) {
-				Company company = CompanyMapper.resultToObject(result);
+				Company company = CompanyDaoMapper.resultToObject(result);
 				allCompany.add(company);
 			}
 		}catch(SQLException eSQL) {
@@ -110,7 +110,7 @@ public class CompanyDao extends AbstractDao<Company> {
 			prepare.setInt(2, nb);
 			ResultSet result = prepare.executeQuery();
 			while(result.next()) {
-				Company company = CompanyMapper.resultToObject(result);
+				Company company = CompanyDaoMapper.resultToObject(result);
 				allCompanies.add(company);
 			}
 		}catch(SQLException eSQL) {

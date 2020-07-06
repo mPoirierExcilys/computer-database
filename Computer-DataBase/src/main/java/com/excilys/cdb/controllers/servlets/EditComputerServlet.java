@@ -12,14 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dto.CompanyDto;
 import com.excilys.cdb.dto.ComputerDto;
-import com.excilys.cdb.mappers.CompanyMapper;
-import com.excilys.cdb.mappers.ComputerMapper;
+import com.excilys.cdb.dto.mappers.CompanyDtoMapper;
+import com.excilys.cdb.dto.mappers.ComputerDtoMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.services.CompanyDBService;
-import com.excilys.cdb.services.CompanyDBServiceImpl;
-import com.excilys.cdb.services.ComputerDBService;
-import com.excilys.cdb.services.ComputerDBServiceImpl;
+import com.excilys.cdb.services.CompanyService;
+import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.services.implemented.CompanyServiceImpl;
+import com.excilys.cdb.services.implemented.ComputerServiceImpl;
 
 /**
  * Servlet implementation class EditComputerServlet
@@ -28,16 +28,16 @@ import com.excilys.cdb.services.ComputerDBServiceImpl;
 public class EditComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private ComputerDBService computerService;
-	private CompanyDBService companyService;
+	private ComputerService computerService;
+	private CompanyService companyService;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public EditComputerServlet() {
         super();
-        computerService = new ComputerDBServiceImpl();
-        companyService = new CompanyDBServiceImpl();
+        computerService = new ComputerServiceImpl();
+        companyService = new CompanyServiceImpl();
     }
 
 	/**
@@ -48,7 +48,7 @@ public class EditComputerServlet extends HttpServlet {
 		List<Company> companies = new ArrayList<>();
 		companies = companyService.getAllCompanies();
 		for(Company company: companies) {
-			CompanyDto companyDto = CompanyMapper.companyToCompanyDto(company);
+			CompanyDto companyDto = CompanyDtoMapper.companyToCompanyDto(company);
 			companiesDto.add(companyDto);
 		}
 		request.setAttribute("companies", companiesDto);
@@ -57,7 +57,7 @@ public class EditComputerServlet extends HttpServlet {
 			try {
 				Integer id = Integer.parseInt(request.getParameter("id"));
 				Computer computer = computerService.getComputer(id);
-				ComputerDto computerDto = ComputerMapper.computerToComputerDto(computer);
+				ComputerDto computerDto = ComputerDtoMapper.computerToComputerDto(computer);
 				request.setAttribute("computer", computerDto);
 			}catch(NumberFormatException e) {
 				error = "Id is not an Integer";
@@ -76,7 +76,7 @@ public class EditComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Integer id = Integer.parseInt(request.getParameter("id"));
 		Computer computer = computerService.getComputer(id);
-		ComputerDto computerDtoOld = ComputerMapper.computerToComputerDto(computer);
+		ComputerDto computerDtoOld = ComputerDtoMapper.computerToComputerDto(computer);
 		ComputerDto computerDto = new ComputerDto();
 		computerDto.setName(request.getParameter("computerName"));
 		if(request.getParameter("introduced") != null && !request.getParameter("introduced").equals("")) {		
@@ -94,11 +94,11 @@ public class EditComputerServlet extends HttpServlet {
 		try {
 			testComputerDtoAttributesNotSetToNull(computerDtoOld, computerDto);
 			computerDto.setIdComputer(computerDtoOld.getIdComputer());
-			Computer newComputer = ComputerMapper.computerDtoToComputer(computerDto);
+			Computer newComputer = ComputerDtoMapper.computerDtoToComputer(computerDto);
 			newComputer = computerService.updateComputer(newComputer);
 			String success = "Computer " + newComputer.getName() + " was successfully updated";
 			request.setAttribute("success", success);
-			request.setAttribute("computer", ComputerMapper.computerToComputerDto(newComputer));
+			request.setAttribute("computer", ComputerDtoMapper.computerToComputerDto(newComputer));
 		}catch(IllegalArgumentException e) {
 			request.setAttribute("error", e.getMessage());
 			request.setAttribute("computer", computerDtoOld);

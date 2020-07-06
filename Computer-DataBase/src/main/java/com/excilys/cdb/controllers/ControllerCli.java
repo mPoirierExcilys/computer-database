@@ -4,16 +4,16 @@ import java.util.Scanner;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.services.CompanyDBService;
-import com.excilys.cdb.services.CompanyDBServiceImpl;
-import com.excilys.cdb.services.ComputerDBService;
-import com.excilys.cdb.services.ComputerDBServiceImpl;
+import com.excilys.cdb.services.CompanyService;
+import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.services.implemented.CompanyServiceImpl;
+import com.excilys.cdb.services.implemented.ComputerServiceImpl;
 import com.excilys.cdb.ui.CliUi;
 
 public class ControllerCli {
 	
-	private final ComputerDBService computerService;
-	private final CompanyDBService companyService;
+	private final ComputerService computerService;
+	private final CompanyService companyService;
 	private final CliUi cliUi;
 	private Scanner sc;
 	private Page page;
@@ -21,11 +21,11 @@ public class ControllerCli {
 	private final String ascending="ASC";
 	
 	public ControllerCli() {
-		this.computerService = new ComputerDBServiceImpl();
-		this.companyService = new CompanyDBServiceImpl();
+		this.computerService = new ComputerServiceImpl();
+		this.companyService = new CompanyServiceImpl();
 		this.cliUi = new CliUi();
 		this.sc = new Scanner(System.in);
-		this.page = new Page(1,10);
+		this.page = new Page();
 	}
 	
 	public void CdbLogical() {
