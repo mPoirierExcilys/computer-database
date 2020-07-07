@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.dao.mappers.CompanyDaoMapper;
 import com.excilys.cdb.model.Company;
@@ -16,6 +17,7 @@ import com.excilys.cdb.persistence.ConnectionH2;
 import com.excilys.cdb.persistence.ConnectionMysql;
 import com.excilys.cdb.persistence.Connector;
 
+@Repository
 public class CompanyDao extends AbstractDao<Company> {
 	
 	private static final String findAllSql = "SELECT id,name FROM company";

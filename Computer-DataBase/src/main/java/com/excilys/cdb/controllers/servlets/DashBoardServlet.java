@@ -6,18 +6,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.cdb.dto.ComputerDto;
 import com.excilys.cdb.dto.mappers.ComputerDtoMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.ComputerService;
-import com.excilys.cdb.services.implemented.ComputerServiceImpl;
 
 /**
  * Servlet implementation class DashBoardServlet
@@ -26,15 +29,20 @@ import com.excilys.cdb.services.implemented.ComputerServiceImpl;
 public class DashBoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	@Autowired
 	private ComputerService computerService;
 	private Page page;
-       
-    /**
+      
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+    	super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,config.getServletContext());
+	}
+	
+	/**
      * @see HttpServlet#HttpServlet()
      */
     public DashBoardServlet() {
-        super();
-        computerService = new ComputerServiceImpl();
         page = new Page();
     }
 

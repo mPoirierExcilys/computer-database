@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 
@@ -20,6 +21,7 @@ import com.excilys.cdb.persistence.ConnectionH2;
 import com.excilys.cdb.persistence.ConnectionMysql;
 import com.excilys.cdb.persistence.Connector;
 
+@Repository
 public class ComputerDao extends AbstractDao<Computer>{
 	
 	private static final String insertSql = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES(?,?,?,?)";

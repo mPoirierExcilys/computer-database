@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.dto.CompanyDto;
 import com.excilys.cdb.dto.ComputerDto;
@@ -18,8 +22,6 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
-import com.excilys.cdb.services.implemented.CompanyServiceImpl;
-import com.excilys.cdb.services.implemented.ComputerServiceImpl;
 
 /**
  * Servlet implementation class AddComputerServlet
@@ -28,16 +30,24 @@ import com.excilys.cdb.services.implemented.ComputerServiceImpl;
 public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	@Autowired
 	private CompanyService companyService;
+	@Autowired
 	private ComputerService computerService;
+	
+	
        
-    /**
+    @Override
+	public void init(ServletConfig config) throws ServletException {
+    	super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,config.getServletContext());
+	}
+
+	/**
      * @see HttpServlet#HttpServlet()
      */
     public AddComputerServlet() {
-        super();
-        this.companyService = new CompanyServiceImpl();
-        this.computerService = new ComputerServiceImpl();
+    	super();
     }
 
 	/**

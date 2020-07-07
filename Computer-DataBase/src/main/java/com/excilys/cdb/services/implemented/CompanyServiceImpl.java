@@ -2,17 +2,21 @@ package com.excilys.cdb.services.implemented;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.CompanyService;
 
+@Service
 public class CompanyServiceImpl implements CompanyService {
 	
-	private final CompanyDao companyDao;
+	@Autowired
+	private CompanyDao companyDao;
 	
 	public CompanyServiceImpl() {
-		this.companyDao = new CompanyDao();
 	}
 
 	@Override
