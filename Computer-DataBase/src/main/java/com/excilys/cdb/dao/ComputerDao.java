@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -18,7 +19,6 @@ import java.sql.Connection;
 import com.excilys.cdb.dao.mappers.ComputerDaoMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.ConnectionH2;
-import com.excilys.cdb.persistence.ConnectionMysql;
 import com.excilys.cdb.persistence.Connector;
 
 @Repository
@@ -46,10 +46,10 @@ public class ComputerDao extends AbstractDao<Computer>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 	
+	@Autowired
 	private Connector connector;
 	
 	public ComputerDao() {
-		this.connector = new ConnectionMysql();
 	}
 	
 	public ComputerDao(int h2) {

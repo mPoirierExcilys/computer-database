@@ -3,7 +3,6 @@ package com.excilys.cdb.dao;
 import java.util.List;
 
 public abstract class AbstractDao<T> {
-	//private  Connection connect = ConnectionMysql.getInstance();
 	
 	public abstract T create(T obj);
 	
