@@ -6,7 +6,7 @@ public class Page {
 	
 	private Integer nbPage = 10;
 	
-	private Integer itemsByPage;
+	private Integer itemsByPage = 10;
 	
 	public Page() {
 	}

@@ -2,27 +2,33 @@ package com.excilys.cdb.controllers;
 
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+
+import com.excilys.cdb.configuration.SpringConfigurationContext;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
-import com.excilys.cdb.services.implemented.CompanyServiceImpl;
-import com.excilys.cdb.services.implemented.ComputerServiceImpl;
 import com.excilys.cdb.ui.CliUi;
 
+@Component
 public class ControllerCli {
 	
-	private final ComputerService computerService;
-	private final CompanyService companyService;
-	private final CliUi cliUi;
+	@Autowired
+	private ComputerService computerService;
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private CliUi cliUi;
 	private Scanner sc;
 	private Page page;
 	private final String order="computer.id";
 	private final String ascending="ASC";
 	
 	public ControllerCli() {
-		this.computerService = new ComputerServiceImpl();
-		this.companyService = new CompanyServiceImpl();
 		this.cliUi = new CliUi();
 		this.sc = new Scanner(System.in);
 		this.page = new Page();
@@ -111,7 +117,8 @@ public class ControllerCli {
 	}
 
 	public static void main(String[] args) {
-		ControllerCli controller = new ControllerCli();
+		ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfigurationContext.class);
+		ControllerCli controller = context.getBean(ControllerCli.class);
 		controller.CdbLogical();
 		
 	}

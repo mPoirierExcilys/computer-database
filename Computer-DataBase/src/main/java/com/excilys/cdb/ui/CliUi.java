@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
+@Component
 public class CliUi {
 	
 	private Scanner sc;

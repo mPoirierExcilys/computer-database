@@ -86,7 +86,7 @@ public class CompanyDao extends AbstractDao<Company> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
 	public void delete(Integer id) {
 		try(Connection connect = connector.getInstance();
@@ -126,7 +126,7 @@ public class CompanyDao extends AbstractDao<Company> {
 		Integer nb = 0;
 		try(Connection connect = connector.getInstance();
 			ResultSet result = connect.createStatement().executeQuery(countSql)) {
-			if(result.first()) {
+			if(result.next()) {
 				nb =result.getInt(1);
 			}
 		}catch(SQLException eSQL) {

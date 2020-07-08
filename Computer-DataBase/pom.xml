@@ -14,7 +14,14 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <org.springframework.version>5.2.7.RELEASE</org.springframework.version>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <mysql.connector.version>8.0.20</mysql.connector.version>
+        <javax.version>7.0</javax.version>
+        <javax.jstl.version>1.2</javax.jstl.version>
+        <org.mockito.version>1.9.5</org.mockito.version>
+        <junit.version>4.12</junit.version>
+        <org.slf4j.version>1.7.25</org.slf4j.version>
+        <com.h2database.version>1.4.194</com.h2database.version>
+        <com.zaxxer.hikari.version>3.4.5</com.zaxxer.hikari.version>
     </properties>
 
     <dependencies>
@@ -36,52 +43,52 @@
         <dependency>
     		<groupId>mysql</groupId>
     		<artifactId>mysql-connector-java</artifactId>
-    		<version>8.0.20</version>
+    		<version>${mysql.connector.version}</version>
     		<scope>runtime</scope>
 		</dependency>
 		 <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
+            <version>${javax.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
-            <version>1.2</version>
+            <version>${javax.jstl.version}</version>
         </dependency>
         <dependency>
       		<groupId>org.mockito</groupId>
       		<artifactId>mockito-all</artifactId>
-      		<version>1.9.5</version>
+      		<version>${org.mockito.version}</version>
       		<scope>test</scope>
     	</dependency>
     	<dependency>
       		<groupId>junit</groupId>
       		<artifactId>junit</artifactId>
-      		<version>4.12</version>
+      		<version>${junit.version}</version>
       		<scope>test</scope>
     	</dependency>
     	<dependency>
     		<groupId>org.slf4j</groupId>
     		<artifactId>slf4j-api</artifactId>
-    		<version>1.7.25</version>
+    		<version>${org.slf4j.version}</version>
 		</dependency>
 		<dependency>
     		<groupId>org.slf4j</groupId>
     		<artifactId>slf4j-simple</artifactId>
-    		<version>1.7.25</version>
+    		<version>${org.slf4j.version}</version>
 		</dependency>
 		<dependency>
     		<groupId>com.h2database</groupId>
     		<artifactId>h2</artifactId>
-    		<version>1.4.194</version>
+    		<version>${com.h2database.version}</version>
     		<scope>test</scope>
 		</dependency>
 		<dependency>
     		<groupId>com.zaxxer</groupId>
     		<artifactId>HikariCP</artifactId>
-    		<version>3.4.5</version>
+    		<version>${com.zaxxer.hikari.version}</version>
 		</dependency>
     </dependencies>
 </project>
