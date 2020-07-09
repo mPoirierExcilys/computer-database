@@ -27,7 +27,7 @@ import com.excilys.cdb.services.ComputerService;
  */
 @WebServlet(name="DashBoardServlet",urlPatterns="/dashboard")
 public class DashBoardServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	@Autowired
 	private ComputerService computerService;

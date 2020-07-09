@@ -29,7 +29,6 @@ public class ControllerCli {
 	private final String ascending="ASC";
 	
 	public ControllerCli() {
-		this.cliUi = new CliUi();
 		this.sc = new Scanner(System.in);
 		this.page = new Page();
 	}
