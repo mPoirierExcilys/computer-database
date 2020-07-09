@@ -3,6 +3,7 @@ package com.excilys.cdb.controllers.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -57,10 +58,7 @@ public class AddComputerServlet extends HttpServlet {
 		List<CompanyDto> companiesDto = new ArrayList<>();
 		List<Company> companies = new ArrayList<>();
 		companies = companyService.getAllCompanies();
-		for(Company company: companies) {
-			CompanyDto companyDto = CompanyDtoMapper.companyToCompanyDto(company);
-			companiesDto.add(companyDto);
-		}
+		companiesDto = companies.stream().map(company->CompanyDtoMapper.companyToCompanyDto(company)).collect(Collectors.toList());
 		request.setAttribute("companies", companiesDto);
 		request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 	}

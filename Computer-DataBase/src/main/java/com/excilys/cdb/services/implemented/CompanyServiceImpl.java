@@ -13,10 +13,11 @@ import com.excilys.cdb.services.CompanyService;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 	
-	@Autowired
 	private CompanyDao companyDao;
 	
-	public CompanyServiceImpl() {
+	@Autowired
+	public CompanyServiceImpl(CompanyDao companyDao) {
+		this.companyDao = companyDao;
 	}
 
 	@Override

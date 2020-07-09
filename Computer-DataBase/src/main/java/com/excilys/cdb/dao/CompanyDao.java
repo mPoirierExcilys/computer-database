@@ -34,10 +34,11 @@ public class CompanyDao extends AbstractDao<Company> {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CompanyDao.class);
 	
-	@Autowired
 	private Connector connector;
 	
-	public CompanyDao() {
+	@Autowired
+	public CompanyDao(Connector connector) {
+		this.connector = connector;
 	}
 	
 	public CompanyDao(int h2) {

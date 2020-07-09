@@ -13,7 +13,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan(basePackages="com.excilys.cdb")
+@ComponentScan(basePackages= {"com.excilys.cdb.services", "com.excilys.cdb.dao", "com.excilys.cdb.persistence", "com.excilys.cdb.controllers",
+		"com.excilys.cdb.ui"})
 public class SpringConfigurationContext extends AbstractContextLoaderInitializer {
 
 	@Override

@@ -46,10 +46,11 @@ public class ComputerDao extends AbstractDao<Computer>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 	
-	@Autowired
 	private Connector connector;
 	
-	public ComputerDao() {
+	@Autowired
+	public ComputerDao(Connector connector) {
+		this.connector = connector;
 	}
 	
 	public ComputerDao(int h2) {

@@ -42,6 +42,7 @@ public class DashBoardServlet extends HttpServlet {
 	/**
      * @see HttpServlet#HttpServlet()
      */
+	
     public DashBoardServlet() {
         page = new Page();
     }
@@ -79,18 +80,12 @@ public class DashBoardServlet extends HttpServlet {
 		if(request.getParameter("search") != null && !request.getParameter("search").equals("")) {
 			search = request.getParameter("search");
 			computers = computerService.getComputersByPagesSearch(page, search, order,ascending);
-			for(Computer computer: computers) {
-				ComputerDto computerDto = ComputerDtoMapper.computerToComputerDto(computer);
-				computersDto.add(computerDto);
-			}
+			computersDto = computers.stream().map(computer->ComputerDtoMapper.computerToComputerDto(computer)).collect(Collectors.toList());
 			request.setAttribute("nbPagesMax", computerService.getNbComputersPagesSearch(page, search));
 			request.setAttribute("nbComputers", computerService.getNbComputersSearch(search));
 		}else {
 			computers = computerService.getComputersByPage(page, order, ascending);
-			for(Computer computer: computers) {
-				ComputerDto computerDto = ComputerDtoMapper.computerToComputerDto(computer);
-				computersDto.add(computerDto);
-			}
+			computersDto = computers.stream().map(computer->ComputerDtoMapper.computerToComputerDto(computer)).collect(Collectors.toList());
 			request.setAttribute("nbPagesMax", computerService.getComputersNbPages(page));
 			request.setAttribute("nbComputers", computerService.getNbComputers());
 		}
@@ -110,9 +105,7 @@ public class DashBoardServlet extends HttpServlet {
 			List<Integer> ids = Stream.of(listInt.split(","))
 	                .map(Integer::parseInt)
 	                .collect(Collectors.toList());
-			for(Integer id: ids) {
-				computerService.deleteComputer(id);
-			}
+			ids.stream().forEach(id->computerService.deleteComputer(id));
 		}
 		doGet(request, response);
 	}

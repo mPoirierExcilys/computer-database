@@ -13,10 +13,11 @@ import com.excilys.cdb.services.ComputerService;
 @Service
 public class ComputerServiceImpl implements ComputerService{
 	
-	@Autowired
 	private ComputerDao computerDao;
 	
-	public ComputerServiceImpl() {
+	@Autowired
+	public ComputerServiceImpl(ComputerDao computerDao) {
+		this.computerDao = computerDao;
 	}
 
 	@Override
