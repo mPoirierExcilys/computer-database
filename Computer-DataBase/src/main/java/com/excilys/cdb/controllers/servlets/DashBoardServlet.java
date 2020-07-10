@@ -54,42 +54,19 @@ public class DashBoardServlet extends HttpServlet {
 		List<ComputerDto> computersDto = new ArrayList<>();
 		List<Computer> computers = new ArrayList<>();
 		String search = "";
-		String order = "computer.id";
-		String ascending = "ASC";
-		page.setCurrentPage(1);
-		page.setItemsByPage(10);
-		if(request.getParameter("nbByPage") != null) {
-			String nbByPage = request.getParameter("nbByPage");
-			page.setItemsByPage(Integer.parseInt(nbByPage));
-		}
-		if(request.getParameter("page") != null) {
-			String pageWish = request.getParameter("page");
-			page.setCurrentPage(Integer.parseInt(pageWish));
-			if(page.getCurrentPage() < 1) {
-				page.setCurrentPage(1);
-			}
-		}
-		if(request.getParameter("order") != null && !request.getParameter("order").equals("")) {
-			order = request.getParameter("order");
-			request.setAttribute("order", order);
-		}
-		if(request.getParameter("ascending") != null && !request.getParameter("ascending").equals("")) {
-			ascending = request.getParameter("ascending");
-			request.setAttribute("ascending", ascending);
-		}
+		page = instantiatePage(request);
 		if(request.getParameter("search") != null && !request.getParameter("search").equals("")) {
 			search = request.getParameter("search");
-			computers = computerService.getComputersByPagesSearch(page, search, order,ascending);
+			computers = computerService.getComputersByPagesSearch(page, search);
 			computersDto = computers.stream().map(computer->ComputerDtoMapper.computerToComputerDto(computer)).collect(Collectors.toList());
 			request.setAttribute("nbPagesMax", computerService.getNbComputersPagesSearch(page, search));
 			request.setAttribute("nbComputers", computerService.getNbComputersSearch(search));
 		}else {
-			computers = computerService.getComputersByPage(page, order, ascending);
+			computers = computerService.getComputersByPage(page);
 			computersDto = computers.stream().map(computer->ComputerDtoMapper.computerToComputerDto(computer)).collect(Collectors.toList());
 			request.setAttribute("nbPagesMax", computerService.getComputersNbPages(page));
 			request.setAttribute("nbComputers", computerService.getNbComputers());
 		}
-		request.setAttribute("nbByPage", page.getItemsByPage());
 		request.setAttribute("search", search);
 		request.setAttribute("page", page);
 		request.setAttribute("computers", computersDto);
@@ -108,6 +85,29 @@ public class DashBoardServlet extends HttpServlet {
 			ids.stream().forEach(id->computerService.deleteComputer(id));
 		}
 		doGet(request, response);
+	}
+	
+	private Page instantiatePage(HttpServletRequest request) {
+		Page page = new Page();
+		page.setCurrentPage(1);
+		page.setItemsByPage(10);
+		page.setOrder("computer.id");
+		page.setAscending("ASC");
+		if(request.getParameter("nbByPage") != null) {
+			String nbByPage = request.getParameter("nbByPage");
+			page.setItemsByPage(Integer.parseInt(nbByPage));
+		}
+		if(request.getParameter("page") != null) {
+			String pageWish = request.getParameter("page");
+			page.setCurrentPage(Integer.parseInt(pageWish));
+		}
+		if(request.getParameter("order") != null && !request.getParameter("order").equals("")) {
+			page.setOrder(request.getParameter("order"));
+		}
+		if(request.getParameter("ascending") != null && !request.getParameter("ascending").equals("")) {
+			page.setAscending(request.getParameter("ascending"));
+		}
+		return page;
 	}
 
 }

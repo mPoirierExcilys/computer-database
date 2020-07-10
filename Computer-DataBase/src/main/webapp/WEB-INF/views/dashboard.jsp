@@ -25,18 +25,18 @@
 	</c:if>
 	
 	<c:set var="nbByPageValue" value="" />
-	<c:if test="${nbByPage != null && nbByPage != ''}">
-		<c:set var="nbByPageValue" value="&nbByPage=${nbByPage}" />
+	<c:if test="${page.itemsByPage != null && page.itemsByPage != ''}">
+		<c:set var="nbByPageValue" value="&nbByPage=${page.itemsByPage}" />
 	</c:if>
 	
 	<c:set var="orderValue" value="" />
-	<c:if test="${order != null && order != ''}">
-		<c:set var="orderValue" value="&order=${order}" />
+	<c:if test="${page.order != null && page.order != ''}">
+		<c:set var="orderValue" value="&order=${page.order}" />
 	</c:if>
 	
 	<c:set var="ascendingValue" value="" />
-	<c:if test="${ascending != null && ascending != ''}">
-		<c:set var="ascendingValue" value="&ascending=${ascending}" />
+	<c:if test="${page.ascending != null && page.ascending != ''}">
+		<c:set var="ascendingValue" value="&ascending=${page.ascending}" />
 	</c:if>
 
     <section id="main">
@@ -80,28 +80,28 @@
                             </span>
                         </th>
                         <th>
-                        	<c:if test="${order == 'computer.name' && ascending == 'ASC'}"><a href="dashboard?order=computer.name&ascending=DESC${nbByPageValue}${searchValue}" >Computer name</a></c:if>
-                        	<c:if test="${order == 'computer.name' && ascending == 'DESC'}"><a href="dashboard?order=computer.name&ascending=ASC${nbByPageValue}${searchValue}" >Computer name</a></c:if>
-                        	<c:if test="${order != 'computer.name'}"><a href="dashboard?order=computer.name&ascending=ASC${nbByPageValue}${searchValue}" >Computer name</a></c:if>
+                        	<c:if test="${page.order == 'computer.name' && page.ascending == 'ASC'}"><a href="dashboard?order=computer.name&ascending=DESC${nbByPageValue}${searchValue}" >Computer name</a></c:if>
+                        	<c:if test="${page.order == 'computer.name' && page.ascending == 'DESC'}"><a href="dashboard?order=computer.name&ascending=ASC${nbByPageValue}${searchValue}" >Computer name</a></c:if>
+                        	<c:if test="${page.order != 'computer.name'}"><a href="dashboard?order=computer.name&ascending=ASC${nbByPageValue}${searchValue}" >Computer name</a></c:if>
                             
                         </th>
                         <th>
-                        	<c:if test="${order == 'computer.introduced' && ascending == 'ASC'}"><a href="dashboard?order=computer.introduced&ascending=DESC${nbByPageValue}${searchValue}">Introduced date</a></c:if>
-                        	<c:if test="${order == 'computer.introduced' && ascending == 'DESC'}"><a href="dashboard?order=computer.introduced&ascending=ASC${nbByPageValue}${searchValue}">Introduced date</a></c:if>
-                        	<c:if test="${order != 'computer.introduced'}"><a href="dashboard?order=computer.introduced&ascending=ASC${nbByPageValue}${searchValue}">Introduced date</a></c:if>
+                        	<c:if test="${page.order == 'computer.introduced' && page.ascending == 'ASC'}"><a href="dashboard?order=computer.introduced&ascending=DESC${nbByPageValue}${searchValue}">Introduced date</a></c:if>
+                        	<c:if test="${page.order == 'computer.introduced' && page.ascending == 'DESC'}"><a href="dashboard?order=computer.introduced&ascending=ASC${nbByPageValue}${searchValue}">Introduced date</a></c:if>
+                        	<c:if test="${page.order != 'computer.introduced'}"><a href="dashboard?order=computer.introduced&ascending=ASC${nbByPageValue}${searchValue}">Introduced date</a></c:if>
                             
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                        	<c:if test="${order == 'computer.discontinued' && ascending == 'ASC'}"><a href="dashboard?order=computer.discontinued&ascending=DESC${nbByPageValue}${searchValue}">Discontinued date</a></c:if>
-                        	<c:if test="${order == 'computer.discontinued' && ascending == 'DESC'}"><a href="dashboard?order=computer.discontinued&ascending=ASC${nbByPageValue}${searchValue}">Discontinued date</a></c:if>
-                        	<c:if test="${order != 'computer.discontinued'}"><a href="dashboard?order=computer.discontinued&ascending=ASC${nbByPageValue}${searchValue}">Discontinued date</a></c:if>
+                        	<c:if test="${page.order == 'computer.discontinued' && page.ascending == 'ASC'}"><a href="dashboard?order=computer.discontinued&ascending=DESC${nbByPageValue}${searchValue}">Discontinued date</a></c:if>
+                        	<c:if test="${page.order == 'computer.discontinued' && page.ascending == 'DESC'}"><a href="dashboard?order=computer.discontinued&ascending=ASC${nbByPageValue}${searchValue}">Discontinued date</a></c:if>
+                        	<c:if test="${page.order != 'computer.discontinued'}"><a href="dashboard?order=computer.discontinued&ascending=ASC${nbByPageValue}${searchValue}">Discontinued date</a></c:if>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                        	<c:if test="${order == 'cp.name' && ascending == 'ASC'}"> <a href="dashboard?order=cp.name&ascending=DESC${nbByPageValue}${searchValue}">Company</a></c:if>
-                        	<c:if test="${order == 'cp.name' && ascending == 'DESC'}"> <a href="dashboard?order=cp.name&ascending=ASC${nbByPageValue}${searchValue}">Company</a></c:if>
-                        	<c:if test="${order != 'cp.name'}"> <a href="dashboard?order=cp.name&ascending=ASC${nbByPageValue}${searchValue}">Company</a></c:if>
+                        	<c:if test="${page.order == 'cp.name' && page.ascending == 'ASC'}"> <a href="dashboard?order=cp.name&ascending=DESC${nbByPageValue}${searchValue}">Company</a></c:if>
+                        	<c:if test="${page.order == 'cp.name' && page.ascending == 'DESC'}"> <a href="dashboard?order=cp.name&ascending=ASC${nbByPageValue}${searchValue}">Company</a></c:if>
+                        	<c:if test="${page.order != 'cp.name'}"> <a href="dashboard?order=cp.name&ascending=ASC${nbByPageValue}${searchValue}">Company</a></c:if>
                         </th>
 
                     </tr>

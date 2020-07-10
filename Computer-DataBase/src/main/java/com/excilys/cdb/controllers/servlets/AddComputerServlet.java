@@ -68,7 +68,27 @@ public class AddComputerServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ComputerDto computerDto = new ComputerDto();
-		computerDto.setName(request.getParameter("computerName"));
+		computerDto = buildComputerDto(request);
+		try {
+			testComputerDtoName(computerDto);
+			Computer newComputer = ComputerDtoMapper.computerDtoToComputer(computerDto);
+			newComputer = computerService.createComputer(newComputer);
+			String success = "Computer " + newComputer.getName() + " was successfully added";
+			request.setAttribute("success", success);
+			
+		}catch(IllegalArgumentException e) {
+			request.setAttribute("error", e.getMessage());
+			request.setAttribute("newComputer", computerDto);
+		}finally {
+			doGet(request, response);
+		}
+	}
+	
+	private ComputerDto buildComputerDto(HttpServletRequest request) {
+		ComputerDto computerDto = new ComputerDto();
+		if(request.getParameter("computerName") != null && !request.getParameter("computerName").equals("")) {
+			computerDto.setName(request.getParameter("computerName"));
+		}
 		if(request.getParameter("introduced") != null && !request.getParameter("introduced").equals("")) {		
 			computerDto.setIntroduced(request.getParameter("introduced"));
 		}
@@ -80,17 +100,12 @@ public class AddComputerServlet extends HttpServlet {
 			companyDto.setIdCompany(Integer.parseInt(request.getParameter("companyId")));
 			computerDto.setCompany(companyDto);
 		}
-		try {
-			Computer newComputer = ComputerDtoMapper.computerDtoToComputer(computerDto);
-			newComputer = computerService.createComputer(newComputer);
-			String success = "Computer " + newComputer.getName() + " was successfully added";
-			request.setAttribute("success", success);
-			
-		}catch(IllegalArgumentException e) {
-			request.setAttribute("error", e.getMessage());
-			request.setAttribute("newComputer", computerDto);
-		}finally {
-			doGet(request, response);
+		return computerDto;
+	}
+	
+	private void testComputerDtoName(ComputerDto computerDto) {
+		if(computerDto.getName() == null || computerDto.getName().trim().equals("")) {
+			throw new IllegalArgumentException("Computer Name must not be empty");
 		}
 	}
 

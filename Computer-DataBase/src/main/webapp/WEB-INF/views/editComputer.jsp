@@ -27,7 +27,7 @@
                     <h1>Edit Computer</h1>
 					<c:if test="${error != null}"><div class="alert alert-danger"><c:out value="${error}" /></div></c:if>
 					<c:if test="${success != null}"><div class="alert alert-success"><c:out value="${success}"/></div></c:if>
-                    <form action="editComputer?id=${computer.idComputer}" method="POST">
+                    <form action="editComputer?id=${computer.idComputer}" method="POST" onsubmit="return checkDate()">
                         <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">

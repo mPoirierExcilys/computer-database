@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.dao.mappers.CompanyDaoMapper;
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.ConnectionH2;
 import com.excilys.cdb.persistence.Connector;
 
@@ -105,12 +106,12 @@ public class CompanyDao extends AbstractDao<Company> {
 	}
 
 	@Override
-	public List<Company> findBetween(Integer offset, Integer nb, String order, String ascending) {
+	public List<Company> findBetween(Integer offset, Page page) {
 		List<Company> allCompanies = new ArrayList<>();
 		try (Connection connect = connector.getInstance();
 			PreparedStatement prepare = connect.prepareStatement(limitSql)){
 			prepare.setInt(1, offset);
-			prepare.setInt(2, nb);
+			prepare.setInt(2, page.getItemsByPage());
 			ResultSet result = prepare.executeQuery();
 			while(result.next()) {
 				Company company = CompanyDaoMapper.resultToObject(result);

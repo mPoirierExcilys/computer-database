@@ -86,19 +86,7 @@ public class EditComputerServlet extends HttpServlet {
 		Computer computer = computerService.getComputer(id);
 		ComputerDto computerDtoOld = ComputerDtoMapper.computerToComputerDto(computer);
 		ComputerDto computerDto = new ComputerDto();
-		computerDto.setName(request.getParameter("computerName"));
-		if(request.getParameter("introduced") != null && !request.getParameter("introduced").equals("")) {		
-			computerDto.setIntroduced(request.getParameter("introduced"));
-		}
-		if(request.getParameter("discontinued") != null && !request.getParameter("discontinued").equals("")){
-			computerDto.setDiscontinued(request.getParameter("discontinued"));
-		}
-		if(!request.getParameter("companyId").equals("0")) {
-			CompanyDto companyDto = new CompanyDto();
-			companyDto.setIdCompany(Integer.parseInt(request.getParameter("companyId")));
-			computerDto.setCompany(companyDto);
-		}
-		
+		computerDto = buildComputerDto(request);
 		try {
 			testComputerDtoAttributesNotSetToNull(computerDtoOld, computerDto);
 			computerDto.setIdComputer(computerDtoOld.getIdComputer());
@@ -116,7 +104,7 @@ public class EditComputerServlet extends HttpServlet {
 	}
 	
 	private void testComputerDtoAttributesNotSetToNull(ComputerDto computerDtoOld, ComputerDto computerDto){
-		if(computerDto.getName().trim().equals("")) {
+		if(computerDto.getName() == null || computerDto.getName().trim().equals("")) {
 			throw new IllegalArgumentException("Computer Name must not be empty");
 		}
 		if(computerDto.getIntroduced() == null && computerDtoOld.getIntroduced()!=null) {
@@ -128,6 +116,25 @@ public class EditComputerServlet extends HttpServlet {
 		if(computerDto.getCompany() == null && computerDtoOld.getCompany() != null) {
 			throw new IllegalArgumentException("Computer had a Company, You couldn't set it to null");
 		}
+	}
+	
+	private ComputerDto buildComputerDto(HttpServletRequest request) {
+		ComputerDto computerDto = new ComputerDto();
+		if(request.getParameter("computerName") != null && !request.getParameter("computerName").equals("")) {
+			computerDto.setName(request.getParameter("computerName"));
+		}
+		if(request.getParameter("introduced") != null && !request.getParameter("introduced").equals("")) {		
+			computerDto.setIntroduced(request.getParameter("introduced"));
+		}
+		if(request.getParameter("discontinued") != null && !request.getParameter("discontinued").equals("")){
+			computerDto.setDiscontinued(request.getParameter("discontinued"));
+		}
+		if(!request.getParameter("companyId").equals("0")) {
+			CompanyDto companyDto = new CompanyDto();
+			companyDto.setIdCompany(Integer.parseInt(request.getParameter("companyId")));
+			computerDto.setCompany(companyDto);
+		}
+		return computerDto;
 	}
 
 }

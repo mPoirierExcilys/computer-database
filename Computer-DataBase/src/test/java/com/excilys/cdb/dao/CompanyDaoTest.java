@@ -4,16 +4,23 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Page;
 
 public class CompanyDaoTest {
 	
 	private CompanyDao companyDao;
+	
+	private Page page = Mockito.mock(Page.class);
 
 	@Before
 	public void setUp() throws Exception {
 		companyDao = new CompanyDao(1);
+		Mockito.when(page.getItemsByPage()).thenReturn(10);
+		Mockito.when(page.getAscending()).thenReturn("ASC");
+		Mockito.when(page.getOrder()).thenReturn("company.id");
 	}
 
 	@Test
@@ -35,7 +42,7 @@ public class CompanyDaoTest {
 	
 	@Test
 	public void findBetween(){
-		assertTrue(companyDao.findBetween(0, 10,"company.id","ASC").size() == 10);
+		assertTrue(companyDao.findBetween(0, page).size() == 10);
 	}
 	
 	@Test

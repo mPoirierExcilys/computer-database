@@ -25,12 +25,14 @@ public class ControllerCli {
 	private CliUi cliUi;
 	private Scanner sc;
 	private Page page;
-	private final String order="computer.id";
-	private final String ascending="ASC";
+	private static final String ORDER_COMPUTER="computer.id";
+	private static final String ORDER_COMPANY="company.id";
+	private static final String ASCENDING="ASC";
 	
 	public ControllerCli() {
 		this.sc = new Scanner(System.in);
 		this.page = new Page();
+		this.page.setAscending(ASCENDING);
 	}
 	
 	public void CdbLogical() {
@@ -43,6 +45,7 @@ public class ControllerCli {
 			case "1":
 				page.setCurrentPage(1);
 				page.setNbPage(companyService.getCompaniesNbPages(page));
+				page.setOrder(ORDER_COMPANY);
 				boolean test = true;
 				do {
 					cliUi.listAllCompanies(companyService.getCompaniesByPage(page),page.getCurrentPage(),page.getNbPage());
@@ -62,8 +65,9 @@ public class ControllerCli {
 				boolean test1 = true;
 				page.setCurrentPage(1);
 				page.setNbPage(computerService.getComputersNbPages(page));
+				page.setOrder(ORDER_COMPUTER);
 				do {
-					cliUi.listAllComputers(computerService.getComputersByPage(page, order, ascending),page.getCurrentPage(),page.getNbPage());
+					cliUi.listAllComputers(computerService.getComputersByPage(page),page.getCurrentPage(),page.getNbPage());
 					String input1 = sc.next();
 					try {
 						Integer pageWish = Integer.parseInt(input1);

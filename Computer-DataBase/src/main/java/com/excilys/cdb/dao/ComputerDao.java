@@ -18,6 +18,7 @@ import java.sql.Connection;
 
 import com.excilys.cdb.dao.mappers.ComputerDaoMapper;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.ConnectionH2;
 import com.excilys.cdb.persistence.Connector;
 
@@ -160,12 +161,12 @@ public class ComputerDao extends AbstractDao<Computer>{
 
 
 	@Override
-	public List<Computer> findBetween(Integer offset, Integer nb, String order, String ascending) {
+	public List<Computer> findBetween(Integer offset, Page page) {
 		List<Computer> allComputer = new ArrayList<>();
 		try(Connection connect = connector.getInstance();
-			PreparedStatement prepare = connect.prepareStatement(limitOrderSql(order, ascending))) {
+			PreparedStatement prepare = connect.prepareStatement(limitOrderSql(page.getOrder(), page.getAscending()))) {
 			prepare.setInt(1, offset);
-			prepare.setInt(2, nb);
+			prepare.setInt(2, page.getItemsByPage());
 			ResultSet result = prepare.executeQuery();
 			while(result.next()) {
 				Computer computer = ComputerDaoMapper.resultToObject(result);
@@ -192,14 +193,14 @@ public class ComputerDao extends AbstractDao<Computer>{
 		return nb;
 	}
 	
-	public List<Computer> findBetweenWithSearch(Integer offset, Integer nb, String search, String order, String ascending){
+	public List<Computer> findBetweenWithSearch(Integer offset, Page page, String search){
 		List<Computer> allComputer = new ArrayList<>();
 		try(Connection connect = connector.getInstance();
-			PreparedStatement prepare = connect.prepareStatement(limitSearchOrderSql(order, ascending))) {
+			PreparedStatement prepare = connect.prepareStatement(limitSearchOrderSql(page.getOrder(),page.getAscending()))) {
 			prepare.setString(1, "%"+search+"%");
 			prepare.setString(2, "%"+search+"%");
 			prepare.setInt(3, offset);
-			prepare.setInt(4, nb);
+			prepare.setInt(4, page.getItemsByPage());
 			ResultSet result = prepare.executeQuery();
 			while(result.next()) {
 				Computer computer = ComputerDaoMapper.resultToObject(result);
