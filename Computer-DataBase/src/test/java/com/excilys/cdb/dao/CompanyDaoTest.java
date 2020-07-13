@@ -5,19 +5,23 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
 
 public class CompanyDaoTest {
 	
+	@Autowired
 	private CompanyDao companyDao;
+	
+	@Autowired
+	private ComputerDao computerDao;
 	
 	private Page page = Mockito.mock(Page.class);
 
 	@Before
 	public void setUp() throws Exception {
-		companyDao = new CompanyDao(1);
 		Mockito.when(page.getItemsByPage()).thenReturn(10);
 		Mockito.when(page.getAscending()).thenReturn("ASC");
 		Mockito.when(page.getOrder()).thenReturn("company.id");
@@ -47,7 +51,6 @@ public class CompanyDaoTest {
 	
 	@Test
 	public void delete() {
-		ComputerDao computerDao = new ComputerDao(1);
 		companyDao.delete(1);
 		assertTrue(companyDao.count() == 19);
 		assertTrue(computerDao.count()== 32);
