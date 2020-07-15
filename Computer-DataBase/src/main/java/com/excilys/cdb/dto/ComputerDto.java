@@ -2,14 +2,15 @@ package com.excilys.cdb.dto;
 
 
 public class ComputerDto {
-	
+
 	private Integer idComputer;
 	private String name;
 	private String introduced;
 	private String discontinued;
-	private CompanyDto company;
+	private CompanyDto companyDto;
 	
 	public ComputerDto() {
+		this.companyDto = new CompanyDto();
 	}
 	
 	public ComputerDto(Integer idComputer, String name, String introduced, String discontinued, CompanyDto company) {
@@ -17,7 +18,7 @@ public class ComputerDto {
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.company = company;
+		this.companyDto = company;
 	}
 
 	public Integer getIdComputer() {
@@ -52,19 +53,19 @@ public class ComputerDto {
 		this.discontinued = discontinued;
 	}
 
-	public CompanyDto getCompany() {
-		return company;
+	public CompanyDto getCompanyDto() {
+		return companyDto;
 	}
 
-	public void setCompany(CompanyDto company) {
-		this.company = company;
+	public void setCompanyDto(CompanyDto company) {
+		this.companyDto = company;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((company == null) ? 0 : company.hashCode());
+		result = prime * result + ((companyDto == null) ? 0 : companyDto.hashCode());
 		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
 		result = prime * result + ((idComputer == null) ? 0 : idComputer.hashCode());
 		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
@@ -81,10 +82,10 @@ public class ComputerDto {
 		if (getClass() != obj.getClass())
 			return false;
 		ComputerDto other = (ComputerDto) obj;
-		if (company == null) {
-			if (other.company != null)
+		if (companyDto == null) {
+			if (other.companyDto != null)
 				return false;
-		} else if (!company.equals(other.company))
+		} else if (!companyDto.equals(other.companyDto))
 			return false;
 		if (discontinued == null) {
 			if (other.discontinued != null)
@@ -109,5 +110,10 @@ public class ComputerDto {
 		return true;
 	}
 	
+	@Override
+	public String toString() {
+		return "ComputerDto [idComputer=" + idComputer + ", name=" + name + ", introduced=" + introduced
+				+ ", discontinued=" + discontinued + ", company=" + companyDto + "]";
+	}
 	
 }

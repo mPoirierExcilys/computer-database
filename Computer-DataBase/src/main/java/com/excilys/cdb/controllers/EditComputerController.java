@@ -88,7 +88,7 @@ public class EditComputerController {
 		if(computerDto.getDiscontinued() == null && computerDtoOld.getDiscontinued() != null) {
 			throw new IllegalArgumentException("Computer Introduced wasn't empty, you couldn't set it to null");
 		}
-		if(computerDto.getCompany() == null && computerDtoOld.getCompany() != null) {
+		if(computerDto.getCompanyDto() == null && computerDtoOld.getCompanyDto() != null) {
 			throw new IllegalArgumentException("Computer had a Company, You couldn't set it to null");
 		}
 	}
@@ -107,7 +107,7 @@ public class EditComputerController {
 		if(!companyId.equals("0")) {
 			CompanyDto companyDto = new CompanyDto();
 			companyDto.setIdCompany(Integer.parseInt(companyId));
-			computerDto.setCompany(companyDto);
+			computerDto.setCompanyDto(companyDto);
 		}
 		return computerDto;
 	}

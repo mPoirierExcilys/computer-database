@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="title"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -15,7 +16,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard"> <spring:message code="title"/> </a>
         </div>
     </header>
     
@@ -42,7 +43,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-               <c:out value="${nbComputers}"/> Computers found
+               <c:out value="${nbComputers}"/> <spring:message code="computer.found"/>
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -118,7 +119,7 @@
                         	</td>
                         	<td><c:if test="${not empty computer.introduced}"><c:out value="${computer.introduced}"/></c:if></td>
                         	<td><c:if test="${not empty computer.discontinued}"><c:out value="${computer.discontinued}"/></c:if></td>
-                        	<td><c:if test="${not empty computer.company}"><c:out value="${computer.company.name}"/></c:if></td>
+                        	<td><c:if test="${not empty computer.companyDto}"><c:out value="${computer.companyDto.name}"/></c:if></td>
                 		</tr>
                 	</c:forEach>
                 </tbody>

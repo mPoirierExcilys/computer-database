@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.cdb.dto.CompanyDto;
 import com.excilys.cdb.dto.ComputerDto;
@@ -34,19 +34,16 @@ public class AddComputerController {
 	public String showAddComputer(Model model) {
 		List<CompanyDto> companiesDto = getAllCompaniesDto();
 		model.addAttribute("companies", companiesDto);
+		model.addAttribute("computerDto",new ComputerDto());
 		return "addComputer";
 	}
 	
 	@PostMapping
-	public String addComputer(@RequestParam(name="computerName") String computerName,
-							@RequestParam(required=false, name="introduced") String introduced,
-							@RequestParam(required=false, name="discontinued") String discontinued,
-							@RequestParam(required=false, name="companyId") String companyId,
+	public String addComputer(@ModelAttribute("computerDto") ComputerDto computerDto,
 							Model model) {
 		List<CompanyDto> companiesDto = getAllCompaniesDto();
 		model.addAttribute("companies", companiesDto);
-		ComputerDto computerDto = new ComputerDto();
-		computerDto = buildComputerDto(computerName,introduced,discontinued,companyId);
+		computerDto = buildComputerDto(computerDto);
 		try {
 			testComputerDtoName(computerDto);
 			Computer newComputer = ComputerDtoMapper.computerDtoToComputer(computerDto);
@@ -59,26 +56,26 @@ public class AddComputerController {
 			model.addAttribute("error", e.getMessage());
 			model.addAttribute("newComputer", computerDto);
 			return "addComputer";
-		}		
+		}
 	}
 	
-	private ComputerDto buildComputerDto(String computerName, String introduced, String discontinued, String companyId) {
-		ComputerDto computerDto = new ComputerDto();
-		if(computerName != null && !computerName.equals("")) {
-			computerDto.setName(computerName);
+	private ComputerDto buildComputerDto(ComputerDto computerDto) {
+		ComputerDto NewcomputerDto = new ComputerDto();
+		if(computerDto.getName() != null && !computerDto.getName().equals("")) {
+			NewcomputerDto.setName(computerDto.getName());
 		}
-		if(introduced != null && !introduced.equals("")) {		
-			computerDto.setIntroduced(introduced);
+		if(computerDto.getIntroduced() != null && !computerDto.getIntroduced().equals("")) {		
+			NewcomputerDto.setIntroduced(computerDto.getIntroduced());
 		}
-		if(discontinued != null && !discontinued.equals("")){
-			computerDto.setDiscontinued(discontinued);
+		if(computerDto.getDiscontinued() != null && !computerDto.getDiscontinued().equals("")){
+			NewcomputerDto.setDiscontinued(computerDto.getDiscontinued());
 		}
-		if(!companyId.equals("0")) {
+		if(computerDto.getCompanyDto() != null && computerDto.getCompanyDto().getIdCompany() > 0) {
 			CompanyDto companyDto = new CompanyDto();
-			companyDto.setIdCompany(Integer.parseInt(companyId));
-			computerDto.setCompany(companyDto);
+			companyDto.setIdCompany(computerDto.getCompanyDto().getIdCompany());
+			NewcomputerDto.setCompanyDto(companyDto);
 		}
-		return computerDto;
+		return NewcomputerDto;
 	}
 	
 	private void testComputerDtoName(ComputerDto computerDto) {

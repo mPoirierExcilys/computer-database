@@ -21,7 +21,7 @@ public class ComputerDtoMapper {
 			computerDto.setDiscontinued(computer.getDiscontinued().toString());
 		}
 		if(computer.getCompany() != null) {
-			computerDto.setCompany(CompanyDtoMapper.companyToCompanyDto(computer.getCompany()));
+			computerDto.setCompanyDto(CompanyDtoMapper.companyToCompanyDto(computer.getCompany()));
 		}
 		return computerDto;
 	}
@@ -38,8 +38,8 @@ public class ComputerDtoMapper {
 		if(computerDto.getDiscontinued() != null) {
 			computer.setDiscontinued(LocalDate.parse(computerDto.getDiscontinued()));
 		}
-		if(computerDto.getCompany() != null && computerDto.getCompany().getIdCompany() != null) {
-			computer.setCompany(CompanyDtoMapper.companyDtoToCompany(computerDto.getCompany()));	
+		if(computerDto.getCompanyDto() != null && computerDto.getCompanyDto().getIdCompany() != null) {
+			computer.setCompany(CompanyDtoMapper.companyDtoToCompany(computerDto.getCompanyDto()));	
 		}
 		return computer;
 	}

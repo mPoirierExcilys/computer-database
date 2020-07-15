@@ -60,6 +60,11 @@ public class CompanyDto {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "CompanyDto [idCompany=" + idCompany + ", name=" + name + "]";
+	}
 	
 	
 

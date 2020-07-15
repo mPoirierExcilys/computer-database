@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+    <%@ taglib uri="http://www.springframework.org/tags/form" prefix="springForm"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,32 +27,32 @@
                     <h1>Add Computer</h1>
                     <c:if test="${error != null}"><div class="alert alert-danger"><c:out value="${error}" /></div></c:if>
 					<c:if test="${success != null}"><div class="alert alert-success"><c:out value="${success}"/></div></c:if>
-                    <form action="addComputer" method="POST" onsubmit="return checkDate()">
+                    <springForm:form action="addComputer" method="POST" modelAttribute="computerDto" onsubmit="return checkDate()">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" value="${newComputer.name}" required>
+                                <springForm:input type="text" class="form-control" id="computerName" path="name" name="computerName" placeholder="Computer name" value="${newComputer.name}" />
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" value="${newComputer.introduced}">
+                                <springForm:input type="date" class="form-control" id="introduced" path="introduced" name="introduced" placeholder="Introduced date" value="${newComputer.introduced}"/>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" value="${newComputer.discontinued}">
+                                <springForm:input type="date" class="form-control" id="discontinued" path="discontinued" name="discontinued" placeholder="Discontinued date" value="${newComputer.discontinued}"/>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" name="companyId">                                	
+                                <springForm:select class="form-control" path="companyDto.idCompany" id="companyId" name="idCompany">                                	
                                 	<option value="0">--</option>
                                 	<c:forEach items="${companies}" var="company">
                                 		<c:set var="selected" value=""/>
-                                		<c:if test = "${company.idCompany == newComputer.company.idCompany}">
+                                		<c:if test = "${company.idCompany == newComputer.companyDto.idCompany}">
                                 			<c:set var="selected" value="selected"/>
                                 		</c:if>
                                 		<option value="${company.idCompany}" ${selected}><c:out value="${company.name}"/></option>
                                 	</c:forEach>
-                                </select>
+                                </springForm:select>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
@@ -58,7 +60,7 @@
                             or
                             <a href="dashboard" class="btn btn-default">Cancel</a>
                         </div>
-                    </form>
+                    </springForm:form>
                 </div>
             </div>
         </div>
