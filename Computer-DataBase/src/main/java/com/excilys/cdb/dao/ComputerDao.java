@@ -76,8 +76,7 @@ public class ComputerDao extends AbstractDao<Computer>{
 	@Override
 	public List<Computer> findAll() {
 		List<Computer> allComputer = new ArrayList<>();
-		SqlParameterSource parameters = new MapSqlParameterSource();
-		allComputer = jdbcTemplate.query(FIND_ALL_SQL, parameters, new ComputerRowMapper());
+		allComputer = jdbcTemplate.query(FIND_ALL_SQL, new ComputerRowMapper());
 		return allComputer;
 	}
 

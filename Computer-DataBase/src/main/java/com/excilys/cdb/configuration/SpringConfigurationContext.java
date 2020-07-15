@@ -9,9 +9,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.context.AbstractContextLoaderInitializer;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -20,15 +17,8 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableTransactionManagement
 @ComponentScan(basePackages= {"com.excilys.cdb.services", "com.excilys.cdb.dao", "com.excilys.cdb.persistence", "com.excilys.cdb.controllers",
 		"com.excilys.cdb.ui"})
-public class SpringConfigurationContext extends AbstractContextLoaderInitializer {
+public class SpringConfigurationContext {
 
-	@Override
-	protected WebApplicationContext createRootApplicationContext() {
-		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-		 rootContext.register(SpringConfigurationContext.class);
-		 return rootContext;
-	}
-	
 	@Bean
 	public DataSource hikariDataSource() {
 		return new HikariDataSource(new HikariConfig("/datasource.properties"));

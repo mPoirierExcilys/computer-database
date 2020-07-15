@@ -53,8 +53,7 @@ public class CompanyDao extends AbstractDao<Company> {
 	@Override
 	public List<Company> findAll() {
 		List<Company> allCompany = new ArrayList<>();
-		SqlParameterSource parameters = new MapSqlParameterSource();
-		allCompany = jdbcTemplate.query(FIND_ALL_SQL, parameters, new CompanyRowMapper());
+		allCompany = jdbcTemplate.query(FIND_ALL_SQL, new CompanyRowMapper());
 		return allCompany;
 	}
 
