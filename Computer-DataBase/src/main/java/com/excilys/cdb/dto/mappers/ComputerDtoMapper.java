@@ -32,13 +32,13 @@ public class ComputerDtoMapper {
 			computer.setIdComputer(computerDto.getIdComputer());
 		}
 		computer.setName(computerDto.getName());
-		if(computerDto.getIntroduced() != null) {
+		if(computerDto.getIntroduced() != null && !computerDto.getIntroduced().trim().equals("")) {
 			computer.setIntroduced(LocalDate.parse(computerDto.getIntroduced()));	
 		}
-		if(computerDto.getDiscontinued() != null) {
+		if(computerDto.getDiscontinued() != null && !computerDto.getDiscontinued().trim().equals("")) {
 			computer.setDiscontinued(LocalDate.parse(computerDto.getDiscontinued()));
 		}
-		if(computerDto.getCompanyDto() != null && computerDto.getCompanyDto().getIdCompany() != null) {
+		if(computerDto.getCompanyDto() != null && computerDto.getCompanyDto().getIdCompany() != null && computerDto.getCompanyDto().getIdCompany() > 0) {
 			computer.setCompany(CompanyDtoMapper.companyDtoToCompany(computerDto.getCompanyDto()));	
 		}
 		return computer;

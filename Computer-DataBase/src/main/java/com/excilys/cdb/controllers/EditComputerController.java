@@ -5,9 +5,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +37,15 @@ public class EditComputerController {
 	@Autowired
 	private CompanyService companyService;
 	
+	@Autowired
+	@Qualifier("computerDtoValidator")
+	private Validator validator;
+	
+	@InitBinder
+	private void initBinder(WebDataBinder binder) {
+		binder.setValidator(validator);
+	}
+	
 	@GetMapping
 	public String showEditComputer(@RequestParam(required=false,name="id") String id, Model model) {
 		List<CompanyDto> companiesDto = getAllCompaniesDto();
@@ -40,7 +56,7 @@ public class EditComputerController {
 				Integer idComputer = Integer.parseInt(id);
 				Computer computer = computerService.getComputer(idComputer);
 				ComputerDto computerDto = ComputerDtoMapper.computerToComputerDto(computer);
-				model.addAttribute("computer", computerDto);
+				model.addAttribute("computerDto", computerDto);
 			}catch(NumberFormatException e) {
 				error = "Id is not an Integer";
 				model.addAttribute("error", error);
@@ -50,10 +66,8 @@ public class EditComputerController {
 	}
 	
 	@PostMapping
-	public String editComputer(@RequestParam(name="computerName") String computerName,
-							@RequestParam(required=false, name="introduced") String introduced,
-							@RequestParam(required=false, name="discontinued") String discontinued,
-							@RequestParam(required=false, name="companyId") String companyId,
+	public String editComputer(@ModelAttribute("computerDto") @Validated ComputerDto computerDto,
+							BindingResult bindingResult,
 							@RequestParam(name="id") String id,
 							Model model) {
 		List<CompanyDto> companiesDto = getAllCompaniesDto();
@@ -61,8 +75,9 @@ public class EditComputerController {
 		Integer idComputer = Integer.parseInt(id);
 		Computer computer = computerService.getComputer(idComputer);
 		ComputerDto computerDtoOld = ComputerDtoMapper.computerToComputerDto(computer);
-		ComputerDto computerDto = new ComputerDto();
-		computerDto = buildComputerDto(computerName,introduced,discontinued,companyId);
+		if(bindingResult.hasErrors()) {
+			return "editComputer";
+		}
 		try {
 			testComputerDtoAttributesNotSetToNull(computerDtoOld, computerDto);
 			computerDto.setIdComputer(computerDtoOld.getIdComputer());
@@ -70,46 +85,27 @@ public class EditComputerController {
 			newComputer = computerService.updateComputer(newComputer);
 			String success = "Computer " + newComputer.getName() + " was successfully updated";
 			model.addAttribute("success", success);
-			model.addAttribute("computer", ComputerDtoMapper.computerToComputerDto(newComputer));
+			model.addAttribute("computerDto", ComputerDtoMapper.computerToComputerDto(newComputer));
 		}catch(IllegalArgumentException e) {
 			model.addAttribute("error", e.getMessage());
-			model.addAttribute("computer", computerDtoOld);
+			model.addAttribute("computerDto", computerDtoOld);
 		}
 		return "editComputer";
 	}
 	
 	private void testComputerDtoAttributesNotSetToNull(ComputerDto computerDtoOld, ComputerDto computerDto){
-		if(computerDto.getName() == null || computerDto.getName().trim().equals("")) {
+		if(computerDto.getName().trim().equals("")) {
 			throw new IllegalArgumentException("Computer Name must not be empty");
 		}
-		if(computerDto.getIntroduced() == null && computerDtoOld.getIntroduced()!=null) {
+		if(computerDto.getIntroduced().equals("") && computerDtoOld.getIntroduced() != null) {
 			throw new IllegalArgumentException("Computer Introduced wasn't empty, you couldn't set it to null");
 		}
-		if(computerDto.getDiscontinued() == null && computerDtoOld.getDiscontinued() != null) {
+		if( computerDto.getDiscontinued().equals("") && computerDtoOld.getDiscontinued() != null) {
 			throw new IllegalArgumentException("Computer Introduced wasn't empty, you couldn't set it to null");
 		}
-		if(computerDto.getCompanyDto() == null && computerDtoOld.getCompanyDto() != null) {
+		if(computerDto.getCompanyDto().getIdCompany() < 1 && computerDtoOld.getCompanyDto() != null) {
 			throw new IllegalArgumentException("Computer had a Company, You couldn't set it to null");
 		}
-	}
-	
-	private ComputerDto buildComputerDto(String computerName, String introduced, String discontinued, String companyId) {
-		ComputerDto computerDto = new ComputerDto();
-		if(computerName != null && !computerName.equals("")) {
-			computerDto.setName(computerName);
-		}
-		if(introduced != null && !introduced.equals("")) {		
-			computerDto.setIntroduced(introduced);
-		}
-		if(discontinued != null && !discontinued.equals("")){
-			computerDto.setDiscontinued(discontinued);
-		}
-		if(!companyId.equals("0")) {
-			CompanyDto companyDto = new CompanyDto();
-			companyDto.setIdCompany(Integer.parseInt(companyId));
-			computerDto.setCompanyDto(companyDto);
-		}
-		return computerDto;
 	}
 	
 	private List<CompanyDto> getAllCompaniesDto(){

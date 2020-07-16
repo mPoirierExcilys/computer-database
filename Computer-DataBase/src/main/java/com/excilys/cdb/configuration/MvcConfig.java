@@ -2,10 +2,12 @@ package com.excilys.cdb.configuration;
 
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.validation.Validator;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -16,6 +18,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import com.excilys.cdb.validators.ComputerDtoFormValidator;
 
 @EnableWebMvc
 @Configuration
@@ -59,5 +63,11 @@ public class MvcConfig implements WebMvcConfigurer{
 	      ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 	      messageSource.setBasename("resources/messages/messages");
 	      return messageSource;
+	 }
+	 
+	 @Qualifier("computerDtoValidator")
+	 @Bean
+	 public Validator computerDtoValidator() {
+		 return new ComputerDtoFormValidator();
 	 }
 }

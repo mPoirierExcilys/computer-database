@@ -27,38 +27,39 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        <c:out value="${computer.idComputer}"/>
+                        <c:out value="${computerDto.idComputer}"/>
                     </div>
                     <h1><spring:message code="editComputer.title"/></h1>
 					<c:if test="${error != null}"><div class="alert alert-danger"><c:out value="${error}" /></div></c:if>
 					<c:if test="${success != null}"><div class="alert alert-success"><c:out value="${success}"/></div></c:if>
-                    <form action="editComputer?id=${computer.idComputer}" method="POST" onsubmit="return checkDate()">
+                    <springForm:form action="editComputer?id=${computerDto.idComputer}" method="POST" modelAttribute="computerDto" onsubmit="return checkDate()">
                         <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName"><spring:message code="form.input.name"/></label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" value="${computer.name}">
+                                <springForm:input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" path="name"/>
+                                <springForm:errors path="name" cssClass="alert-danger"/>
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="form.input.introduced"/></label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" value="${computer.introduced}">
+                                <springForm:input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" path="introduced"/>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued"><spring:message code="form.input.discontinued"/></label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" value="${computer.discontinued}">
+                                <springForm:input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" path="discontinued"/>
                             </div>
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="form.input.company"/></label>
-                                <select class="form-control" id="companyId" name="companyId">                                	
+                                <springForm:select class="form-control" path="companyDto.idCompany" id="companyId" name="companyId">                                	
                                 	<option value="0">--</option>
                                 	<c:forEach items="${companies}" var="company">
                                 		<c:set var="selected" value=""/>
-                                		<c:if test = "${company.idCompany == computer.companyDto.idCompany}">
+                                		<c:if test = "${company.idCompany == computerDto.companyDto.idCompany}">
                                 			<c:set var="selected" value="selected"/>
                                 		</c:if>
                                 		<option value="${company.idCompany}" ${selected}><c:out value="${company.name}"/></option>
                                 	</c:forEach>
-                                </select>
+                                </springForm:select>
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">
@@ -66,7 +67,7 @@
                             or
                             <a href="dashboard" class="btn btn-default"><spring:message code="form.button.cancel"/></a>
                         </div>
-                    </form>
+                    </springForm:form>
                 </div>
             </div>
         </div>

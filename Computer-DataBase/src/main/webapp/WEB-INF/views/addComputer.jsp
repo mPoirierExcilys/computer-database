@@ -34,15 +34,16 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName"><spring:message code="form.input.name"/></label>
-                                <springForm:input type="text" class="form-control" id="computerName" path="name" name="computerName" placeholder="Computer name" value="${newComputer.name}" />
+                                <springForm:input type="text" class="form-control" id="computerName" path="name" name="computerName" placeholder="Computer name"/>
+                                <springForm:errors path="name" cssClass="alert-danger"/>
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="form.input.introduced"/></label>
-                                <springForm:input type="date" class="form-control" id="introduced" path="introduced" name="introduced" placeholder="Introduced date" value="${newComputer.introduced}"/>
+                                <springForm:input type="date" class="form-control" id="introduced" path="introduced" name="introduced" placeholder="Introduced date"/>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued"><spring:message code="form.input.discontinued"/></label>
-                                <springForm:input type="date" class="form-control" id="discontinued" path="discontinued" name="discontinued" placeholder="Discontinued date" value="${newComputer.discontinued}"/>
+                                <springForm:input type="date" class="form-control" id="discontinued" path="discontinued" name="discontinued" placeholder="Discontinued date"/>
                             </div>
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="form.input.company"/></label>
@@ -50,7 +51,7 @@
                                 	<option value="0">--</option>
                                 	<c:forEach items="${companies}" var="company">
                                 		<c:set var="selected" value=""/>
-                                		<c:if test = "${company.idCompany == newComputer.companyDto.idCompany}">
+                                		<c:if test = "${company.idCompany == computerDto.companyDto.idCompany}">
                                 			<c:set var="selected" value="selected"/>
                                 		</c:if>
                                 		<option value="${company.idCompany}" ${selected}><c:out value="${company.name}"/></option>
