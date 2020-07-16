@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+    <%@ taglib uri="http://www.springframework.org/tags/form" prefix="springForm"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="title"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link href="resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -14,7 +16,10 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard"><spring:message code="title"/></a>
+            <div class="pull-right">
+            	<a class="navbar-brand" href="<spring:message code="lang.url"/>"><spring:message code="lang"/></a>
+            </div>
         </div>
     </header>
     <section id="main">
@@ -24,31 +29,31 @@
                     <div class="label label-default pull-right">
                         <c:out value="${computer.idComputer}"/>
                     </div>
-                    <h1>Edit Computer</h1>
+                    <h1><spring:message code="editComputer.title"/></h1>
 					<c:if test="${error != null}"><div class="alert alert-danger"><c:out value="${error}" /></div></c:if>
 					<c:if test="${success != null}"><div class="alert alert-success"><c:out value="${success}"/></div></c:if>
                     <form action="editComputer?id=${computer.idComputer}" method="POST" onsubmit="return checkDate()">
                         <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
+                                <label for="computerName"><spring:message code="form.input.name"/></label>
                                 <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" value="${computer.name}">
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
+                                <label for="introduced"><spring:message code="form.input.introduced"/></label>
                                 <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" value="${computer.introduced}">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
+                                <label for="discontinued"><spring:message code="form.input.discontinued"/></label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" value="${computer.discontinued}">
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId"><spring:message code="form.input.company"/></label>
                                 <select class="form-control" id="companyId" name="companyId">                                	
                                 	<option value="0">--</option>
                                 	<c:forEach items="${companies}" var="company">
                                 		<c:set var="selected" value=""/>
-                                		<c:if test = "${company.idCompany == computer.company.idCompany}">
+                                		<c:if test = "${company.idCompany == computer.companyDto.idCompany}">
                                 			<c:set var="selected" value="selected"/>
                                 		</c:if>
                                 		<option value="${company.idCompany}" ${selected}><c:out value="${company.name}"/></option>
@@ -57,9 +62,9 @@
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Edit" class="btn btn-primary">
+                            <input type="submit" value="<spring:message code="form.button.edit"/>" class="btn btn-primary">
                             or
-                            <a href="dashboard" class="btn btn-default">Cancel</a>
+                            <a href="dashboard" class="btn btn-default"><spring:message code="form.button.cancel"/></a>
                         </div>
                     </form>
                 </div>
