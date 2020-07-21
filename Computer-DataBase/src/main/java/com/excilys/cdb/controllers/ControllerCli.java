@@ -3,11 +3,13 @@ package com.excilys.cdb.controllers;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.configuration.SpringConfigurationContext;
+import com.excilys.cdb.dao.AbstractJpaDao;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.CompanyService;
@@ -123,7 +125,6 @@ public class ControllerCli {
 		ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfigurationContext.class);
 		ControllerCli controller = context.getBean(ControllerCli.class);
 		controller.CdbLogical();
-		
 	}
 
 }

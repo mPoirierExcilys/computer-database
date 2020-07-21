@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.excilys.cdb.dao.ComputerDao;
+import com.excilys.cdb.dao.AbstractJpaDao;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.ComputerService;
@@ -13,10 +13,10 @@ import com.excilys.cdb.services.ComputerService;
 @Service
 public class ComputerServiceImpl implements ComputerService{
 	
-	private ComputerDao computerDao;
+	private AbstractJpaDao<Computer> computerDao;
 	
 	@Autowired
-	public ComputerServiceImpl(ComputerDao computerDao) {
+	public ComputerServiceImpl(AbstractJpaDao<Computer> computerDao) {
 		this.computerDao = computerDao;
 	}
 

@@ -64,10 +64,5 @@ public class MvcConfig implements WebMvcConfigurer{
 	      messageSource.setBasename("resources/messages/messages");
 	      return messageSource;
 	 }
-	 
-	 @Qualifier("computerDtoValidator")
-	 @Bean
-	 public Validator computerDtoValidator() {
-		 return new ComputerDtoFormValidator();
-	 }
+
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.excilys.cdb.dao.CompanyDao;
+import com.excilys.cdb.dao.AbstractJpaDao;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.CompanyService;
@@ -13,10 +13,10 @@ import com.excilys.cdb.services.CompanyService;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 	
-	private CompanyDao companyDao;
+	private AbstractJpaDao<Company> companyDao;
 	
 	@Autowired
-	public CompanyServiceImpl(CompanyDao companyDao) {
+	public CompanyServiceImpl(AbstractJpaDao<Company> companyDao) {
 		this.companyDao = companyDao;
 	}
 
