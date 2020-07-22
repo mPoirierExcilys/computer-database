@@ -5,16 +5,14 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 
-public class ComputerDaoTest {
+public class ComputerJpaDaoTest {
 	
-	@Autowired
-	private ComputerDao computerDao;
+	private AbstractJpaDao<Computer> computerDao;
 	
 	private Page page = Mockito.mock(Page.class);
 
