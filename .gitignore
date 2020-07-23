@@ -1,14 +1,14 @@
 # ignore build
-Computer-DataBase/target/
+**/target/
 
 # ignore .project
-Computer-DataBase/.project
+**/.project
 
 # ignore settings
-Computer-DataBase/.settings/
+**/.settings/
 
 #ignore classpath
-Computer-DataBase/.classpath
+**/.classpath
 
 #ignore jdbc properties
-Computer-DataBase/src/main/resources/datasource.properties
+Computer-DataBase/persistence/src/main/resources/datasource.properties
