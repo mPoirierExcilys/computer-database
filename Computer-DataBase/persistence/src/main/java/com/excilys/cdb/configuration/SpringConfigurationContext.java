@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -24,8 +23,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages= {"com.excilys.cdb.services", "com.excilys.cdb.dao", "com.excilys.cdb.persistence", "com.excilys.cdb.controllers",
-		"com.excilys.cdb.ui"})
+@ComponentScan(basePackages= {"com.excilys.cdb.dao"})
 public class SpringConfigurationContext {
 	
 	@Bean
@@ -44,11 +42,6 @@ public class SpringConfigurationContext {
 	@Bean
 	public DataSource hikariDataSource() {
 		return new HikariDataSource(new HikariConfig("/datasource.properties"));
-	}
-	
-	@Bean
-	public NamedParameterJdbcTemplate jdbcTemplate(DataSource hikariDataSource){
-		return new NamedParameterJdbcTemplate(hikariDataSource);
 	}
 	
 	@Bean

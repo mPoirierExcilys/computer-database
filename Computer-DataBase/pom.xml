@@ -4,7 +4,7 @@
 
   <groupId>com.excilys.cdb</groupId>
   <artifactId>Computer-DataBase</artifactId>
-  <version>1.5.0-SNAPSHOT</version>
+  <version>${cbd.project.version}</version>
   <packaging>pom</packaging>
 
   <name>Computer-DataBase</name>
@@ -16,60 +16,36 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <org.springframework.version>5.2.7.RELEASE</org.springframework.version>
-    <mysql.connector.version>8.0.20</mysql.connector.version>
-    <javax.version>7.0</javax.version>
-    <javax.jstl.version>1.2</javax.jstl.version>
     <org.mockito.version>1.9.5</org.mockito.version>
     <junit.version>4.12</junit.version>
     <org.slf4j.version>1.7.25</org.slf4j.version>
-    <com.h2database.version>1.4.194</com.h2database.version>
+    <org.springframework.version>5.2.7.RELEASE</org.springframework.version>
+    <javax.jstl.version>1.2</javax.jstl.version>
+    <javax.version>7.0</javax.version>
     <com.zaxxer.hikari.version>3.4.5</com.zaxxer.hikari.version>
     <hibernate.version.entity-manager>5.4.18.Final</hibernate.version.entity-manager>
+    <mysql.connector.version>8.0.20</mysql.connector.version>
+    <com.h2database.version>1.4.194</com.h2database.version>
+    <org.springframework.version>5.2.7.RELEASE</org.springframework.version>
+    <cbd.project.version>1.5.0-SNAPSHOT</cbd.project.version>
   </properties>
 
   <dependencies>
-    <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${org.springframework.version}</version>
-        </dependency>
-        <dependency>
-    		<groupId>org.springframework</groupId>
-    		<artifactId>spring-jdbc</artifactId>
-    		<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
+  		<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${org.springframework.version}</version>
         </dependency>
         <dependency>
-    		<groupId>org.springframework</groupId>
-    		<artifactId>spring-orm</artifactId>
-    		<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
-    		<groupId>org.hibernate</groupId>
-    		<artifactId>hibernate-entitymanager</artifactId>
-    		<version>${hibernate.version.entity-manager}</version>
-		</dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${javax.jstl.version}</version>
+        </dependency>
         <dependency>
-    		<groupId>mysql</groupId>
-    		<artifactId>mysql-connector-java</artifactId>
-    		<version>${mysql.connector.version}</version>
-    		<scope>runtime</scope>
-		</dependency>
-		 <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>${javax.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>${javax.jstl.version}</version>
         </dependency>
         <dependency>
       		<groupId>org.mockito</groupId>
@@ -92,17 +68,6 @@
     		<groupId>org.slf4j</groupId>
     		<artifactId>slf4j-simple</artifactId>
     		<version>${org.slf4j.version}</version>
-		</dependency>
-		<dependency>
-    		<groupId>com.h2database</groupId>
-    		<artifactId>h2</artifactId>
-    		<version>${com.h2database.version}</version>
-    		<scope>test</scope>
-		</dependency>
-		<dependency>
-    		<groupId>com.zaxxer</groupId>
-    		<artifactId>HikariCP</artifactId>
-    		<version>${com.zaxxer.hikari.version}</version>
 		</dependency>
   </dependencies>
 
@@ -158,7 +123,8 @@
       </plugin>
     </plugins>
   </reporting>
-<modules>  <module>core</module>
+  <modules>  
+	<module>core</module>
     <module>persistence</module>
     <module>binding</module>
     <module>service</module>

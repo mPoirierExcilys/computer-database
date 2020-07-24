@@ -13,7 +13,7 @@ public class WebConfig implements WebApplicationInitializer {
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 		AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
-		webContext.register(MvcConfig.class, WebConfig.class, SpringConfigurationContext.class);
+		webContext.register(MvcConfig.class, WebConfig.class, SpringConfigurationContext.class, ServicesConfiguration.class);
 		webContext.setServletContext(servletContext);
 		
 		ServletRegistration.Dynamic servlet=servletContext.addServlet("dynamicServlet",new DispatcherServlet(webContext));

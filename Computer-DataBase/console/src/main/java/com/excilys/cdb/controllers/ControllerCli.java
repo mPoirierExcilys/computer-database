@@ -3,11 +3,14 @@ package com.excilys.cdb.controllers;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.excilys.cdb.configuration.ServicesConfiguration;
 import com.excilys.cdb.configuration.SpringConfigurationContext;
+import com.excilys.cdb.configuration.UiConfiguration;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.CompanyService;
@@ -18,8 +21,10 @@ import com.excilys.cdb.ui.CliUi;
 public class ControllerCli {
 	
 	@Autowired
+	@Qualifier(value="computerServiceImpl")
 	private ComputerService computerService;
 	@Autowired
+	@Qualifier(value="companyServiceImpl")
 	private CompanyService companyService;
 	@Autowired
 	private CliUi cliUi;
@@ -120,7 +125,7 @@ public class ControllerCli {
 	}
 
 	public static void main(String[] args) {
-		ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfigurationContext.class);
+		ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfigurationContext.class,ServicesConfiguration.class,UiConfiguration.class);
 		ControllerCli controller = context.getBean(ControllerCli.class);
 		controller.CdbLogical();
 	}

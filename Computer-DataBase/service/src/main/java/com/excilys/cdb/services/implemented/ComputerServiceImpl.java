@@ -3,6 +3,7 @@ package com.excilys.cdb.services.implemented;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.dao.AbstractJpaDao;
@@ -13,12 +14,9 @@ import com.excilys.cdb.services.ComputerService;
 @Service
 public class ComputerServiceImpl implements ComputerService{
 	
-	private AbstractJpaDao<Computer> computerDao;
-	
 	@Autowired
-	public ComputerServiceImpl(AbstractJpaDao<Computer> computerDao) {
-		this.computerDao = computerDao;
-	}
+	@Qualifier(value="computerJpaDao")
+	private AbstractJpaDao<Computer> computerDao;
 
 	@Override
 	public List<Computer> getAllComputers() {

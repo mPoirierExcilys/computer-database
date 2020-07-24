@@ -3,6 +3,7 @@ package com.excilys.cdb.services.implemented;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.dao.AbstractJpaDao;
@@ -13,12 +14,9 @@ import com.excilys.cdb.services.CompanyService;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 	
-	private AbstractJpaDao<Company> companyDao;
-	
 	@Autowired
-	public CompanyServiceImpl(AbstractJpaDao<Company> companyDao) {
-		this.companyDao = companyDao;
-	}
+	@Qualifier(value="companyJpaDao")
+	private AbstractJpaDao<Company> companyDao;
 
 	@Override
 	public List<Company> getAllCompanies() {
