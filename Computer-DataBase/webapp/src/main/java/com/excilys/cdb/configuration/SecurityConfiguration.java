@@ -1,5 +1,6 @@
 package com.excilys.cdb.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -7,21 +8,20 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+	
+	@Autowired
+	private UserDetailsService customUserDetailsService;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService());
+		auth.userDetailsService(customUserDetailsService).passwordEncoder(encoder());
 	}
 
 	@Override
@@ -34,32 +34,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.and()
 		.formLogin()
 		.and()
-		.logout();
-	}
-
-	@Override
-	@Bean
-	protected UserDetailsService userDetailsService() {
-		InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
-		inMemoryUserDetailsManager.createUser(User.withUsername("user").password(encoder().encode("password")).roles("USER").build());
-		inMemoryUserDetailsManager.createUser(User.withUsername("admin").password(encoder().encode("password")).roles("ADMIN").build());
-		return inMemoryUserDetailsManager;
-	}
-
-	@Bean
-	DigestAuthenticationFilter digestAuthenticationFilter() throws Exception {
-		DigestAuthenticationFilter digestAuthenticationFilter = new DigestAuthenticationFilter();
-		digestAuthenticationFilter.setUserDetailsService(userDetailsService());
-		digestAuthenticationFilter.setAuthenticationEntryPoint(digestEntryPoint());
-		return digestAuthenticationFilter;
-	}
-
-	@Bean
-	DigestAuthenticationEntryPoint digestEntryPoint() {
-		DigestAuthenticationEntryPoint bauth = new DigestAuthenticationEntryPoint();
-		bauth.setRealmName("Digest WF Realm");
-		bauth.setKey("MySecureKey");
-		return bauth;
+		.logout()
+		.and().csrf().disable();
 	}
 	
 	@Bean
