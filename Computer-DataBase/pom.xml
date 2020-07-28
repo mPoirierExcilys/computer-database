@@ -27,6 +27,7 @@
     <mysql.connector.version>8.0.20</mysql.connector.version>
     <com.h2database.version>1.4.194</com.h2database.version>
     <org.springframework.version>5.2.7.RELEASE</org.springframework.version>
+    <org.springframework.security.version>5.3.3.RELEASE</org.springframework.security.version>
     <cbd.project.version>1.5.0-SNAPSHOT</cbd.project.version>
   </properties>
 

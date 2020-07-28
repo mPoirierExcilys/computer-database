@@ -23,7 +23,7 @@
     	<dependency>
       		<groupId>com.excilys.cdb</groupId>
       		<artifactId>binding</artifactId>
-      		<version>1.5.0-SNAPSHOT</version>
+      		<version>${cbd.project.version}</version>
     	</dependency>
     	<dependency>
     		<groupId>com.h2database</groupId>

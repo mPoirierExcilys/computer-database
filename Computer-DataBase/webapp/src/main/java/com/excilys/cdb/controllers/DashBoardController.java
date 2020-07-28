@@ -20,7 +20,7 @@ import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.ComputerService;
 
 @Controller
-@RequestMapping({ "/","/dashboard"})
+@RequestMapping({"/","/dashboard"})
 public class DashBoardController {
 	
 	@Autowired
