@@ -31,7 +31,22 @@
     		<artifactId>jackson-databind</artifactId>
     		<version>${jackson.version}</version>
 		 </dependency>
-  </dependencies>
+		 <dependency>
+    		<groupId>io.springfox</groupId>
+    		<artifactId>springfox-swagger2</artifactId>
+    		<version>${swagger.version}</version>
+		</dependency>
+		<dependency>
+		 	<groupId>io.springfox</groupId>
+		    <artifactId>springfox-core</artifactId>
+		    <version>${swagger.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>${swagger.version}</version>
+		</dependency>
+	</dependencies>
 
   <build>
     <finalName>webapprest</finalName>
