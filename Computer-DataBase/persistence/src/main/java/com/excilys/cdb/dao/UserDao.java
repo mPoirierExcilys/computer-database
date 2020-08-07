@@ -3,6 +3,7 @@ package com.excilys.cdb.dao;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -28,6 +29,10 @@ public class UserDao {
 		criteriaQuery.where(idPredicate);
 		
 		TypedQuery<User> query = em.createQuery(criteriaQuery);
-		return Optional.ofNullable(query.getSingleResult());
+		try {
+			return Optional.ofNullable(query.getSingleResult());
+		}catch(NoResultException e) {
+			return Optional.ofNullable(query.getSingleResult());
+		}
 	}
 }

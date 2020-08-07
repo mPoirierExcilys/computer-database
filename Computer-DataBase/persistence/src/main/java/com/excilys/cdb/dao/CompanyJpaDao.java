@@ -1,8 +1,10 @@
 package com.excilys.cdb.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -40,7 +42,11 @@ public class CompanyJpaDao implements AbstractJpaDao<Company>{
 		criteriaQuery.where(idPredicate);
 		
 		TypedQuery<Company> query = em.createQuery(criteriaQuery);
-		return query.getSingleResult();
+		try {
+			return query.getSingleResult();
+		}catch(NoResultException e) {
+			return new Company();
+		}
 	}
 
 	@Override
@@ -50,7 +56,11 @@ public class CompanyJpaDao implements AbstractJpaDao<Company>{
 		Root<Company> root = criteriaQuery.from(Company.class);
 		criteriaQuery.select(root);
 		TypedQuery<Company> companies = em.createQuery(criteriaQuery);
-		return companies.getResultList();
+		try {
+			return companies.getResultList();
+		}catch(NoResultException e) {
+			return new ArrayList<Company>();
+		}
 	}
 
 	@Override
@@ -81,7 +91,11 @@ public class CompanyJpaDao implements AbstractJpaDao<Company>{
 		Root<Company> root = criteriaQuery.from(Company.class);
 		criteriaQuery.select(root);
 		TypedQuery<Company> companies = em.createQuery(criteriaQuery).setFirstResult(offset).setMaxResults(page.getItemsByPage());
-		return companies.getResultList();
+		try {
+			return companies.getResultList();
+		}catch(NoResultException e) {
+			return new ArrayList<Company>();
+		}
 	}
 
 	@Override
@@ -90,7 +104,11 @@ public class CompanyJpaDao implements AbstractJpaDao<Company>{
 		CriteriaQuery<Long> criteriaQuery = cb.createQuery(Long.class);
 		Root<Company> root = criteriaQuery.from(Company.class);
 		criteriaQuery.select(cb.count(root));
-		return em.createQuery(criteriaQuery).getSingleResult().intValue();
+		try {
+			return em.createQuery(criteriaQuery).getSingleResult().intValue();
+		}catch(NoResultException e) {
+			return 0;
+		}
 	}
 
 	@Override

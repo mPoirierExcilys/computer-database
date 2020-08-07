@@ -1,8 +1,10 @@
 package com.excilys.cdb.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -44,7 +46,11 @@ public class ComputerJpaDao implements AbstractJpaDao<Computer>{
 		criteriaQuery.where(idPredicate);
 		
 		TypedQuery<Computer> query = em.createQuery(criteriaQuery);
-		return query.getSingleResult();
+		try {
+			return query.getSingleResult();
+		}catch(NoResultException e) {
+			return new Computer();
+		}	
 	}
 
 	@Override
@@ -54,7 +60,12 @@ public class ComputerJpaDao implements AbstractJpaDao<Computer>{
 		Root<Computer> root = criteriaQuery.from(Computer.class);
 		criteriaQuery.select(root);
 		TypedQuery <Computer> computers = em.createQuery(criteriaQuery);
-		return computers.getResultList();
+		try {
+			return computers.getResultList();
+		}catch(NoResultException e) {
+			return new ArrayList<Computer>();
+		}
+		
 	}
 	
 	@Transactional
@@ -112,7 +123,11 @@ public class ComputerJpaDao implements AbstractJpaDao<Computer>{
 			}
 		}
 		TypedQuery <Computer> computers = em.createQuery(criteriaQuery).setFirstResult(offset).setMaxResults(page.getItemsByPage());
-		return computers.getResultList();
+		try {
+			return computers.getResultList();
+		}catch(NoResultException e) {
+			return new ArrayList<Computer>();
+		}		
 	}
 
 	@Override
@@ -120,8 +135,12 @@ public class ComputerJpaDao implements AbstractJpaDao<Computer>{
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> criteriaQuery = cb.createQuery(Long.class);
 		Root<Computer> root = criteriaQuery.from(Computer.class);
-		criteriaQuery.select(cb.count(root));
-		return em.createQuery(criteriaQuery).getSingleResult().intValue();
+		criteriaQuery.select(cb.count(root));	
+		try {
+			return em.createQuery(criteriaQuery).getSingleResult().intValue();
+		}catch(NoResultException e) {
+			return 0;
+		}
 	}
 
 	@Override
@@ -150,7 +169,11 @@ public class ComputerJpaDao implements AbstractJpaDao<Computer>{
 			}
 		}
 		TypedQuery <Computer> computers = em.createQuery(criteriaQuery).setFirstResult(offset).setMaxResults(page.getItemsByPage());
-		return computers.getResultList();
+		try {
+			return computers.getResultList();
+		}catch(NoResultException e) {
+			return new ArrayList<Computer>();
+		}
 	}
 
 	@Override
@@ -162,7 +185,11 @@ public class ComputerJpaDao implements AbstractJpaDao<Computer>{
 		Predicate computerName = cb.like(root.get("name"), "%"+search+"%");
 		Predicate companyName = cb.like(leftJoin.get("name"), "%"+search+"%");
 		criteriaQuery.select(cb.count(root)).where(cb.or(computerName,companyName));
-		return em.createQuery(criteriaQuery).getSingleResult().intValue();
+		try {
+			return em.createQuery(criteriaQuery).getSingleResult().intValue();
+		}catch(NoResultException e) {
+			return 0;
+		}
 	}
 
 	private String getAttribute(Page page) {
