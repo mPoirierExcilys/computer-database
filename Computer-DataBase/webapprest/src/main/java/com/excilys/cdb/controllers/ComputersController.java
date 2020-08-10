@@ -37,18 +37,26 @@ public class ComputersController {
 		return computerService.getNbComputers();
 	}
 	
-	@RequestMapping(value = "/nbPages", method = RequestMethod.GET, consumes = "application/json", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public Integer getNbPages(@RequestParam(required = false) String search, @RequestBody Page page) {
+	@RequestMapping(value = "/nbPages", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+	public Integer getNbPages(@RequestParam(required = false) String search,
+			@RequestParam(required = false) String itemsByPage) {
+		Page page = new Page();
+		page.setItemsByPage(Integer.parseInt(itemsByPage));
 		if(search != null && !search.equals("")) {
 			return computerService.getNbComputersPagesSearch(page, search);
 		}
 		return  computerService.getComputersNbPages(page);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, consumes = "application/json", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public List<ComputerDto> getComputers(@RequestParam(required = false) String search, @RequestBody Page page){
+	@RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+	public List<ComputerDto> getComputers(@RequestParam(required = false) String search,
+			@RequestParam(required = false) String currentPage,
+			@RequestParam(required = false) String itemsByPage,
+			@RequestParam(required = false)String order,
+			@RequestParam(required = false)String ascending){
 		List<ComputerDto> computersDto = new ArrayList<>();
 		List<Computer> computers = new ArrayList<>();
+		Page page = createPageFromParameters(currentPage, itemsByPage, order, ascending);
 		if(search != null && !search.equals("")) {
 			computers = computerService.getComputersByPagesSearch(page, search);
 			computersDto = computers.stream().map(computer->ComputerDtoMapper.computerToComputerDto(computer)).collect(Collectors.toList());
@@ -119,5 +127,22 @@ public class ComputersController {
 		if(computerDto.getCompanyDto().getIdCompany() < 1 && computerDtoOld.getCompanyDto() != null) {
 			throw new IllegalArgumentException("Computer had a Company, You couldn't set it to null");
 		}
+	}
+	
+	private Page createPageFromParameters(String currentPage, String itemsByPage, String order, String ascending) {
+		Page page = new Page();
+		if(currentPage != null && !currentPage.equals("")) {
+			page.setCurrentPage(Integer.parseInt(currentPage));
+		}
+		if(itemsByPage != null && !itemsByPage.equals("")) {
+			page.setItemsByPage(Integer.parseInt(itemsByPage));
+		}
+		if(order != null && !order.equals("")) {
+			page.setOrder(order);
+		}
+		if(ascending != null && !ascending.equals("")) {
+			page.setAscending(ascending);
+		}
+		return page;
 	}
 }
