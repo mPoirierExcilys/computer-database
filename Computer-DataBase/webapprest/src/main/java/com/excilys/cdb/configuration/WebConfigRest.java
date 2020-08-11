@@ -11,13 +11,13 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
-@ComponentScan(basePackages= {"com.excilys.cdb.controllers"})
+@ComponentScan(basePackages= {"com.excilys.cdb.controllers","com.excilys.cdb.configuration.jwt"})
 public class WebConfigRest implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 		AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
-		webContext.register(WebConfigRest.class, SpringConfigurationContext.class, ServicesConfiguration.class, MvcConfig.class,SwaggerConfig.class);
+		webContext.register(WebConfigRest.class, SpringConfigurationContext.class, ServicesConfiguration.class, MvcConfig.class, SwaggerConfig.class, SecurityConfiguration.class);
 		webContext.setServletContext(servletContext);
 		
 		ServletRegistration.Dynamic servlet=servletContext.addServlet("dynamicServlet",new DispatcherServlet(webContext));

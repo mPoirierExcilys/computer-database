@@ -12,3 +12,6 @@
 
 #ignore jdbc properties
 Computer-DataBase/persistence/src/main/resources/datasource.properties
+
+#ignore secret key for token
+Computer-DataBase/webapprest/src/main/resources/application.properties
