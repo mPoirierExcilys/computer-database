@@ -17,6 +17,9 @@ import com.excilys.cdb.dto.mappers.CompanyDtoMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.services.CompanyService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/companies")
@@ -25,6 +28,7 @@ public class CompanyController {
 	@Autowired
 	private CompanyService companyService;
 	
+	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public Collection<CompanyDto> getAllCompanies(){
 		return getAllCompaniesDto();

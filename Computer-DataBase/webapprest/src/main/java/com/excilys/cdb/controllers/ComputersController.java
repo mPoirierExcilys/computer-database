@@ -23,6 +23,9 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.services.ComputerService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/computers")
@@ -31,6 +34,7 @@ public class ComputersController {
 	@Autowired
 	private ComputerService computerService;
 	
+	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(value = "/numbers", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public Integer getNbComputers(@RequestParam(required = false) String search) {
 		if(search != null && !search.equals("")) {
@@ -39,6 +43,7 @@ public class ComputersController {
 		return computerService.getNbComputers();
 	}
 	
+	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(value = "/nbPages", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public Integer getNbPages(@RequestParam(required = false) String search,
 			@RequestParam(required = false) String itemsByPage) {
@@ -50,6 +55,7 @@ public class ComputersController {
 		return  computerService.getComputersNbPages(page);
 	}
 	
+	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public List<ComputerDto> getComputers(@RequestParam(required = false) String search,
 			@RequestParam(required = false) String currentPage,
@@ -69,11 +75,13 @@ public class ComputersController {
 		return computersDto;
 	}
 	
+	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(value = "{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ComputerDto getComputerById(@PathVariable("id") Integer id) {
 		return ComputerDtoMapper.computerToComputerDto(computerService.getComputer(id));
 	}
 	
+	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public ResponseEntity<String> addComputer(@RequestBody ComputerDto computerDto){
 		if(computerDto.getName() != null && !computerDto.getName().trim().equals("")) {
@@ -91,6 +99,7 @@ public class ComputersController {
 		return ResponseEntity.badRequest().body("Computer name must not be empty");
 	}
 	
+	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/json")
 	public ResponseEntity<String> updateComputer(@PathVariable("id") Integer id, @RequestBody ComputerDto computerDto){
 		Computer computer = computerService.getComputer(id);
@@ -110,6 +119,7 @@ public class ComputersController {
 		return ResponseEntity.ok(location);
 	}
 	
+	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteComputer(@PathVariable("id") Integer id){
 		computerService.deleteComputer(id);
