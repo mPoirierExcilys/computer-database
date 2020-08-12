@@ -9,13 +9,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.excilys.cdb.configuration.jwt.JwtTokenUtil;
+import com.excilys.cdb.dto.UserDto;
+import com.excilys.cdb.dto.mappers.UserDtoMapper;
 import com.excilys.cdb.model.JwtRequest;
 import com.excilys.cdb.model.JwtResponse;
+import com.excilys.cdb.model.User;
 import com.excilys.cdb.services.implemented.CustomUserDetailsService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -37,6 +41,17 @@ public class JwtAuthenticationController {
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		return ResponseEntity.ok(new JwtResponse(token));
+	}
+	
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	public UserDto getUserInfo(@RequestHeader(value="Authorization") String requestTokenHeader){
+		String username = null;
+		String jwtToken = null;
+		jwtToken = requestTokenHeader.substring(7);
+		username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+		User user = this.userDetailsService.getUserByUsername(username);
+		UserDto userDto = UserDtoMapper.userToUserDto(user);
+		return userDto;
 	}
 	
 	private void authenticate(String username, String password) throws Exception {

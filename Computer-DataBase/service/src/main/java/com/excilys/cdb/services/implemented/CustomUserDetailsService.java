@@ -30,5 +30,10 @@ public class CustomUserDetailsService implements UserDetailsService{
         Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(userRoles);
         return authorities;
     }
+	
+	public User getUserByUsername(String username) throws UsernameNotFoundException{
+		User user = userDao.findByName(username).orElseThrow(() -> new UsernameNotFoundException("User with name : "+username+" not found"));
+		return user;
+	}
 
 }

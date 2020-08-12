@@ -90,7 +90,7 @@ public class ComputersController {
 				newComputer = computerService.createComputer(newComputer);
 				URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 						.buildAndExpand(newComputer.getIdComputer()).toUri();
-				return ResponseEntity.created(location).body("");
+				return ResponseEntity.created(location).body(newComputer.getIdComputer().toString());
 			}
 			catch(IllegalArgumentException e) {
 				return ResponseEntity.badRequest().body(e.getMessage());
