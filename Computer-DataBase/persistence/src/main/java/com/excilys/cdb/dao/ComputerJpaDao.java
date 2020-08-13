@@ -71,7 +71,6 @@ public class ComputerJpaDao implements AbstractJpaDao<Computer>{
 	@Transactional
 	@Override
 	public Computer update(Computer obj) {
-		//em.merge(obj);
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaUpdate<Computer> updateQuery = cb.createCriteriaUpdate(Computer.class);
 		Root<Computer> root = updateQuery.from(Computer.class);

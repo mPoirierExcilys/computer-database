@@ -31,8 +31,6 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public List<Company> getCompaniesByPage(Page page) {
 		Integer offset = (page.getCurrentPage()-1)*page.getItemsByPage();
-		page.setOrder("company.id");
-		page.setAscending("ASC");
 		return companyDao.findBetween(offset, page);
 	}
 
@@ -47,6 +45,11 @@ public class CompanyServiceImpl implements CompanyService {
 	public void deleteCompany(Integer id) {
 		companyDao.delete(id);
 		
+	}
+
+	@Override
+	public Integer getNbCompanies() {
+		return companyDao.count();
 	}
 
 }

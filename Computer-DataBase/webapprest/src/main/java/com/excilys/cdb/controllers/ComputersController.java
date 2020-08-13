@@ -48,7 +48,9 @@ public class ComputersController {
 	public Integer getNbPages(@RequestParam(required = false) String search,
 			@RequestParam(required = false) String itemsByPage) {
 		Page page = new Page();
-		page.setItemsByPage(Integer.parseInt(itemsByPage));
+		if(itemsByPage != null && !itemsByPage.equals("")) {
+			page.setItemsByPage(Integer.parseInt(itemsByPage));
+		}
 		if(search != null && !search.equals("")) {
 			return computerService.getNbComputersPagesSearch(page, search);
 		}

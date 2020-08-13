@@ -90,6 +90,12 @@ public class CompanyJpaDao implements AbstractJpaDao<Company>{
 		CriteriaQuery<Company> criteriaQuery = cb.createQuery(Company.class);
 		Root<Company> root = criteriaQuery.from(Company.class);
 		criteriaQuery.select(root);
+		if(page.getAscending().equals("DESC")) {
+			criteriaQuery.orderBy(cb.desc(root.get(getAttribute(page))));
+		}
+		else {
+			criteriaQuery.orderBy(cb.asc(root.get(getAttribute(page))));
+		}
 		TypedQuery<Company> companies = em.createQuery(criteriaQuery).setFirstResult(offset).setMaxResults(page.getItemsByPage());
 		try {
 			return companies.getResultList();
@@ -121,6 +127,19 @@ public class CompanyJpaDao implements AbstractJpaDao<Company>{
 	public Integer countSearch(String search) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private String getAttribute(Page page) {
+		String order="";
+		switch(page.getOrder()){
+			case"cp.name":
+				order="name";
+				break;
+			default:
+				order="idCompany";
+				break;
+		}
+		return order;
 	}
 
 }
