@@ -1,5 +1,7 @@
 package com.excilys.cdb.controllers;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,6 +70,7 @@ public class JwtAuthenticationController {
 		UserDto userDto = UserDtoMapper.userToUserDto(user);
 		return userDto;
 	}
+	
 	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(value = "/roles", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public List<RoleDto> getRoles(){
@@ -76,6 +79,13 @@ public class JwtAuthenticationController {
 		roles = roleService.getAllRole();
 		rolesDto = roles.stream().map(role -> RoleDtoMapper.roleToRoleDto(role)).collect(Collectors.toList());
 		return rolesDto;
+	}
+	
+	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+	@RequestMapping(value="/register", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<String> addUser(@RequestBody UserDto userDto) throws URISyntaxException{
+		User user = userDetailsService.saveUser(UserDtoMapper.userDtoToUser(userDto));
+		return ResponseEntity.created(new URI("")).body(user.getName() + " created");
 	}
 	
 	private void authenticate(String username, String password) throws Exception {

@@ -7,13 +7,15 @@ public class UserDto {
 	
 	private String name;
 	
-	private List<String> roles;
+	private String password;
+	
+	private List<RoleDto> roles;
 	
 	public UserDto() {
 		this.roles = new ArrayList<>();
 	}
 	
-	public UserDto(String name, List<String> roles) {
+	public UserDto(String name, List<RoleDto> roles) {
 		this.name = name;
 		this.roles = roles;
 	}
@@ -26,13 +28,25 @@ public class UserDto {
 		this.name = name;
 	}
 
-	public List<String> getRoles() {
+	public List<RoleDto> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<String> roles) {
+	public void setRoles(List<RoleDto> roles) {
 		this.roles = roles;
 	}
-	
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDto [name=" + name + ", password=" + password + ", roles=" + roles + "]";
+	}
 	
 }

@@ -14,5 +14,12 @@ public class RoleDtoMapper {
 		roleDto.setName(role.getName());
 		return roleDto;
 	}
+	
+	public static Role roleDtoToRole(RoleDto roleDto) {
+		Role role = new Role();
+		role.setId(roleDto.getId());
+		role.setName(roleDto.getName());
+		return role;
+	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.dao.UserDao;
@@ -15,6 +16,9 @@ import com.excilys.cdb.model.User;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService{
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private UserDao userDao;
@@ -34,6 +38,11 @@ public class CustomUserDetailsService implements UserDetailsService{
 	public User getUserByUsername(String username) throws UsernameNotFoundException{
 		User user = userDao.findByName(username).orElseThrow(() -> new UsernameNotFoundException("User with name : "+username+" not found"));
 		return user;
+	}
+	
+	public User saveUser(User user) {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		return userDao.create(user);
 	}
 
 }

@@ -17,6 +17,10 @@ public class RoleDto {
 	public void setName(String name) {
 		this.name = name;
 	}
+	@Override
+	public String toString() {
+		return "RoleDto [id=" + id + ", name=" + name + "]";
+	}
 	
 	
 

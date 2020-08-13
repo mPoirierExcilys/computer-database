@@ -12,6 +12,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.model.User;
 
@@ -34,5 +35,11 @@ public class UserDao {
 		}catch(NoResultException e) {
 			return Optional.ofNullable(query.getSingleResult());
 		}
+	}
+	
+	@Transactional
+	public User create(User user) {
+		em.persist(user);
+		return user;
 	}
 }
