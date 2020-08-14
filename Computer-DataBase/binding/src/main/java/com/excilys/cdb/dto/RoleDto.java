@@ -1,8 +1,12 @@
 package com.excilys.cdb.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class RoleDto {
 	
+	@NotNull(message = "Role must have an id")
 	private Integer id;
+	
 	private String name;
 	
 	public Integer getId() {

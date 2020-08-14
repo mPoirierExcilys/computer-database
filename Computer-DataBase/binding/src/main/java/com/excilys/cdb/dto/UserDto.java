@@ -3,12 +3,22 @@ package com.excilys.cdb.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+
 public class UserDto {
 	
+	@NotBlank(message = "Name cannot be null or empty")
+	@Size(min = 4, message = "Name must contain at least 4 chars")
 	private String name;
 	
+	@NotBlank(message = "Paswword cannot be null or empty")
+	@Size(min = 8, message = "Paswword must contain at least 8 chars")
 	private String password;
 	
+	@NotEmpty(message = "User must have at least one role")
 	private List<RoleDto> roles;
 	
 	public UserDto() {

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -83,7 +85,7 @@ public class JwtAuthenticationController {
 	
 	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(value="/register", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<String> addUser(@RequestBody UserDto userDto) throws URISyntaxException{
+	public ResponseEntity<String> addUser(@RequestBody @Valid UserDto userDto) throws URISyntaxException{
 		User user = userDetailsService.saveUser(UserDtoMapper.userDtoToUser(userDto));
 		return ResponseEntity.created(new URI("")).body(user.getName() + " created");
 	}
