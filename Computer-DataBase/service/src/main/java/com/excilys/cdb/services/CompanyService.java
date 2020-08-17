@@ -18,4 +18,10 @@ public interface CompanyService {
 	Integer getNbCompanies();
 	
 	void deleteCompany(Integer id);
+	
+	List<Company> getCompaniesByPageWithSearch(Page page, String search);
+	
+	Integer getNbCompaniesSearch(String search);
+	
+	Integer getCompaniesNbPagesSearch(Page page, String search);
 }

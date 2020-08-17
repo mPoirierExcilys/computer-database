@@ -52,4 +52,22 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyDao.count();
 	}
 
+	@Override
+	public List<Company> getCompaniesByPageWithSearch(Page page, String search) {
+		Integer offset = (page.getCurrentPage()-1)*page.getItemsByPage();
+		return companyDao.findBetweenWithSearch(offset, page, search);
+	}
+
+	@Override
+	public Integer getCompaniesNbPagesSearch(Page page, String search) {
+		Integer nbEntries = companyDao.countSearch(search);
+		Integer nbPages = nbEntries/page.getItemsByPage();
+		return nbEntries%page.getItemsByPage() == 0?nbPages:nbPages+1;
+	}
+
+	@Override
+	public Integer getNbCompaniesSearch(String search) {
+		return companyDao.countSearch(search);
+	}
+
 }

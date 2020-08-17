@@ -119,14 +119,37 @@ public class CompanyJpaDao implements AbstractJpaDao<Company>{
 
 	@Override
 	public List<Company> findBetweenWithSearch(Integer offset, Page page, String search) {
-		// TODO Auto-generated method stub
-		return null;
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Company> criteriaQuery = cb.createQuery(Company.class);
+		Root<Company> root = criteriaQuery.from(Company.class);
+		Predicate companyName = cb.like(root.get("name"), "%"+search+"%");
+		criteriaQuery.select(root).where(companyName);
+		if(page.getAscending().equals("DESC")) {
+			criteriaQuery.orderBy(cb.desc(root.get(getAttribute(page))));
+		}
+		else {
+			criteriaQuery.orderBy(cb.asc(root.get(getAttribute(page))));
+		}
+		TypedQuery<Company> companies = em.createQuery(criteriaQuery).setFirstResult(offset).setMaxResults(page.getItemsByPage());
+		try {
+			return companies.getResultList();
+		}catch(NoResultException e) {
+			return new ArrayList<Company>();
+		}
 	}
 
 	@Override
 	public Integer countSearch(String search) {
-		// TODO Auto-generated method stub
-		return null;
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Long> criteriaQuery = cb.createQuery(Long.class);
+		Root<Company> root = criteriaQuery.from(Company.class);
+		Predicate companyName = cb.like(root.get("name"), "%"+search+"%");
+		criteriaQuery.select(cb.count(root)).where(companyName);
+		try {
+			return em.createQuery(criteriaQuery).getSingleResult().intValue();
+		}catch(NoResultException e) {
+			return 0;
+		}
 	}
 	
 	private String getAttribute(Page page) {

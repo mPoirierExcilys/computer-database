@@ -42,10 +42,16 @@ public class CompanyController {
 	public List<CompanyDto> getCompanies(@RequestParam(required = false) String currentPage,
 			@RequestParam(required = false) String itemsByPage,
 			@RequestParam(required = false)String order,
-			@RequestParam(required = false)String ascending){
+			@RequestParam(required = false)String ascending,
+			@RequestParam(required = false) String search){
 		List<Company> companies = new ArrayList<>();
 		List<CompanyDto> companiesDto = new ArrayList<>();
 		Page page = createPageFromParameters(currentPage, itemsByPage, order, ascending);
+		if(search != null && !search.equals("")) {
+			companies = companyService.getCompaniesByPageWithSearch(page, search);
+			companiesDto = companies.stream().map(company -> CompanyDtoMapper.companyToCompanyDto(company)).collect(Collectors.toList());
+			return companiesDto;
+		}
 		companies = companyService.getCompaniesByPage(page);
 		companiesDto = companies.stream().map(company -> CompanyDtoMapper.companyToCompanyDto(company)).collect(Collectors.toList());
 		return companiesDto;
@@ -66,16 +72,23 @@ public class CompanyController {
 	
 	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(value = "/numbers", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public Integer getNbCompanies() {
+	public Integer getNbCompanies(@RequestParam(required = false) String search) {
+		if(search != null && ! search.equals("")) {
+			return companyService.getNbCompaniesSearch(search);
+		}
 		return companyService.getNbCompanies();
 	}
 	
 	@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
 	@RequestMapping(value = "/nbPages", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public Integer getNbPage(@RequestParam String itemsByPage) {
+	public Integer getNbPage(@RequestParam(required = false) String itemsByPage,
+							@RequestParam(required = false) String search) {
 		Page page = new Page();
 		if(itemsByPage != null && !itemsByPage.equals("")) {
 			page.setItemsByPage(Integer.parseInt(itemsByPage));
+		}
+		if(search != null && !search.equals("")) {
+			return companyService.getCompaniesNbPagesSearch(page, search);
 		}
 		return companyService.getCompaniesNbPages(page);
 	}
