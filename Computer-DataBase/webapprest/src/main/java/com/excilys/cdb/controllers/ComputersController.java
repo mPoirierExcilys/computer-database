@@ -132,13 +132,13 @@ public class ComputersController {
 		if(computerDto.getName().trim().equals("")) {
 			throw new IllegalArgumentException("Computer Name must not be empty");
 		}
-		if(computerDto.getIntroduced().equals("") && computerDtoOld.getIntroduced() != null) {
+		if((computerDto.getIntroduced() == null || computerDto.getIntroduced().equals("")) && computerDtoOld.getIntroduced() != null) {
 			throw new IllegalArgumentException("Computer Introduced wasn't empty, you couldn't set it to null");
 		}
-		if( computerDto.getDiscontinued().equals("") && computerDtoOld.getDiscontinued() != null) {
+		if((computerDto.getDiscontinued() == null ||computerDto.getDiscontinued().equals("")) && computerDtoOld.getDiscontinued() != null) {
 			throw new IllegalArgumentException("Computer Introduced wasn't empty, you couldn't set it to null");
 		}
-		if(computerDto.getCompanyDto().getIdCompany() < 1 && computerDtoOld.getCompanyDto() != null) {
+		if((computerDto.getCompanyDto() == null || computerDto.getCompanyDto().getIdCompany() < 1) && computerDtoOld.getCompanyDto() != null) {
 			throw new IllegalArgumentException("Computer had a Company, You couldn't set it to null");
 		}
 	}
