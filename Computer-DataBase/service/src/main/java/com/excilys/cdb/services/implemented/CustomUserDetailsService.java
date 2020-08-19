@@ -1,6 +1,7 @@
 package com.excilys.cdb.services.implemented;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,9 +41,23 @@ public class CustomUserDetailsService implements UserDetailsService{
 		return user;
 	}
 	
+	public User getUserById(Integer id) throws UsernameNotFoundException{
+		User user = userDao.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id : "+id+" not found"));
+		return user;
+	}
+	
+	public List<User> getUsers() {
+		return userDao.findAll().orElse(null);
+	}
+	
 	public User saveUser(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userDao.create(user);
 	}
-
+	public User modify(User user) {
+		if(user.getPassword() != null && user.getPassword() != "") {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
+		return userDao.modify(user);
+	}
 }
