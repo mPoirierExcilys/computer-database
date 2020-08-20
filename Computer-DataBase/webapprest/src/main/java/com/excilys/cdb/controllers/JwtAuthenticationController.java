@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.excilys.cdb.configuration.jwt.JwtTokenUtil;
@@ -58,11 +58,23 @@ public class JwtAuthenticationController {
 	private RoleService roleService;
 	
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-		authenticate(authenticationRequest.getName(), authenticationRequest.getPassword());
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
+		try {
+			authenticate(authenticationRequest.getName(), authenticationRequest.getPassword());
+		} catch (DisabledException e) {
+			return new ResponseEntity<>("You tryied to login with a user that is disabled.", HttpStatus.BAD_REQUEST);
+		} catch (LockedException e) {
+			return new ResponseEntity<>("You tryied to login with a user that is locked.", HttpStatus.BAD_REQUEST);
+		} catch (BadCredentialsException e) {
+			return new ResponseEntity<>("You tryied to login with wrong credentials.", HttpStatus.BAD_REQUEST);
+		}
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getName());
 		final String token = jwtTokenUtil.generateToken(userDetails);
+		if(token == null || token.equals("")) {
+			return new ResponseEntity<>("You tryied to login with wrong credentials.", HttpStatus.BAD_REQUEST);	
+		} else {
 		return ResponseEntity.ok(new JwtResponse(token));
+		}
 	}
 	
 	@RequestMapping(value = "/self", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -108,14 +120,8 @@ public class JwtAuthenticationController {
 		return ResponseEntity.created(new URI("")).body(user.getName() + " created");
 	}
 	
-	private void authenticate(String username, String password) throws Exception {
-		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		} catch (DisabledException e) {
-			throw new Exception("USER_DISABLED", e);
-		} catch (BadCredentialsException e) {
-			throw new Exception("INVALID_CREDENTIALS", e);
-		}
+	private void authenticate(String username, String password) throws DisabledException, LockedException, BadCredentialsException {
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 	}
 	
 	@RequestMapping(value = "/modify", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -133,18 +139,23 @@ public class JwtAuthenticationController {
 				isAdmin = true;
 			}
 		}
+		if(!userDetailsService.checkNoUserWithSameName(userToModif.getId(), userToModif.getName())) {
+			return new ResponseEntity<>("Another user already have this this name.", HttpStatus.BAD_REQUEST);		
+		}
 		if(isAdmin || userActing.getId().equals(userToModif.getId())) {
 			result = userDetailsService.modify(userToModif);
-		}
-		if(result == null) {
-			return new ResponseEntity<>("Illegal argument passed as either the user or the password.",
-			          HttpStatus.BAD_REQUEST);	
-		} else if(result.equals(userToModif)) {
-			return new ResponseEntity<>(UserDtoMapper.userToUserDto(result),
-			          HttpStatus.OK);
+			if(result == null) {
+				return new ResponseEntity<>("A problem occured with the request.",
+				          HttpStatus.BAD_REQUEST);	
+			} else if(result.equals(userToModif)) {
+				return new ResponseEntity<>(UserDtoMapper.userToUserDto(result),
+				          HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("Wrong data given concerning the user.",
+				          HttpStatus.BAD_REQUEST);
+			}
 		} else {
-			return new ResponseEntity<>("Bad request   :)",
-			          HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("You are trying to modify a user without being either this user or an admin.", HttpStatus.BAD_REQUEST);
 		}
 	}
 }
