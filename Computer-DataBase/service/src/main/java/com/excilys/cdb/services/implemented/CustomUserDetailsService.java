@@ -57,9 +57,11 @@ public class CustomUserDetailsService implements UserDetailsService{
 	public User modify(User user) {
 		if(user.getPassword() != null && user.getPassword() != "") {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		} else {
-			System.out.println("plop : " + user.toString());
-		}
+		}		
 		return userDao.modify(user);
+	}
+	
+	public boolean checkNoUserWithSameName(Integer id, String name) {
+		return userDao.isUserByNotIdAndByName(id, name);
 	}
 }
