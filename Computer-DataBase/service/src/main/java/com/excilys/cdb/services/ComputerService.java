@@ -27,5 +27,4 @@ public interface ComputerService {
 	List<Computer> getComputersByPagesSearch(Page page, String search);
 	
 	Integer getNbComputersSearch(String search);
-
 }
