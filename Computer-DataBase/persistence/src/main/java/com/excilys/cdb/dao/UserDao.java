@@ -76,7 +76,7 @@ public class UserDao {
 	@Transactional
 	public User modify(User user) {
 		User preUser = this.findById(user.getId()).orElse(null);
-		if (preUser == null) {
+		if (preUser == null || !isUserByNotIdAndByName(user.getId(), user.getName())) {
 			return null;
 		} else {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -93,5 +93,19 @@ public class UserDao {
 			em.createQuery(updateQuery).executeUpdate();
 			return user;
 		}
+	}
+	
+	public boolean isUserByNotIdAndByName(Integer id, String name) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<User> criteriaQuery = cb.createQuery(User.class);
+		Root<User> root = criteriaQuery.from(User.class);
+		Predicate namePredicate = cb.equal(root.get("name"), name);
+		Predicate notIdPredicate = cb.equal(root.get("id"), id).not();
+		criteriaQuery.where(namePredicate, notIdPredicate);
+
+		TypedQuery<User> query = em.createQuery(criteriaQuery);
+		int nombre = query.getResultList().size();
+		System.out.println("Test result size :  " + nombre);
+		return nombre == 0;
 	}
 }
