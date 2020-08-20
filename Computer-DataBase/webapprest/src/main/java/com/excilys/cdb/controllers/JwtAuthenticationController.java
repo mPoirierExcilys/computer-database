@@ -59,7 +59,6 @@ public class JwtAuthenticationController {
 	
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-		System.out.println("plop : " + authenticationRequest.getPassword() + "  " + authenticationRequest.getName());
 		authenticate(authenticationRequest.getName(), authenticationRequest.getPassword());
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getName());
 		final String token = jwtTokenUtil.generateToken(userDetails);
@@ -135,7 +134,6 @@ public class JwtAuthenticationController {
 			}
 		}
 		if(isAdmin || userActing.getId().equals(userToModif.getId())) {
-			System.out.println("Mouahahahaahahaahaah :   " + userToModif.toString() + "   " + userActing.toString() );
 			result = userDetailsService.modify(userToModif);
 		}
 		if(result == null) {
