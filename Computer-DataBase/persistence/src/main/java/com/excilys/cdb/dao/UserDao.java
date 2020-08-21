@@ -74,7 +74,7 @@ public class UserDao {
 	}
 
 	@Transactional
-	public User modify(User user) {
+	public User modify(User user, boolean isAdmin) {
 		User preUser = this.findById(user.getId()).orElse(null);
 		if (preUser == null || !isUserByNotIdAndByName(user.getId(), user.getName())) {
 			return null;
@@ -82,7 +82,9 @@ public class UserDao {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaUpdate<User> updateQuery = cb.createCriteriaUpdate(User.class);
 			Root<User> root = updateQuery.from(User.class);
-			updateQuery.set(root.get("name"), user.getName());
+			if(isAdmin && user.getRoles().size() != 0) {
+				updateQuery.set(root.get("roles"), user.getRoles());
+			}
 			if(user.getName() != null && !user.getName().equals("")) {
 				updateQuery.set(root.get("name"), user.getName());
 			}

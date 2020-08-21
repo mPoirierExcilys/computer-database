@@ -54,11 +54,19 @@ public class CustomUserDetailsService implements UserDetailsService{
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userDao.create(user);
 	}
+
+	public User modifyByAdmin(User user) {
+		if(user.getPassword() != null && user.getPassword() != "") {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		}		
+		return userDao.modify(user, true);
+	}
+	
 	public User modify(User user) {
 		if(user.getPassword() != null && user.getPassword() != "") {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		}		
-		return userDao.modify(user);
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
+		return userDao.modify(user, false);
 	}
 	
 	public boolean checkNoUserWithSameName(Integer id, String name) {

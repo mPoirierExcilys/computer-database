@@ -143,7 +143,11 @@ public class JwtAuthenticationController {
 			return new ResponseEntity<>("Another user already have this this name.", HttpStatus.BAD_REQUEST);		
 		}
 		if(isAdmin || userActing.getId().equals(userToModif.getId())) {
-			result = userDetailsService.modify(userToModif);
+			if(isAdmin) {
+				result = userDetailsService.modifyByAdmin(userToModif);
+			} else {
+				result = userDetailsService.modify(userToModif);
+			}
 			if(result == null) {
 				return new ResponseEntity<>("A problem occured with the request.",
 				          HttpStatus.BAD_REQUEST);	
