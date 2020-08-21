@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,6 +18,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.excilys.cdb.model.Role;
 import com.excilys.cdb.model.User;
 
 @Repository
@@ -38,7 +41,7 @@ public class UserDao {
 			return Optional.ofNullable(query.getSingleResult());
 		}
 	}
-	
+
 	public Optional<User> findById(Integer id) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<User> criteriaQuery = cb.createQuery(User.class);
@@ -53,16 +56,16 @@ public class UserDao {
 			return Optional.ofNullable(query.getSingleResult());
 		}
 	}
-	
+
 	public Optional<List<User>> findAll() {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<User> criteriaQuery = cb.createQuery(User.class);
 		Root<User> root = criteriaQuery.from(User.class);
 		criteriaQuery.select(root);
-		TypedQuery <User> Users = em.createQuery(criteriaQuery);
+		TypedQuery<User> Users = em.createQuery(criteriaQuery);
 		try {
 			return Optional.ofNullable(Users.getResultList());
-		} catch(NoResultException e) {
+		} catch (NoResultException e) {
 			return Optional.ofNullable(null);
 		}
 	}
@@ -82,10 +85,21 @@ public class UserDao {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaUpdate<User> updateQuery = cb.createCriteriaUpdate(User.class);
 			Root<User> root = updateQuery.from(User.class);
-			if(isAdmin && user.getRoles().size() != 0) {
-				updateQuery.set(root.get("roles"), user.getRoles());
+			if (isAdmin && user.getRoles().size() != 0) {
+//				EntityTransaction entityTransaction = em.getTransaction();
+				Query queryDelete = em
+						.createNativeQuery("DELETE FROM user_role WHERE user_role.user_id = " + user.getId() + ";");
+				queryDelete.executeUpdate();
+//				entityTransaction.commit();
+//				entityTransaction = em.getTransaction();
+				for (Role role : user.getRoles()) {
+					Query queryCreate = em.createNativeQuery("INSERT INTO user_role(user_id, role_id) VALUES ("
+							+ user.getId() + ", " + role.getId() + ")");
+					queryCreate.executeUpdate();
+				}
+//				entityTransaction.commit();
 			}
-			if(user.getName() != null && !user.getName().equals("")) {
+			if (user.getName() != null && !user.getName().equals("")) {
 				updateQuery.set(root.get("name"), user.getName());
 			}
 			if (user.getPassword() != null) {
@@ -96,7 +110,7 @@ public class UserDao {
 			return user;
 		}
 	}
-	
+
 	public boolean isUserByNotIdAndByName(Integer id, String name) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<User> criteriaQuery = cb.createQuery(User.class);
@@ -107,7 +121,6 @@ public class UserDao {
 
 		TypedQuery<User> query = em.createQuery(criteriaQuery);
 		int nombre = query.getResultList().size();
-		System.out.println("Test result size :  " + nombre);
 		return nombre == 0;
 	}
 }
