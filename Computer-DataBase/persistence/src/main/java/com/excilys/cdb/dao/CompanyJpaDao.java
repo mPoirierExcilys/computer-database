@@ -75,7 +75,7 @@ public class CompanyJpaDao implements AbstractJpaDao<Company>{
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaDelete<Computer> deleteQuery = cb.createCriteriaDelete(Computer.class);
 		Root<Computer> root = deleteQuery.from(Computer.class);
-		deleteQuery.where(cb.equal(root.get("company").get("id"), id));
+		deleteQuery.where(cb.equal(root.get("company").get("idCompany"), id));
 		em.createQuery(deleteQuery).executeUpdate();
 		
 		CriteriaDelete<Company> deleteQueryCompany = cb.createCriteriaDelete(Company.class);
